@@ -75,8 +75,8 @@
       ["Geneticista", "assets/sprites/personagens/geneticista/front.png"],
       ["Laboratorista", "assets/sprites/personagens/laboratorista/front.png"],
       ["Mendelino", "assets/sprites/pets/mendelino/branco.png"],
-      ["Gencko", "assets/sprites/pets/gencko/variante-1.png"],
-      ["Nibbli", "assets/sprites/pets/nibbli/variante-1.png"],
+      ["Gencko", "assets/sprites/pets/gencko/azul.png"],
+      ["Nibbli", "assets/sprites/pets/nibbli/branco.png"],
     ];
     document.getElementById("cast").innerHTML = cast.map(function (item) {
       return "<figure><img alt='' src='" + item[1] + "'><figcaption>" + item[0] + "</figcaption></figure>";
@@ -88,7 +88,7 @@
     box.classList.remove("hidden");
     box.innerHTML = [
       ["geneticista", "Geneticista", "Jaleco com detalhes roxos"],
-      ["laboratorista", "Laboratorista", "O mesmo uniforme, detalhes azuis"],
+      ["laboratorista", "Laboratorista", "Jaleco com detalhes azuis"],
     ].map(function (item) {
       return "<button class='choice' type='button' data-character='" + item[0] + "'><img alt='' src='assets/sprites/personagens/" + item[0] + "/front.png' style='height:96px'><strong>" + item[1] + "</strong>" + item[2] + "</button>";
     }).join("");

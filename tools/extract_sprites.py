@@ -1,223 +1,292 @@
 #!/usr/bin/env python3
-"""Recorta as folhas de referência do Notion em sprites com fundo transparente.
+"""Recorta as folhas do Notion em sprites com fundo transparente.
 
-    python3 tools/extract_sprites.py characters.png pets.png npcs.png shop.png
+    python3 tools/extract_sprites.py characters.png pets.png npcs.png
 
-A folha dos personagens traz o geneticista em quatro direções na faixa de cima.
-O laboratorista reaproveita essa silhueta com os detalhes roxos puxados para o azul,
-porque a faixa de baixo é legenda e não um segundo conjunto limpo de corpos.
+As legendas das folhas mandam no nome. Nada é recolorido nem clareado.
 """
 
 from __future__ import annotations
 
+import shutil
 import sys
-from collections import Counter, deque
+from collections import deque
 from pathlib import Path
 
+import numpy as np
 from PIL import Image
 
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "assets" / "sprites"
 
-
-def dominant_color(im: Image.Image) -> tuple[int, int, int]:
-    px = im.load()
-    width, height = im.size
-    counts: Counter[tuple[int, int, int]] = Counter()
-    for y in range(0, height, 3):
-        for x in range(0, width, 3):
-            red, green, blue = px[x, y][:3]
-            counts[(red // 6 * 6, green // 6 * 6, blue // 6 * 6)] += 1
-    return counts.most_common(1)[0][0]
+DIRECTIONS = ("front", "back", "left", "right")
 
 
-def knock_out(im: Image.Image, dist: int = 34) -> Image.Image:
-    im = im.convert("RGBA")
-    background = dominant_color(im)
-    px = im.load()
-    width, height = im.size
+def sheet_array(path: Path) -> tuple[np.ndarray, tuple[int, int, int]]:
+    image = Image.open(path).convert("RGB")
+    pixels = np.asarray(image)
+    background = tuple(int(channel) for channel in pixels[2, 2])
+    return pixels, background
+
+
+def components(
+    cell: np.ndarray,
+    background: tuple[int, int, int],
+    dist: int,
+    dilate: int,
+    min_w: int,
+    min_h: int,
+    max_w: int,
+    max_h: int,
+    min_area: int,
+) -> list[tuple[int, int, int, int]]:
+    delta = np.abs(cell.astype(np.int16) - np.array(background)).sum(axis=2)
+    foreground = delta >= dist
+    if dilate:
+        grown = foreground.copy()
+        for dy in range(-dilate, dilate + 1):
+            for dx in range(-dilate, dilate + 1):
+                if dx == 0 and dy == 0:
+                    continue
+                grown |= np.roll(np.roll(foreground, dy, axis=0), dx, axis=1)
+        grown[:dilate, :] = False
+        grown[-dilate:, :] = False
+        grown[:, :dilate] = False
+        grown[:, -dilate:] = False
+        foreground = grown
+    height, width = foreground.shape
+    seen = np.zeros((height, width), dtype=np.uint8)
+    boxes: list[tuple[int, int, int, int, int]] = []
     for y in range(height):
         for x in range(width):
-            red, green, blue, _alpha = px[x, y]
-            if abs(red - background[0]) + abs(green - background[1]) + abs(blue - background[2]) < dist:
-                px[x, y] = (0, 0, 0, 0)
-    return im
-
-
-def largest_sprite(im: Image.Image, inset: int = 8) -> Image.Image:
-    if inset:
-        im = im.crop((inset, inset, im.width - inset, im.height - inset))
-    im = knock_out(im)
-    width, height = im.size
-    px = im.load()
-    seen = bytearray(width * height)
-    best: list[tuple[int, int]] = []
-    for y in range(height):
-        for x in range(width):
-            start = y * width + x
-            if seen[start] or px[x, y][3] == 0:
+            if not foreground[y, x] or seen[y, x]:
                 continue
             queue = deque([(x, y)])
-            seen[start] = 1
-            cells = [(x, y)]
+            seen[y, x] = 1
+            min_x = max_x = x
+            min_y = max_y = y
+            area = 0
             while queue:
                 cx, cy = queue.popleft()
+                area += 1
+                min_x = min(min_x, cx)
+                max_x = max(max_x, cx)
+                min_y = min(min_y, cy)
+                max_y = max(max_y, cy)
                 for nx, ny in ((cx + 1, cy), (cx - 1, cy), (cx, cy + 1), (cx, cy - 1)):
                     if nx < 0 or ny < 0 or nx >= width or ny >= height:
                         continue
-                    index = ny * width + nx
-                    if seen[index] or px[nx, ny][3] == 0:
+                    if seen[ny, nx] or not foreground[ny, nx]:
                         continue
-                    seen[index] = 1
+                    seen[ny, nx] = 1
                     queue.append((nx, ny))
-                    cells.append((nx, ny))
-            if len(cells) > len(best):
-                best = cells
-    if not best:
-        return im
-    keep = set(best)
-    for y in range(height):
-        for x in range(width):
-            if (x, y) not in keep and px[x, y][3]:
-                px[x, y] = (0, 0, 0, 0)
-    xs = [point[0] for point in best]
-    ys = [point[1] for point in best]
-    return im.crop((min(xs), min(ys), max(xs) + 1, max(ys) + 1))
+            box_w = max_x - min_x + 1
+            box_h = max_y - min_y + 1
+            if area >= min_area and min_w <= box_w <= max_w and min_h <= box_h <= max_h:
+                boxes.append((min_x, min_y, max_x, max_y, area))
+    boxes.sort(key=lambda box: box[0])
+    return [(box[0], box[1], box[2], box[3]) for box in boxes]
 
 
-def trim_background(im: Image.Image, background: tuple[int, int, int], dist: int = 42) -> Image.Image:
-    im = im.convert("RGBA")
-    px = im.load()
-    width, height = im.size
-    for y in range(height):
-        for x in range(width):
-            red, green, blue, _alpha = px[x, y]
-            if abs(red - background[0]) + abs(green - background[1]) + abs(blue - background[2]) < dist:
-                px[x, y] = (0, 0, 0, 0)
-    bbox = im.getbbox()
-    return im.crop(bbox) if bbox else im
+def slots(cell: np.ndarray, count: int, background: tuple[int, int, int], dist: int = 50) -> list[tuple[int, int, int, int]]:
+    delta = np.abs(cell.astype(np.int16) - np.array(background)).sum(axis=2)
+    foreground = delta >= dist
+    xs = np.flatnonzero(foreground.any(axis=0))
+    if len(xs) < count:
+        raise RuntimeError(f"faixa sem {count} sprites")
+    centers = np.linspace(float(xs[0]), float(xs[-1]), count)
+    labels = None
+    for _ in range(30):
+        labels = np.argmin(np.abs(xs[:, None] - centers[None, :]), axis=1)
+        updated = centers.copy()
+        for index in range(count):
+            chosen = labels == index
+            if np.any(chosen):
+                updated[index] = xs[chosen].mean()
+        if np.allclose(updated, centers):
+            break
+        centers = updated
+    order = np.argsort(centers)
+    bounds = [int(xs[0])]
+    for left, right in zip(order[:-1], order[1:]):
+        bounds.append(int((centers[left] + centers[right]) / 2))
+    bounds.append(int(xs[-1]) + 1)
+    found: list[tuple[int, int, int, int]] = []
+    for index in range(count):
+        x0, x1 = bounds[index], bounds[index + 1]
+        region = foreground[:, x0:x1]
+        cols = np.flatnonzero(region.any(axis=0))
+        rows = np.flatnonzero(region.any(axis=1))
+        if len(cols) == 0 or len(rows) == 0:
+            raise RuntimeError("sprite vazio dentro da faixa")
+        found.append((x0 + int(cols[0]), int(rows[0]), x0 + int(cols[-1]), int(rows[-1])))
+    return found
 
 
-def save(im: Image.Image, path: Path) -> None:
+def cut(sheet: np.ndarray, origin: tuple[int, int], box: tuple[int, int, int, int], background: tuple[int, int, int], dist: int = 42) -> Image.Image:
+    ox, oy = origin
+    x0, y0, x1, y1 = box
+    x0 = max(0, ox + x0 - 1)
+    y0 = max(0, oy + y0 - 1)
+    x1 = min(sheet.shape[1] - 1, ox + x1 + 1)
+    y1 = min(sheet.shape[0] - 1, oy + y1 + 1)
+    crop = sheet[y0 : y1 + 1, x0 : x1 + 1]
+    delta = np.abs(crop.astype(np.int16) - np.array(background)).sum(axis=2)
+    alpha = np.where(delta >= dist, 255, 0).astype(np.uint8)
+    rows, cols = np.where(alpha > 0)
+    if len(cols) == 0:
+        raise RuntimeError("recorte sem pixels")
+    crop = crop[rows.min() : rows.max() + 1, cols.min() : cols.max() + 1]
+    alpha = alpha[rows.min() : rows.max() + 1, cols.min() : cols.max() + 1]
+    return Image.fromarray(np.dstack([crop, alpha]), "RGBA")
+
+
+def save(image: Image.Image, path: Path) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    im.save(path, "PNG", optimize=True)
+    image.save(path, "PNG", optimize=True)
 
 
-def mean_luma(im: Image.Image) -> float:
-    total = count = 0
-    for red, green, blue, alpha in im.getdata():
-        if alpha < 20:
-            continue
-        total += (red + green + blue) / 3
-        count += 1
-    return total / max(count, 1)
-
-
-def tint_laboratorista(im: Image.Image) -> Image.Image:
-    """Troca os detalhes roxos por azul para separar o laboratorista."""
-    out = im.convert("RGBA").copy()
-    px = out.load()
-    width, height = out.size
-    for y in range(height):
-        for x in range(width):
-            red, green, blue, alpha = px[x, y]
-            if alpha < 20:
-                continue
-            if red > 70 and blue > 70 and red > green + 12 and blue > green:
-                px[x, y] = (int(red * 0.45), int(green * 0.75), min(255, int(blue * 1.15 + 30)), alpha)
-    return out
+def save_frames(frames: list[Image.Image], folder: Path, direction: str) -> None:
+    if len(frames) != 3:
+        raise RuntimeError(f"{folder.name}/{direction}: esperava 3 quadros, veio {len(frames)}")
+    for index, frame in enumerate(frames, start=1):
+        save(frame, folder / f"{direction}-{index}.png")
+    save(frames[1], folder / f"{direction}.png")
 
 
 def extract_characters(path: Path) -> None:
-    sheet = Image.open(path).convert("RGB")
-    columns = [(13, 378), (389, 762), (781, 1151), (1161, 1529)]
-    directions = ["front", "back", "left", "right"]
-    for index, (x0, x1) in enumerate(columns):
-        sprite = largest_sprite(sheet.crop((x0, 7, x1, 381)), inset=8)
-        save(sprite, OUT / "personagens" / "geneticista" / f"{directions[index]}.png")
-        save(tint_laboratorista(sprite), OUT / "personagens" / "laboratorista" / f"{directions[index]}.png")
-        print(directions[index], sprite.size)
+    sheet, background = sheet_array(path)
+    names = ("geneticista-m", "geneticista-f", "laboratorista-m", "laboratorista-f")
+    portrait_columns = ((40, 360), (415, 735), (790, 1130), (1170, 1505))
+    for name, (x0, x1) in zip(names, portrait_columns):
+        cell = sheet[24:360, x0:x1]
+        boxes = components(cell, background, dist=42, dilate=0, min_w=180, min_h=200, max_w=340, max_h=340, min_area=12000)
+        if len(boxes) != 1:
+            raise RuntimeError(f"retrato {name}: {len(boxes)} blocos")
+        portrait = cut(sheet, (x0, 24), boxes[0], background, dist=36)
+        save(portrait, OUT / "personagens" / name / "retrato.png")
+        print("retrato", name, portrait.size)
+
+    columns = ((28, 372), (398, 752), (772, 1148), (1152, 1522))
+    rows = {"front": (388, 548), "back": (548, 722), "left": (700, 875), "right": (850, 1010)}
+    for name, (x0, x1) in zip(names, columns):
+        folder = OUT / "personagens" / name
+        for direction, (y0, y1) in rows.items():
+            cell = sheet[y0:y1, x0:x1]
+            boxes = components(cell, background, dist=46, dilate=0, min_w=40, min_h=90, max_w=120, max_h=160, min_area=2500)
+            frames = [cut(sheet, (x0, y0), box, background, dist=40) for box in boxes]
+            save_frames(frames, folder, direction)
+            print(name, direction, [frame.size for frame in frames])
+        if name == "geneticista-m":
+            mirror(folder, OUT / "personagens" / "geneticista")
+        if name == "laboratorista-m":
+            mirror(folder, OUT / "personagens" / "laboratorista")
+
+
+def mirror(source: Path, dest: Path) -> None:
+    dest.mkdir(parents=True, exist_ok=True)
+    for image in source.glob("*.png"):
+        shutil.copyfile(image, dest / image.name)
 
 
 def extract_pets(path: Path) -> None:
-    sheet = Image.open(path).convert("RGB")
-    rows = {
-        "mendelino": (360, 570),
-        "gencko": (578, 793),
-        "nibbli": (801, 1011),
+    sheet, background = sheet_array(path)
+    species = {
+        "mendelino": {
+            "x": (36, 478),
+            "cores": ("branco", "cinza", "preto", "marrom"),
+            "tracos": ("orelha-grande", "orelha-pequena"),
+            "olhos": ("olho-azul", "olho-verde", "olho-amarelo", "olho-roxo"),
+        },
+        "gencko": {
+            "x": (540, 986),
+            "cores": ("azul", "verde", "vermelho", "amarelo"),
+            "tracos": ("liso", "manchas", "listras", "pontos"),
+            "olhos": ("olho-azul", "olho-verde", "olho-amarelo", "olho-vermelho"),
+        },
+        "nibbli": {
+            "x": (1046, 1488),
+            "cores": ("branco", "cinza", "marrom", "rosa"),
+            "tracos": ("orelha-longa", "orelha-curta"),
+            "olhos": ("olho-azul", "olho-verde", "olho-amarelo", "olho-roxo"),
+        },
     }
-    columns = [(17, 508), (523, 1015), (1030, 1520)]
-    mendelinos = []
-    for name, (y0, y1) in rows.items():
-        sprites = []
-        for x0, x1 in columns:
-            sprites.append(largest_sprite(sheet.crop((x0, y0, x1, y1)), inset=6))
-        if name == "mendelino":
-            mendelinos = list(enumerate(sprites))
-        else:
-            for index, sprite in enumerate(sprites, start=1):
-                save(sprite, OUT / "pets" / name / f"variante-{index}.png")
-                print(name, index, sprite.size)
-    mendelinos.sort(key=lambda item: mean_luma(item[1]))
-    labeled = list(zip(["preto", "cinza", "branco"], mendelinos))
-    for label, (_index, sprite) in labeled:
-        save(sprite, OUT / "pets" / "mendelino" / f"{label}.png")
-        print("mendelino", label, round(mean_luma(sprite), 1), sprite.size)
-    # O pelo branco do nível 1 é o mesmo recorte do preto, só mais claro,
-    # para o fenótipo não trocar de espécie.
-    dark = labeled[0][1][1].convert("RGBA")
-    light = dark.copy()
-    pixels = light.load()
-    for y in range(light.height):
-        for x in range(light.width):
-            red, green, blue, alpha = pixels[x, y]
-            if alpha < 10:
-                continue
-            pixels[x, y] = (
-                min(255, int(red * 1.55 + 80)),
-                min(255, int(green * 1.55 + 80)),
-                min(255, int(blue * 1.55 + 80)),
-                alpha,
-            )
-    save(light, OUT / "pets" / "mendelino" / "branco.png")
+    bands = {
+        "direcao": (186, 312),
+        "cor": (404, 530),
+        "traco": (618, 756),
+        "olho": (842, 972),
+    }
+    pet_directions = ("frente", "costas", "esquerda", "direita")
+    for name, spec in species.items():
+        x0, x1 = spec["x"]
+        folder = OUT / "pets" / name
+        y0, y1 = bands["direcao"]
+        boxes = slots(sheet[y0:y1, x0:x1], 4, background)
+        for direction, box in zip(pet_directions, boxes):
+            sprite = cut(sheet, (x0, y0), box, background)
+            save(sprite, folder / f"{direction}.png")
+            print(name, direction, sprite.size)
+        for key, names in (("cor", spec["cores"]), ("traco", spec["tracos"]), ("olho", spec["olhos"])):
+            y0, y1 = bands[key]
+            boxes = slots(sheet[y0:y1, x0:x1], len(names), background)
+            for label, box in zip(names, boxes):
+                sprite = cut(sheet, (x0, y0), box, background)
+                save(sprite, folder / f"{label}.png")
+                print(name, label, sprite.size, "luma", round(luma(sprite), 1))
 
 
 def extract_npcs(path: Path) -> None:
-    sheet = Image.open(path).convert("RGB")
-    background = sheet.getpixel((2, 2))
-    columns = [(78, 301), (315, 541), (555, 777), (791, 1029), (1043, 1275), (1289, 1514)]
-    names = ["estudante-f", "estudante-m", "senhora", "homem", "alternativa", "crianca"]
-    directions = ["front", "back", "left", "right"]
-    # A primeira faixa de cada cliente já traz as quatro direções lado a lado.
-    y0, y1 = 115, 218
-    for (x0, x1), name in zip(columns, names):
-        strip = sheet.crop((x0, y0, x1, y1))
-        width = strip.width
-        for index, direction in enumerate(directions):
-            slice_box = (int(index * width / 4), 0, int((index + 1) * width / 4), strip.height)
-            frame = trim_background(strip.crop(slice_box), background, dist=40)
-            save(frame, OUT / "npcs" / name / f"{direction}.png")
-            print(name, direction, frame.size)
+    sheet, background = sheet_array(path)
+    names = ("estudante-f", "estudante-m", "senhora", "homem", "alternativa", "crianca")
+    columns = ((70, 310), (305, 550), (545, 790), (780, 1040), (1030, 1285), (1275, 1525))
+    # A margem da folha nomeia as faixas de cima para baixo.
+    rows = {"front": (100, 230), "left": (218, 348), "right": (332, 458), "back": (442, 568)}
+    for name, (x0, x1) in zip(names, columns):
+        folder = OUT / "npcs" / name
+        for direction, (y0, y1) in rows.items():
+            cell = sheet[y0:y1, x0:x1]
+            boxes = components(cell, background, dist=38, dilate=1, min_w=32, min_h=60, max_w=90, max_h=140, min_area=900)
+            frames = [cut(sheet, (x0, y0), box, background, dist=36) for box in boxes]
+            save_frames(frames, folder, direction)
+            print(name, direction, [frame.size for frame in frames])
 
 
-def extract_shop(path: Path) -> None:
-    image = Image.open(path).convert("RGB")
-    image = image.resize((1280, 853), Image.Resampling.LANCZOS)
-    dest = ROOT / "assets" / "shop" / "cenario-1.png"
-    dest.parent.mkdir(parents=True, exist_ok=True)
-    image.save(dest, "PNG", optimize=True)
-    print("shop", dest.stat().st_size)
+def luma(image: Image.Image) -> float:
+    pixels = np.asarray(image)
+    mask = pixels[..., 3] > 20
+    if not np.any(mask):
+        return 0.0
+    return float(pixels[..., :3][mask].mean())
+
+
+def assert_distinct(path_a: Path, path_b: Path) -> None:
+    first = np.asarray(Image.open(path_a).convert("RGBA"))
+    second = np.asarray(Image.open(path_b).convert("RGBA").resize(Image.open(path_a).size))
+    if first.shape != second.shape:
+        second = np.asarray(Image.open(path_b).convert("RGBA").resize((first.shape[1], first.shape[0])))
+    delta = np.abs(first.astype(np.int16) - second.astype(np.int16)).mean()
+    if delta < 8:
+        raise RuntimeError(f"{path_a.name} e {path_b.name} saíram iguais ({delta:.2f})")
 
 
 def main() -> None:
-    if len(sys.argv) != 5:
-        raise SystemExit("uso: extract_sprites.py characters.png pets.png npcs.png shop.png")
-    characters, pets, npcs, shop = map(Path, sys.argv[1:])
+    if len(sys.argv) != 4:
+        raise SystemExit("uso: extract_sprites.py characters.png pets.png npcs.png")
+    characters, pets, npcs = map(Path, sys.argv[1:])
+    if OUT.exists():
+        shutil.rmtree(OUT)
     extract_characters(characters)
     extract_pets(pets)
     extract_npcs(npcs)
-    extract_shop(shop)
+    assert_distinct(OUT / "personagens/geneticista/front.png", OUT / "personagens/laboratorista/front.png")
+    assert_distinct(OUT / "pets/mendelino/branco.png", OUT / "pets/mendelino/preto.png")
+    white = luma(Image.open(OUT / "pets/mendelino/branco.png"))
+    black = luma(Image.open(OUT / "pets/mendelino/preto.png"))
+    if white <= black:
+        raise RuntimeError(f"pelo branco ({white:.1f}) não ficou mais claro que o preto ({black:.1f})")
+    print("ok", white, black)
 
 
 if __name__ == "__main__":

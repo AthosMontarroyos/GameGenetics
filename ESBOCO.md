@@ -22,15 +22,15 @@ O plantel tem Noir (`CC`), Mina e Pingo (`Cc`), Nuvem e Algodão (`cc`). Com doi
 
 ## Sprites
 
-As folhas do Notion foram recortadas para `assets/sprites/`.
+As folhas do Notion foram recortadas para `assets/sprites/`. O nome de cada arquivo segue a legenda da folha. Nenhum sprite foi recolorido.
 
-- Geneticista: quatro direções da faixa superior da folha (`front`, `back`, `left`, `right`).
-- Laboratorista: a mesma silhueta, com os detalhes roxos puxados para o azul. A faixa inferior da folha é legenda, não um segundo corpo limpo.
-- Mendelino, Gencko e Nibbli: um recorte por variante. No nível 1 só o Mendelino entra no cruzamento. O pelo preto usa o recorte escuro; o pelo branco é o mesmo desenho clareado, para o fenótipo não virar outro bicho. O cinza fica só como referência.
-- Clientes: quatro direções de cada NPC. Na loja eles usam a frente.
-- Cenário: `assets/shop/cenario-1.png`.
+Personagens, da esquerda para a direita: geneticista masculino, geneticista feminino, laboratorista masculino e laboratorista feminino. Cada pasta tem `retrato.png` e, embaixo, as direções `front`, `back`, `left` e `right`. Cada direção traz três quadros de passo (`front-1.png`, `front-2.png`, `front-3.png`). O arquivo sem número é o quadro do meio. `geneticista/` e `laboratorista/` repetem o par masculino, que é o usado no protótipo.
 
-`tools/extract_sprites.py` refaz o recorte se as folhas forem baixadas de novo.
+Pets, uma espécie por coluna: Mendelino, Gencko e Nibbli. A primeira faixa é `frente`, `costas`, `esquerda` e `direita`. As cores desenhadas ficam ao lado: Mendelino branco, cinza, preto e marrom; Gencko azul, verde, vermelho e amarelo; Nibbli branco, cinza, marrom e rosa. Orelhas, padrão e olhos estão na mesma pasta. No nível 1 o cruzamento usa o Mendelino branco e o preto da folha.
+
+Clientes, da esquerda para a direita: `estudante-f`, `estudante-m`, `senhora`, `homem`, `alternativa` e `crianca`. As faixas, de cima para baixo, são `front`, `left`, `right` e `back`, com três quadros cada. Na loja eles usam a frente.
+
+O cenário continua em `assets/shop/cenario-1.png`. `tools/extract_sprites.py` refaz o recorte a partir das folhas.
 
 ## Fora deste corte
 
