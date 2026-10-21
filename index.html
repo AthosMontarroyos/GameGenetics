@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pet Shop Mendel</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #140f22;
+      --panel: rgba(22, 16, 38, 0.92);
+      --line: rgba(255, 255, 255, 0.14);
+      --ink: #f6f2ff;
+      --muted: #c9bedf;
+      --accent: #8d6bff;
+      --accent-2: #49d2c5;
+      --good: #8ee7b0;
+      --bad: #ff9b9b;
+      --shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Trebuchet MS", "Segoe UI", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top, #3a2468 0%, transparent 42%),
+        var(--bg);
+    }
+    button, .card { font: inherit; color: inherit; }
+    button { cursor: pointer; }
+    .screen { display: none; min-height: 100vh; }
+    .screen.active { display: block; }
+    .wrap { width: min(1120px, calc(100% - 28px)); margin: 0 auto; padding: 22px 0 32px; }
+    h1 { margin: 0 0 6px; font-size: 40px; letter-spacing: -0.04em; }
+    h2 { margin: 0 0 8px; font-size: 22px; }
+    p { color: var(--muted); line-height: 1.45; }
+    .row { display: flex; gap: 12px; flex-wrap: wrap; }
+    .choice, .primary, .ghost, .pad button, .actor, .lab-hotspot {
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.04);
+      border-radius: 14px;
+    }
+    .choice, .primary, .ghost { padding: 12px 16px; }
+    .primary { background: var(--accent); border-color: transparent; font-weight: 700; }
+    .primary:disabled { opacity: 0.45; cursor: not-allowed; }
+    .ghost { background: transparent; }
+    .choice { text-align: left; min-width: 220px; }
+    .choice strong, .parent strong { display: block; }
+    .choice.selected, .parent.selected { outline: 3px solid var(--accent-2); }
+    .sprites { display: flex; gap: 18px; align-items: end; margin: 18px 0; }
+    .sprites figure { margin: 0; text-align: center; color: var(--muted); font-size: 13px; }
+    .sprites img, .parent img, .result-pet { image-rendering: auto; }
+    .sprites img { height: 120px; }
+    .stage { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 14px; align-items: start; }
+    #map {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 1280 / 853;
+      border-radius: 16px;
+      overflow: hidden;
+      background: #111 url("assets/shop/cenario-1.png") center / cover no-repeat;
+      box-shadow: var(--shadow);
+    }
+    .actor, .lab-hotspot, #player {
+      position: absolute;
+      transform: translate(-50%, -92%);
+      padding: 0;
+      background: transparent;
+      border: 0;
+    }
+    .actor img, #player img { height: 96px; width: auto; filter: drop-shadow(0 6px 0 rgba(0, 0, 0, 0.35)); }
+    .actor span, .lab-hotspot span, .pin {
+      display: block;
+      margin-top: 2px;
+      font-size: 12px;
+      background: rgba(10, 8, 18, 0.82);
+      border-radius: 999px;
+      padding: 2px 7px;
+    }
+    .actor.done span { color: var(--good); }
+    .actor.active span { color: #ffe08a; }
+    .lab-hotspot {
+      width: 92px;
+      min-height: 64px;
+      border: 2px dashed rgba(255, 230, 140, 0.85);
+      border-radius: 12px;
+      background: rgba(80, 50, 10, 0.28);
+    }
+    #hud, .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 14px;
+      box-shadow: var(--shadow);
+    }
+    #log { min-height: 3.2em; }
+    .pad { display: grid; grid-template-columns: 52px 52px 52px; gap: 6px; justify-content: center; margin-top: 12px; }
+    .pad button { height: 44px; }
+    .pad .wide { grid-column: 1 / -1; }
+    .parents { display: grid; gap: 8px; }
+    .parent { display: grid; grid-template-columns: 72px 1fr; gap: 8px; align-items: center; text-align: left; padding: 8px; }
+    .parent img { width: 72px; height: 72px; object-fit: contain; }
+    .lab-grid { display: grid; grid-template-columns: 340px 1fr; gap: 16px; }
+    table { border-collapse: collapse; width: 100%; }
+    th, td { border: 1px solid var(--line); padding: 8px; text-align: center; vertical-align: middle; }
+    td.match { background: rgba(73, 210, 197, 0.18); }
+    td small { display: block; color: var(--muted); }
+    .chance { font-size: 28px; margin: 8px 0; }
+    .hidden { display: none !important; }
+    @media (max-width: 860px) {
+      .stage, .lab-grid { grid-template-columns: 1fr; }
+      h1 { font-size: 32px; }
+      .actor img, #player img { height: 72px; }
+    }
+  </style>
+</head>
+<body>
+  <main id="menu" class="screen active">
+    <div class="wrap">
+      <h1>Pet Shop Mendel</h1>
+      <p>Nível 1 · Mendelino · um gene · dominância completa. O pedido sai do fenótipo dos pais, e o quadro de Punnett usa a mesma conta.</p>
+      <div class="sprites" id="cast"></div>
+      <div class="row">
+        <button class="choice" id="pick-solo" type="button"><strong>Solo</strong>Você faz o geneticista e o laboratorista.</button>
+        <button class="choice" id="pick-coop" type="button"><strong>Coop local</strong>Jogador 1 escolhe os pais. Jogador 2 lê o Punnett.</button>
+      </div>
+      <div id="characters" class="row hidden" style="margin-top:14px"></div>
+    </div>
+  </main>
+
+  <section id="world" class="screen">
+    <div class="wrap stage">
+      <div>
+        <div id="map">
+          <div id="player"><img alt="" src="assets/sprites/personagens/geneticista/front.png"></div>
+          <button class="lab-hotspot" id="lab-hotspot" type="button" style="left:78%; top:24%"><span>Laboratório</span></button>
+        </div>
+        <div class="pad" aria-label="Movimento">
+          <span></span>
+          <button type="button" data-move="0,-6">↑</button>
+          <span></span>
+          <button type="button" data-move="-6,0">←</button>
+          <button type="button" id="interact">Interagir</button>
+          <button type="button" data-move="6,0">→</button>
+          <span></span>
+          <button type="button" data-move="0,6">↓</button>
+          <span></span>
+        </div>
+      </div>
+      <aside id="hud">
+        <h2 id="mode-label">Loja</h2>
+        <p id="log">Chegue perto de um cliente e interaja.</p>
+        <div id="orders"></div>
+        <p id="score-line"></p>
+      </aside>
+    </div>
+  </section>
+
+  <section id="lab" class="screen">
+    <div class="wrap">
+      <h1>Laboratório</h1>
+      <p id="lab-order"></p>
+      <div class="lab-grid">
+        <div>
+          <h2 id="lab-role">Geneticista</h2>
+          <div class="parents" id="parents"></div>
+        </div>
+        <div class="panel">
+          <h2>Quadro de Punnett</h2>
+          <div id="punnett-box"></div>
+          <div class="row" style="margin-top:12px">
+            <button class="primary" id="lock-parents" type="button">Travar pais</button>
+            <button class="primary" id="confirm-cross" type="button">Confirmar cruzamento</button>
+            <button class="ghost" id="back-shop" type="button">Voltar à loja</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="result" class="screen">
+    <div class="wrap panel">
+      <h1 id="result-title">Resultado</h1>
+      <p id="result-copy"></p>
+      <div id="result-square"></div>
+      <button class="primary" id="result-ok" type="button">Continuar</button>
+    </div>
+  </section>
+
+  <section id="done" class="screen">
+    <div class="wrap panel">
+      <h1>Nível 1 completo</h1>
+      <p id="done-copy"></p>
+      <div id="done-list"></div>
+      <button class="primary" id="replay" type="button">Jogar de novo</button>
+    </div>
+  </section>
+
+  <script src="js/genetics.js"></script>
+  <script src="js/game.js"></script>
+</body>
+</html>
