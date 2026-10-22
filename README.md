@@ -1,7 +1,7 @@
 # Pet Shop Mendel
 
-Jogo educacional no navegador sobre um gene fictício da cor do Mendelino.
-Este protótipo tem um nível solo, em português, com três atendimentos.
+Jogo educacional no navegador sobre modelos fictícios de herança para gatinho, cachorrinho e coelhinho.
+São três níveis para um jogador (um por espécie), com um único atendente e quatro pedidos por nível.
 
 ## Como abrir
 
@@ -14,32 +14,39 @@ Se uma imagem necessária não abrir, a tela inicial mostra o caminho que falhou
 ## Como jogar
 
 1. Clique em **Jogar**.
-2. Ande com **WASD** ou as **setas**. O HUD mostra o pedido e a próxima ação. **Ajuda** reúne os controles e a teoria.
-3. Fale com o cliente na marca roxa e pressione **E**. O diálogo traz o pedido. **Ir ao laboratório** só fecha a conversa.
-4. Vá à marca azul e pressione **E**. A bancada mostra os pais, o quadro de Punnett e a chance.
-5. Confirme um cruzamento que atenda ao pedido e volte ao cliente para entregar.
-6. Repita nos três clientes. **Jogar novamente** reinicia o nível sem recarregar a página.
+2. Ande com **WASD** ou as **setas**. O HUD mostra o pedido e a próxima ação. **Ajuda** reúne os controles.
+3. Aguarde o cliente chegar ao balcão. Aproxime-se e pressione **E** para ouvir o pedido (por exemplo, "um gatinho marrom, de olhos verdes").
+4. Siga a seta branca até o laboratório e pressione **E**. Você vê só a **aparência** dos bichos disponíveis: os genes ficam escondidos.
+5. Escolha **dois pais** e clique em **Cruzar**. Nasce um **filhote sorteado**. O **caderno** guarda todos os cruzamentos.
+6. Se o filhote tem tudo o que o cliente pediu, escolha **Entregar este filhote**, leve até o cliente e pressione **E**. Se não tem, o cliente diz o que está errado: cruze de novo ou troque os pais.
 
-Uma escolha abaixo da chance pedida não avança o pedido. **Limpar seleção** ou **Rever os pais** permite corrigir. Fechar o painel não entrega o pedido.
+Quanto menos cruzamentos, mais estrelas (até 3 por pedido). Cada nível tem uma espécie, com quatro pedidos de dificuldade crescente.
 
-## O que o nível mostra
+## O que o jogo mostra
 
-- Genótipo (AA, Aa, aa) e fenótipo (pelo roxo ou marrom).
-- Alelo **A** dominante e alelo **a** recessivo.
-- Homozigose (AA ou aa) e heterozigose (Aa). AA e Aa têm a mesma aparência roxa.
-- Gametas de cada pai e o quadro de Punnett 2×2, com 25% por célula.
-- A chance calculada a partir dos pais escolhidos, não de uma proporção fixa.
+- Cinco características nas três espécies: cor, olhos, orelhas, manchas e rabo, herdadas por seis genes independentes (dois para a cor).
+- Dominância e recessividade, sem mostrar genótipos, porcentagens ou quadros de Punnett: o jogador deduz pelos filhotes e pelo caderno.
+- Portadores: um bicho pode ter uma característica escondida e passá-la adiante.
+- Sorte e raciocínio: cada filhote é um sorteio, mas todo pedido tem pais no catálogo que o geram.
 
-É um modelo didático fictício, não uma descrição da genética real dos gatos. O exemplo de descendente mostra um resultado possível; a entrega não faz um sorteio.
+É um modelo didático fictício, não uma descrição da genética real desses animais.
 
 ## Arquivos do protótipo
 
 - `index.html`: telas, painéis e canvas.
 - `css/style.css`: layout, painéis e botões.
 - `js/assets.js`: caminhos e recortes dos sprites usados.
-- `js/genetics.js`: gametas, cruzamento, fenótipo e validação do pedido.
-- `js/main.js`: mundo, teclado, pedidos e interface.
+- `js/catalog.js`: espécies, indivíduos e regras visuais (genótipo → aparência).
+- `js/orders.js`: níveis e pedidos em linguagem natural, sem porcentagens.
+- `js/breeding.js`: o cruzamento do jogo (pais do catálogo, filhote sorteado, caderno e estrelas).
+- `js/genetics.js`: gametas e cruzamentos usados pelo catálogo e pelos testes.
+- `js/main.js`: mundo, teclado, pedidos, animação do atendente e interface.
+- `js/customers.js`: chegada pela borda da rua, entrada pela porta, espera e saída dos clientes.
+- `js/sprites.js`: desenhos completos e frontais de cada família com variações genéticas; `js/pet-art-data.js` permite usar a arte também sem servidor.
+- `assets/animals/familias-anime.png`: atlas compartilhado de gato, cachorro e coelho.
+- `assets/players/atendente-walk.png`: um personagem, três quadros por direção.
+- `tests/phase05.test.js`: genética, cruzamento e filhote sorteado, pedidos, entrega, estrelas e trajeto dos clientes. Execute `node tests/phase05.test.js`.
 
 ## Fora deste protótipo
 
-Cooperativo, outros níveis, outras espécies, genética de dois genes, sons, animação completa de caminhada, moedas e contas de jogador.
+Cooperativo e seleção de personagem não fazem parte do escopo. Os seis clientes usam 16 quadros cada: quatro passos para cada direção, na entrada e na saída. Os recortes e apoios estão em `js/client-frames.js`, gerados por `node tools/build-client-frames.js`. O atendente também possui caminhada em quatro direções.

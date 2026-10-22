@@ -1,0 +1,125 @@
+/* ==========================================================================
+   HUD, dica de interação e diálogos — mesmo tema madeira do laboratório.
+   Carregado depois de style.css; lab.css define as mesmas cores para o painel.
+   ========================================================================== */
+:root {
+  --ui-bg: #1b130e;
+  --ui-panel: #2b1f16;
+  --ui-raised: #46341f;
+  --ui-line: #5c4430;
+  --ui-edge: #8a6a43;
+  --ui-shadow: #120b07;
+  --ui-cream: #fff2d5;
+  --ui-muted: #cdbba0;
+  --ui-gold: #f0b429;
+  --ui-gold-soft: #ffe0a1;
+  --ui-serif: 'Palatino Linotype', 'Book Antiqua', Georgia, serif;
+}
+
+/* HUD: cartão de pedido no canto superior esquerdo */
+#hud {
+  top: 0.85rem;
+  left: 0.85rem;
+  transform: none;
+  width: 15.5rem;
+  padding: 0.6rem 0.75rem 0.7rem;
+  background: var(--ui-panel);
+  border: 2px solid var(--ui-edge);
+  border-radius: 4px;
+  box-shadow: 0 0 0 2px var(--ui-shadow);
+  color: var(--ui-cream);
+  text-shadow: none;
+}
+.hud-bar { margin-bottom: 0.35rem; padding-bottom: 0.35rem; border-bottom: 1px solid var(--ui-line); }
+#progress { color: var(--ui-gold-soft); font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; }
+#order-summary { font-size: 1rem; font-weight: 700; line-height: 1.3; color: var(--ui-cream); }
+#objective { color: var(--ui-muted); font-size: 0.82rem; }
+#status { color: var(--ui-gold-soft); font-size: 0.8rem; }
+
+/* Dica de interação */
+#hint {
+  bottom: 0.85rem;
+  padding: 0.4rem 0.85rem;
+  background: var(--ui-panel);
+  border: 2px solid var(--ui-edge);
+  border-radius: 4px;
+  box-shadow: 0 0 0 2px var(--ui-shadow);
+  color: var(--ui-cream);
+  font-weight: 700;
+  text-shadow: none;
+}
+
+/* Botão de ajuda */
+#btn-help {
+  right: 0.85rem;
+  bottom: 0.85rem;
+  min-height: 34px;
+  padding: 0.25rem 0.65rem;
+  background: var(--ui-panel);
+  border: 2px solid var(--ui-edge);
+  border-radius: 4px;
+  box-shadow: 0 0 0 2px var(--ui-shadow);
+  color: var(--ui-cream);
+  font-weight: 700;
+  text-shadow: none;
+}
+#btn-help:hover { background: var(--ui-raised); color: #fff; }
+
+/* Diálogo do cliente */
+#dialogue {
+  bottom: 1.5rem;
+  grid-template-columns: 84px minmax(0, 1fr);
+  column-gap: 1rem;
+  padding: 0.9rem 1.1rem 0.6rem;
+  border: 2px solid var(--ui-edge);
+  border-radius: 4px;
+  background: var(--ui-panel);
+  box-shadow: 0 0 0 3px var(--ui-shadow);
+  color: var(--ui-cream);
+  font-family: var(--ui-serif);
+}
+.dialogue-portrait {
+  width: 84px;
+  height: 84px;
+  padding: 4px;
+  background: var(--ui-bg);
+  border: 2px solid var(--ui-line);
+  border-radius: 4px;
+}
+.dialogue-copy h2 { margin: 0 0 0.3rem; color: var(--ui-gold-soft); font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; }
+.dialogue-copy p { color: var(--ui-cream); font-size: 1.12rem; line-height: 1.5; }
+.dialogue-actions button {
+  min-height: 36px;
+  padding: 0.3rem 0.9rem;
+  border: 2px solid #ffd36b;
+  border-radius: 4px;
+  background: var(--ui-gold);
+  color: #2b1a05;
+  font-weight: 700;
+}
+.dialogue-actions button:hover { background: #ffc94d; color: #2b1a05; }
+#dialogue :focus-visible { outline: 3px solid var(--ui-gold-soft); outline-offset: 2px; }
+
+/* Tela final e ajuda */
+.screen-card { background: var(--ui-panel); color: var(--ui-cream); border: 2px solid var(--ui-edge); border-radius: 4px; box-shadow: 0 0 0 3px var(--ui-shadow); font-family: var(--ui-serif); }
+.screen-card button, #modal.is-help button.secondary { border-radius: 4px; }
+#screen-end .screen-card button { background: var(--ui-gold); color: #2b1a05; border: 2px solid #ffd36b; font-weight: 700; }
+#screen-end .screen-card button:hover { background: #ffc94d; }
+#screen-end details { background: var(--ui-bg); border: 1px solid var(--ui-line); border-radius: 4px; color: var(--ui-cream); }
+#screen-end summary { color: var(--ui-gold-soft); }
+.done-count { color: var(--ui-gold-soft); font-weight: 700; }
+
+@media (max-width: 720px) {
+  #hud { width: 12.5rem; padding: 0.45rem 0.6rem; }
+  #order-summary { font-size: 0.9rem; }
+  #dialogue { grid-template-columns: 56px minmax(0, 1fr); }
+  .dialogue-portrait { width: 56px; height: 56px; }
+}
+
+/* Ajuda */
+#modal.is-help { --paper: var(--ui-panel); --paper-2: var(--ui-bg); --ink: var(--ui-cream); --line: var(--ui-line); background: rgba(14, 9, 6, 0.72); }
+#modal.is-help .modal-card { background: var(--ui-panel); color: var(--ui-cream); border: 2px solid var(--ui-edge); border-radius: 4px; box-shadow: 0 0 0 3px var(--ui-shadow); font-family: var(--ui-serif); }
+#modal.is-help .panel-head h2, #modal.is-help h3 { color: var(--ui-gold-soft); }
+#modal.is-help #modal-kicker { color: var(--ui-muted); }
+#modal.is-help button { background: var(--ui-raised); color: var(--ui-cream); border: 2px solid var(--ui-edge); border-radius: 4px; }
+#modal.is-help button:hover { background: #5a4228; }

@@ -1,0 +1,457 @@
+/* ==========================================================================
+ Laboratório — bancada de cruzamento (tema madeira quente, igual ao menu).
+ Carregado depois de style.css e sobrescreve o tema cinza antigo.
+ ========================================================================== */
+
+/* --- Estrutura (movida de style.css) --- */
+/* Laboratório: coleção visual e análise lado a lado. */
+#modal.is-bench {
+  padding: 1rem;
+}
+#modal.is-bench .modal-card {
+  width: min(1380px, 100%);
+  height: calc(100dvh - 2rem);
+  max-height: 900px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: none;
+  border: 1px solid var(--lab-edge);
+  border-radius: 0;
+  font-family: 'Bahnschrift', 'Trebuchet MS', sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.005em;
+}
+#modal.is-bench .panel-head {
+  position: static;
+  flex: 0 0 auto;
+  margin: 0;
+  padding: 1rem 1.4rem;
+  border-bottom: 1px solid var(--line);
+}
+#modal.is-bench .panel-head h2 { font-size: 1.25rem; font-weight: 600; }
+#modal.is-bench #modal-kicker { display: none; }
+#modal.is-bench #modal-body { display: flex; flex-direction: column; flex: 1; min-height: 0; overflow: hidden; }
+.lab-order {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.75rem 1.4rem;
+  background: var(--lab-panel-2);
+  color: var(--lab-cream);
+}
+.lab-order > div { display: grid; gap: 0.15rem; }
+.order-client { font-size: 0.78rem; }
+.lab-order strong { font-size: 1rem; }
+.lab-order-hint { font-size: 0.85rem; max-width: 22ch; }
+.lab-workspace { display: grid; grid-template-columns: minmax(0, 1fr) minmax(330px, 0.68fr); flex: 1; min-height: 0; }
+.lab-library { min-height: 0; min-width: 0; display: flex; flex-direction: column; padding: 1rem 1.25rem 0; background: var(--lab-bg); }
+.species-tabs { display: flex; gap: 0.4rem; flex: 0 0 auto; border-bottom: 1px solid var(--line); padding-bottom: 0.7rem; }
+.lab-tab { background: transparent; color: var(--lab-muted); border-radius: 0; font-weight: 600; }
+.lab-tab:hover { color: var(--purple-dark); background: var(--lab-panel-2); }
+.lab-tab.is-active { background: var(--lab-raised); color: var(--purple-dark); }
+.species-tabs .lab-tab { position: relative; flex: 1; min-width: 0; text-align: left; padding: 0.55rem 0.35rem 0.55rem 3.4rem; font-size: 0.94rem; }
+.species-tabs .lab-tab .thumb { position: absolute; top: 50%; left: 0.3rem; transform: translateY(-50%); width: 44px; height: 44px; background: transparent; }
+.species-count { display: block; font-size: 0.78rem; font-weight: 400; }
+.collection-panel { display: flex; flex-direction: column; min-height: 0; flex: 1; }
+.trait-filters { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.45rem 0.6rem; margin-bottom: 0.8rem; }
+.trait-filters label { display: grid; gap: 0.2rem; min-width: 0; font-size: 0.75rem; color: var(--lab-muted); }
+.trait-filters select { width: 100%; min-height: 34px; border: 1px solid var(--lab-line); border-radius: 0; padding: 0.25rem 0.35rem; background: var(--lab-panel); color: var(--lab-cream); font: inherit; font-size: 0.82rem; color-scheme: dark; }
+#modal.is-bench .clear-filters { align-self: end; min-height: 34px; background: transparent; padding: 0.25rem; border: 1px solid var(--lab-line); color: var(--lab-cream); font-size: 0.78rem; }
+.trait-chances { display: grid; grid-template-columns: 1fr auto; gap: 0.35rem 0.7rem; font-size: 0.8rem; margin: 0.8rem 0; }
+.trait-chances dt, .trait-chances dd { margin: 0; }
+.trait-chances dd { text-align: right; font-variant-numeric: tabular-nums; }
+.offspring-traits { margin: 0.25rem 0 0; font-size: 0.72rem; line-height: 1.4; color: var(--lab-muted); }
+.offspring-details .offspring-row { padding-block: 0.6rem; border-top: 1px solid var(--lab-line); }
+.trait-punnett { margin-bottom: 0.7rem; }
+.trait-punnett .cell-pheno { font-size: 0.7rem; }
+.trait-punnett caption { font-size: 0.75rem; }
+.lab-order strong { line-height: 1.45; }
+.lab-order > div { flex: 1; min-width: 0; }
+.lab-order-hint { flex: 0 0 10rem; }
+.lab-library .parent-card .pet-art { min-height: 126px; }
+.lab-library .parent-card { min-height: 250px; height: max-content; }
+.lab-library .parent-card .pet-art, .lab-library .parent-card .pet-card-copy { flex-shrink: 0; }
+.lab-library .parent-card .thumb { width: 120px; height: 120px; }
+.lab-library .parent-card .genotype-label { font-size: 0.73rem; overflow-wrap: anywhere; font-weight: 400; color: var(--lab-muted); }
+.lab-sidebar .slot .genotype-label { font-size: 0.72rem; }
+.lab-sidebar .slot-copy strong { overflow-wrap: anywhere; }
+.collection-heading, .selection-heading { display: flex; justify-content: space-between; align-items: center; gap: 0.5rem; }
+.collection-heading { margin: 0.9rem 0 0.65rem; }
+.collection-heading h3, .selection-heading h3 { font-size: 1rem; margin: 0; }
+.collection-heading > span, .selection-heading > span { color: var(--lab-muted); font-size: 0.78rem; }
+.pet-filters { display: flex; flex-wrap: wrap; gap: 0.35rem; padding-bottom: 0.8rem; }
+.pet-filter { min-height: 34px; background: var(--lab-panel); color: var(--lab-muted); border-radius: 0; padding: 0.35rem 0.6rem; font-size: 0.8rem; font-weight: 400; }
+.pet-filter:hover { background: var(--lab-raised); color: var(--purple-dark); }
+.pet-filter.is-active { background: var(--lab-cream); color: #202020; }
+.collection-notice { padding: 0.65rem; margin: 0 0 0.6rem; background: var(--lab-panel-2); color: var(--lab-cream); border-radius: 0; font-size: 0.8rem; }
+.lab-library .parent-list { grid-template-columns: repeat(auto-fill, minmax(135px, 1fr)); grid-auto-rows: max-content; gap: 0.65rem; align-content: start; overflow-y: auto; padding: 3px 5px 1rem 3px; scrollbar-color: var(--lab-edge) var(--lab-bg); scrollbar-width: thin; }
+.lab-library .parent-card { display: flex; flex-direction: column; align-items: stretch; gap: 0; border: 1px solid var(--lab-line); padding: 0; border-radius: 0; overflow: hidden; font-size: 0.87rem; transition: border-color 150ms, background 150ms; }
+.lab-library .parent-card:disabled { opacity: 1; cursor: default; }
+.pet-art { position: relative; display: grid; place-items: center; background: var(--lab-panel-2); min-height: 112px; }
+.lab-library .parent-card .thumb { width: 106px; height: 106px; background: transparent; border-radius: 0; }
+.thumb { image-rendering: auto; }
+.pet-selected { position: absolute; top: 0.4rem; left: 0.4rem; background: var(--lab-cream); color: #202020; border-radius: 0; padding: 0.15rem 0.4rem; font-size: 0.68rem; font-weight: 400; }
+.pet-card-copy { padding: 0.55rem 0.6rem 0.6rem; display: grid; gap: 0.15rem; }
+.lab-library .parent-card .who { font-size: 0.92rem; font-weight: 600; }
+.pet-appearance { font-size: 0.8rem; line-height: 1.4; color: var(--lab-muted); }
+.genotype-label { font-size: 0.85rem; font-weight: 500; font-variant-numeric: tabular-nums; color: var(--purple-dark); }
+.lab-sidebar { padding: 1rem; min-width: 0; min-height: 0; display: flex; flex-direction: column; background: var(--lab-panel); border-left: 1px solid var(--line); }
+.lab-sidebar .slots { grid-template-columns: 1fr 1fr; gap: 0.5rem; margin: 0.65rem 0 1rem; }
+.lab-sidebar .slot { display: flex; position: relative; flex-wrap: wrap; align-content: start; justify-content: flex-start; padding: 0.55rem; min-height: 116px; border: 1px solid var(--lab-line); border-radius: 0; background: var(--lab-panel-2); gap: 0.25rem; }
+.lab-sidebar .slot.is-target { border-color: var(--purple); background: #383838; }
+.lab-sidebar .slot .thumb { width: 48px; height: 48px; background: transparent; }
+.slot-copy { display: grid; flex: 1; min-width: 70px; gap: 0.05rem; font-size: 0.78rem; }
+.slot-label { color: var(--lab-muted); font-size: 0.76rem; }
+.slot-controls { display: flex; gap: 0.5rem; width: 100%; }
+.lab-sidebar .slot .text-button { background: transparent; color: var(--purple); padding: 0; min-height: 30px; font-size: 0.72rem; text-decoration: underline; text-underline-offset: 3px; }
+.lab-sidebar .slot .text-button:hover { color: var(--purple-dark); }
+.lab-sidebar .slot-empty { width: 100%; padding: 0.3rem; min-height: 44px; background: var(--lab-raised); color: var(--purple-dark); font-size: 0.8rem; }
+.slot-help { width: 100%; text-align: center; font-size: 0.76rem; color: var(--lab-muted); }
+.analysis-tabs { display: flex; gap: 0.2rem; border-bottom: 1px solid var(--line); padding-bottom: 0.4rem; }
+.analysis-tabs .lab-tab { min-height: 38px; flex: 1; padding: 0.4rem; font-size: 0.78rem; white-space: nowrap; }
+.analysis-panel { flex: 1; min-height: 0; overflow: auto; padding: 0.9rem 0.15rem; scrollbar-color: var(--lab-edge) var(--lab-bg); scrollbar-width: thin; }
+.analysis-panel h3 { margin: 0 0 0.6rem; font-size: 1rem; }
+.analysis-panel .chance-line { margin: 0.5rem 0; font-size: 0.95rem; }
+.analysis-panel .chance-req { display: block; color: var(--lab-muted); font-size: 0.78rem; margin-top: 0.25rem; }
+.analysis-panel .empty-note { font-size: 0.88rem; color: var(--lab-muted); margin: 0; }
+.offspring-list { margin-top: 1rem; display: grid; gap: 0.7rem; }
+.offspring-row { display: flex; align-items: center; gap: 0.6rem; font-size: 0.8rem; }
+.offspring-row .thumb { width: 54px; height: 54px; background: transparent; }
+.offspring-row > div { flex: 1; }
+.chance-value { font-size: 1.1rem; color: var(--purple-dark); font-variant-numeric: tabular-nums; }
+.chance-track { height: 5px; background: var(--lab-line); border-radius: 0; margin-top: 0.5rem; overflow: hidden; }
+.chance-track span { display: block; height: 100%; background: var(--purple); }
+.genetic-rules { display: grid; grid-template-columns: 1fr 1fr; gap: 0; margin: 0.7rem 0; font-size: 0.85rem; }
+.genetic-rules dt, .genetic-rules dd { margin: 0; padding: 0.45rem 0; border-bottom: 1px solid var(--lab-line); }
+.genetic-rules dt { font-weight: 700; color: var(--purple-dark); }
+.species-guide > p { font-size: 0.83rem; }
+.species-guide h4 { margin: 1rem 0 0.5rem; font-size: 0.85rem; }
+.guide-visuals { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.4rem; }
+.guide-visuals figure { margin: 0; text-align: center; }
+.guide-visuals .thumb { width: 100%; height: 62px; background: transparent; }
+.guide-visuals figcaption { font-size: 0.76rem; line-height: 1.4; }
+.guide-note { color: var(--lab-muted); padding-top: 0.4rem; }
+#modal.is-bench .bench-actions { flex: 0 0 auto; margin: 0; padding: 0.75rem 1.25rem; background: var(--lab-bg); border-top: 1px solid var(--line); display: flex; justify-content: flex-end; gap: 0.65rem; position: static; }
+#modal.is-bench #btn-confirm { order: 2; }
+#modal.is-bench .bench-actions button { min-height: 44px; margin: 0; }
+#modal.is-bench button { border-radius: 0; font-family: inherit; font-weight: 500; }
+#modal.is-bench h3 { font-weight: 500; }
+#modal.is-bench .approval-banner { flex: 0 0 auto; margin: 0; padding: 1rem 1.25rem; }
+#modal.is-bench #modal-body > .bench { flex: 1; min-height: 0; overflow: auto; padding: 1.25rem; }
+.approved-parent { display: flex; align-items: center; gap: 0.75rem; padding: 0.7rem 0; }
+.approved-parent .thumb { width: 96px; height: 96px; background: transparent; }
+.approved-parent p { display: grid; gap: 0.3rem; font-size: 0.85rem; }
+@media (max-width: 1000px) {
+  .lab-workspace { grid-template-columns: minmax(0, 1fr) 325px; }
+  .lab-library { padding-inline: 0.85rem; }
+  .species-tabs .lab-tab { font-size: 0.8rem; padding-left: 2.7rem; }
+  .species-tabs .lab-tab .thumb { width: 34px; height: 34px; }
+  .lab-library .parent-list { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); }
+}
+@media (max-width: 700px) {
+  #modal.is-bench { padding: 0; }
+  #modal.is-bench .modal-card { height: 100dvh; max-height: 100dvh; border-radius: 0; }
+  #modal.is-bench .panel-head { padding: 0.65rem 0.85rem; }
+  #modal.is-bench .panel-head h2 { font-size: 1.2rem; }
+  #modal.is-bench #modal-body { overflow-y: auto; display: block; }
+  .lab-order { padding: 0.6rem 0.85rem; }
+  .lab-order-hint { display: none; }
+  .lab-order strong { font-size: 0.85rem; }
+  .lab-workspace { display: flex; flex-direction: column; }
+  .lab-library { padding: 0.8rem; }
+  .lab-library .parent-list { overflow: visible; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .species-tabs .lab-tab { font-size: 0.8rem; }
+  .lab-sidebar { border-left: 0; border-top: 1px solid var(--line); }
+  .lab-sidebar .slot { min-height: 108px; }
+  .analysis-panel { overflow: visible; min-height: 130px; }
+  #modal.is-bench .bench-actions { position: sticky; bottom: 0; padding: 0.65rem 0.8rem; }
+  #modal.is-bench .bench-actions button { flex: 1; font-size: 0.83rem; padding-inline: 0.4rem; }
+}
+@media (prefers-reduced-motion: reduce) { .lab-library .parent-card { transition: none; } }
+.combination-manual { overflow-y:auto; min-height:0; padding-right:8px; line-height:1.5; }
+.combination-manual > p { margin:0 0 12px; }
+.manual-count { padding-top:12px; font-variant-numeric:tabular-nums; }
+.manual-filters > summary { cursor:pointer; padding:8px 0; text-decoration:underline; text-underline-offset:3px; }
+.collection-modes, .manual-filters { flex-shrink:0; }
+.combination-entry { border-top:1px solid var(--lab-line); }
+.combination-entry summary { display:flex; align-items:center; gap:14px; cursor:pointer; padding:10px 4px; }
+.combination-entry summary .thumb { width:78px; height:78px; flex-shrink:0; }
+.combination-entry summary span span, .combination-entry summary em { display:block; margin-top:4px; font-style:normal; }
+.combination-entry summary em { text-decoration:underline; text-underline-offset:3px; }
+.combination-recipe { margin:0 0 18px 96px; }
+.combination-recipe p { margin:8px 0; }
+@media(max-width:700px) { .combination-manual { overflow:visible; } .combination-recipe { margin-left:4px; } }
+
+/* --- Tema --- */
+#modal.is-bench {
+ --lab-bg: #1b130e;
+ --lab-panel: #2b1f16;
+ --lab-panel-2: #382a1d;
+ --lab-raised: #46341f;
+ --lab-line: #5c4430;
+ --lab-edge: #8a6a43;
+ --lab-shadow: #120b07;
+ --lab-cream: #fff2d5;
+ --lab-muted: #cdbba0;
+ --lab-gold: #f0b429;
+ --lab-gold-soft: #ffe0a1;
+ --lab-ok: #8fe3a2;
+ --lab-ok-bg: #173323;
+ --lab-bad: #ffa597;
+ --lab-bad-bg: #3d1c17;
+ --lab-serif: 'Palatino Linotype', 'Book Antiqua', Georgia, serif;
+ --lab-mono: Consolas, 'Courier New', monospace;
+ --paper: var(--lab-panel);
+ --ink: var(--lab-cream);
+ --line: var(--lab-line);
+ background: rgba(14, 9, 6, 0.72);
+}
+#modal.is-bench .modal-card {
+ background: var(--lab-bg);
+ color: var(--lab-cream);
+ border: 2px solid var(--lab-edge);
+ border-radius: 4px;
+ box-shadow: 0 0 0 4px var(--lab-shadow), 0 24px 60px rgba(0, 0, 0, 0.6);
+}
+#modal.is-bench .panel-head {
+ background: var(--lab-panel);
+ border-bottom: 2px solid var(--lab-shadow);
+ box-shadow: inset 0 -1px 0 var(--lab-line);
+}
+#modal.is-bench .panel-head h2 { font-family: var(--lab-serif); font-size: 1.5rem; font-weight: 700; color: var(--lab-gold-soft); letter-spacing: 0.01em; }
+#modal.is-bench h3, #modal.is-bench h4 { font-family: var(--lab-serif); font-weight: 700; color: var(--lab-cream); }
+
+/* Botões com relevo "pixel" e sombra dura */
+#modal.is-bench button { border-radius: 4px; }
+#modal.is-bench #btn-fechar-painel {
+ background: var(--lab-raised); color: var(--lab-cream); border: 2px solid var(--lab-edge);
+ min-height: 40px; font-weight: 600;
+}
+#modal.is-bench #btn-fechar-painel:hover { background: #5a4228; }
+#modal.is-bench .bench-actions { background: var(--lab-panel); border-top: 2px solid var(--lab-shadow); box-shadow: inset 0 1px 0 var(--lab-line); }
+#modal.is-bench .bench-actions button { border: 2px solid var(--lab-edge); background: var(--lab-raised); color: var(--lab-cream); font-weight: 600; }
+#modal.is-bench .bench-actions button:hover:not(:disabled) { background: #5a4228; }
+#modal.is-bench .bench-actions button:not(.secondary) { background: var(--lab-gold); color: #2b1a05; border-color: #ffd36b; }
+#modal.is-bench .bench-actions button:not(.secondary):hover:not(:disabled) { background: #ffc94d; }
+#modal.is-bench .bench-actions button:active:not(:disabled) { transform: translateY(2px); }
+#modal.is-bench .bench-actions button:disabled { opacity: 0.45; cursor: not-allowed; }
+#modal.is-bench :focus-visible { outline: 3px solid var(--lab-gold-soft); outline-offset: 2px; }
+
+/* Pedido: faixa de contexto */
+.lab-order { background: var(--lab-panel-2); border-bottom: 1px solid var(--lab-line); color: var(--lab-cream); padding: 0.7rem 1.4rem; }
+.lab-order .order-client { color: var(--lab-muted); font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.1em; }
+.lab-order strong { font-family: var(--lab-serif); font-size: 1.15rem; color: var(--lab-gold-soft); }
+.lab-order-hint { color: var(--lab-muted); font-style: italic; }
+
+/* Coluna da coleção */
+.lab-library { background: var(--lab-bg); padding: 1rem 1.25rem 0; }
+.species-tabs { gap: 0.5rem; border-bottom: 0; padding-bottom: 0.8rem; }
+.lab-tab { border-radius: 4px; color: var(--lab-muted); }
+.lab-tab:hover { background: var(--lab-panel-2); color: var(--lab-cream); }
+.lab-tab.is-active { background: var(--lab-raised); color: var(--lab-gold-soft); }
+.species-tabs .lab-tab {
+ display: flex; flex-direction: column; justify-content: center; align-items: flex-start; gap: 0.1rem;
+ border: 2px solid var(--lab-line); background: var(--lab-panel); padding: 0.4rem 0.5rem 0.4rem 3.6rem; min-height: 56px;
+ font-family: var(--lab-serif); font-size: 1rem; font-weight: 700; line-height: 1.15; text-align: left;
+}
+.species-tabs .lab-tab.is-active { border-color: var(--lab-gold); background: var(--lab-raised); }
+.species-tabs .lab-tab .thumb { left: 0.35rem; width: 46px; height: 46px; }
+.species-count { font-family: 'Segoe UI', sans-serif; font-size: 0.72rem; font-weight: 400; color: var(--lab-muted); }
+
+.collection-heading { margin: 0.4rem 0 0.6rem; }
+.collection-heading h3 { font-size: 1.15rem; color: var(--lab-gold-soft); }
+.collection-heading > span, .selection-heading > span { color: var(--lab-muted); background: var(--lab-panel); border: 1px solid var(--lab-line); border-radius: 2px; padding: 0.1rem 0.6rem; font-size: 0.74rem; white-space: nowrap; }
+
+/* Modo (Pais / Manual): controle segmentado */
+.collection-modes { display: grid; grid-template-columns: 1fr 1fr; gap: 0; margin: 0.2rem 0 0.9rem; border: 2px solid var(--lab-line); border-radius: 4px; overflow: hidden; }
+#modal .collection-modes button { background: var(--lab-panel); color: var(--lab-muted); border: 0; border-radius: 0; padding: 0.5rem 0.7rem; min-height: 40px; font-weight: 600; box-shadow: none; }
+#modal .collection-modes button + button { border-left: 2px solid var(--lab-line); }
+#modal .collection-modes button:hover { background: var(--lab-panel-2); color: var(--lab-cream); }
+#modal .collection-modes button[aria-pressed="true"] { background: var(--lab-raised); color: var(--lab-gold-soft); box-shadow: inset 0 0 0 2px var(--lab-gold); }
+
+/* Filtros compactos */
+.trait-filters { grid-template-columns: repeat(auto-fit, minmax(104px, 1fr)); gap: 0.4rem 0.5rem; margin-bottom: 0.7rem; }
+.trait-filters label { color: var(--lab-muted); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.06em; }
+.trait-filters select { background: var(--lab-panel); color: var(--lab-cream); border: 1px solid var(--lab-line); border-radius: 4px; min-height: 36px; }
+#modal.is-bench .clear-filters { background: transparent; border: 1px dashed var(--lab-line); color: var(--lab-muted); border-radius: 4px; box-shadow: none; }
+#modal.is-bench .clear-filters:hover { color: var(--lab-cream); border-color: var(--lab-muted); background: var(--lab-panel); }
+.collection-notice { background: var(--lab-panel-2); border: 1px solid var(--lab-edge); border-radius: 4px; color: var(--lab-cream); }
+
+/* Cards de pet */
+.lab-library .parent-list { grid-template-columns: repeat(auto-fill, minmax(158px, 1fr)); gap: 0.75rem; scrollbar-color: var(--lab-edge) var(--lab-bg); padding: 4px 6px 1rem 4px; }
+.lab-library .parent-card { min-height: 0; border: 2px solid var(--lab-line); border-radius: 4px; background: var(--lab-panel); overflow: hidden; transition: transform 120ms, border-color 120ms, box-shadow 120ms; }
+#modal.is-bench button.parent-card { background: var(--lab-panel); color: var(--lab-cream); }
+#modal.is-bench button.parent-card:hover:not(:disabled), #modal.is-bench button.parent-card:focus-visible { background: var(--lab-panel-2); border-color: var(--lab-gold-soft); transform: translateY(-2px); }
+#modal.is-bench button.parent-card.is-selected { background: #3c2c14; border-color: var(--lab-gold); outline: none; box-shadow: 0 0 0 2px var(--lab-gold); }
+#modal.is-bench button.parent-card:disabled, #modal.is-bench button.parent-card:disabled:hover { background: var(--lab-panel); border-color: var(--lab-line); opacity: 0.55; transform: none; }
+.pet-art, .pet-art[data-visual] { background: var(--lab-panel-2); border-bottom: 2px solid var(--lab-shadow); min-height: 124px; }
+.pet-art::after { content: ''; position: absolute; bottom: 12px; left: 50%; width: 62px; height: 10px; transform: translateX(-50%); background: rgba(0, 0, 0, 0.35); border-radius: 50%; z-index: 0; }
+.pet-art .thumb { position: relative; z-index: 1; }
+.lab-library .parent-card .thumb { width: 112px; height: 112px; }
+.pet-selected { background: var(--lab-gold); color: #2b1a05; border-radius: 2px; font-weight: 700; font-size: 0.7rem; padding: 0.15rem 0.5rem; z-index: 2; }
+.pet-card-copy { padding: 0.55rem 0.65rem 0.7rem; gap: 0.35rem; }
+.lab-library .parent-card .who { font-family: var(--lab-serif); font-size: 1.05rem; font-weight: 700; color: var(--lab-cream); }
+.pet-chips { display: flex; flex-wrap: wrap; gap: 0.25rem; }
+.chip { font-size: 0.68rem; line-height: 1; padding: 0.22rem 0.45rem; border-radius: 2px; background: #1f1610; border: 1px solid var(--lab-line); color: var(--lab-muted); white-space: nowrap; }
+.chip-color { background: var(--lab-raised); border-color: var(--lab-edge); color: var(--lab-gold-soft); font-weight: 600; }
+.lab-library .parent-card .genotype-label { font-family: var(--lab-mono); font-size: 0.72rem; color: var(--lab-muted); letter-spacing: 0.04em; }
+
+/* Bancada (coluna da direita) */
+.lab-sidebar { background: var(--lab-panel); border-left: 2px solid var(--lab-shadow); box-shadow: inset 1px 0 0 var(--lab-line); padding: 1rem 1.1rem; }
+.selection-heading h3 { font-size: 1.15rem; color: var(--lab-gold-soft); }
+.lab-sidebar .slots { grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: stretch; gap: 0.4rem; margin: 0.7rem 0 1rem; }
+.slot-cross { align-self: center; display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; background: var(--lab-gold); color: #2b1a05; font-family: var(--lab-serif); font-weight: 700; font-size: 1.3rem; line-height: 1; }
+.lab-sidebar .slot { flex-direction: column; flex-wrap: nowrap; align-items: center; justify-content: flex-start; text-align: center; gap: 0.2rem; min-height: 190px; padding: 0.7rem 0.5rem 0.5rem; border: 2px solid var(--lab-line); border-radius: 4px; background: var(--lab-panel-2); }
+.lab-sidebar .slot.is-target { border-color: var(--lab-gold); box-shadow: 0 0 0 2px var(--lab-gold); }
+.lab-sidebar .slot.is-empty { border-style: dashed; background: var(--lab-bg); }
+.slot-silhouette { display: grid; place-items: center; width: 72px; height: 72px; border-radius: 50%; border: 2px dashed var(--lab-line); color: var(--lab-line); font-family: var(--lab-serif); font-size: 2rem; font-weight: 700; margin-top: 0.2rem; }
+.lab-sidebar .slot .thumb { width: 84px; height: 84px; }
+.slot-copy { flex: 0 0 auto; min-width: 0; width: 100%; justify-items: center; gap: 0.1rem; font-size: 0.82rem; }
+.slot-copy strong { font-family: var(--lab-serif); font-size: 1.05rem; color: var(--lab-cream); }
+.slot-label { color: var(--lab-gold-soft); font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.1em; }
+.lab-sidebar .slot .genotype-label { font-family: var(--lab-mono); font-size: 0.72rem; color: var(--lab-muted); }
+.slot-controls { justify-content: center; gap: 0.9rem; margin-top: auto; }
+.lab-sidebar .slot .text-button { color: var(--lab-gold-soft); font-size: 0.74rem; border: 0; background: transparent; box-shadow: none; text-decoration: underline; text-underline-offset: 3px; }
+.lab-sidebar .slot .text-button:hover { color: #fff; background: transparent; }
+.lab-sidebar .slot-empty { width: 100%; min-height: 38px; margin-top: 0.4rem; background: var(--lab-raised); color: var(--lab-cream); border: 2px solid var(--lab-edge); border-radius: 4px; font-size: 0.82rem; font-weight: 600; }
+#modal.is-bench .slot-empty:hover { background: #5a4228; }
+.slot-help { color: var(--lab-muted); font-size: 0.72rem; }
+
+/* Abas de análise */
+.analysis-tabs { gap: 0.25rem; border-bottom: 2px solid var(--lab-line); padding-bottom: 0; }
+.analysis-tabs .lab-tab { border-radius: 4px 8px 0 0; font-weight: 600; margin-bottom: -2px; border-bottom: 2px solid transparent; }
+.analysis-tabs .lab-tab.is-active { background: var(--lab-bg); color: var(--lab-gold-soft); border-bottom-color: var(--lab-gold); }
+.analysis-panel { scrollbar-color: var(--lab-edge) var(--lab-panel); padding: 1rem 0.2rem; }
+.analysis-panel h3 { font-size: 1.15rem; color: var(--lab-gold-soft); }
+.analysis-panel .empty-note { background: var(--lab-bg); border: 1px dashed var(--lab-line); border-radius: 4px; padding: 1rem; text-align: center; color: var(--lab-muted); font-style: italic; }
+
+/* Resultado previsto: número grande, barra e veredito */
+#modal.is-bench .chance-line { display: grid; gap: 0.35rem; margin: 0.2rem 0 0.8rem; padding: 0.9rem 1rem; background: var(--lab-bg); border: 2px solid var(--lab-line); border-radius: 4px; font-size: 1rem; }
+.chance-label { color: var(--lab-muted); font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.08em; }
+.chance-big { font-family: var(--lab-serif); font-size: 2.6rem; line-height: 1; color: var(--lab-gold-soft); font-variant-numeric: tabular-nums; }
+.chance-track { display: block; height: 12px; margin: 0.2rem 0; background: var(--lab-shadow); border: 1px solid var(--lab-line); border-radius: 2px; overflow: hidden; }
+.chance-track span { display: block; height: 100%; background: var(--lab-gold); border-radius: 2px; transition: width 300ms; }
+.chance-req { display: block; color: var(--lab-muted); font-size: 0.8rem; margin: 0; }
+.verdict { border-radius: 4px; padding: 0.65rem 0.9rem 0.65rem 2.4rem; position: relative; font-family: var(--lab-serif); font-weight: 700; font-size: 1.05rem; border: 2px solid transparent; }
+.verdict::before { position: absolute; left: 0.8rem; top: 50%; transform: translateY(-50%); font-family: 'Segoe UI', sans-serif; font-weight: 700; }
+#modal.is-bench .verdict.is-ok { background: var(--lab-ok-bg); color: var(--lab-ok); border-color: #2f6b45; font-weight: 700; }
+#modal.is-bench .verdict.is-ok::before { content: '✓' / ''; }
+#modal.is-bench .verdict.is-bad { background: var(--lab-bad-bg); color: var(--lab-bad); border-color: #7a3a30; font-weight: 700; }
+#modal.is-bench .verdict.is-bad::before { content: '✕' / ''; }
+#modal.is-bench .alert { background: var(--lab-bad-bg); color: var(--lab-bad); border: 2px solid #7a3a30; border-radius: 4px; padding: 0.6rem 0.8rem; }
+.trait-chances { background: var(--lab-bg); border: 1px solid var(--lab-line); border-radius: 4px; padding: 0.7rem 0.9rem; margin: 0.9rem 0; font-size: 0.84rem; }
+.trait-chances dt { color: var(--lab-muted); }
+.trait-chances dd { color: var(--lab-gold-soft); font-weight: 700; }
+.analysis-panel h4 { margin: 1rem 0 0.5rem; font-size: 0.95rem; color: var(--lab-muted); }
+.offspring-row { background: var(--lab-bg); border: 1px solid var(--lab-line); border-radius: 4px; padding: 0.5rem 0.75rem; gap: 0.75rem; }
+.offspring-row .thumb { width: 64px; height: 64px; }
+.offspring-row strong { color: var(--lab-cream); }
+.offspring-row .chance-value { font-family: var(--lab-serif); font-size: 1.4rem; color: var(--lab-gold-soft); }
+.offspring-traits { color: var(--lab-muted); font-size: 0.74rem; }
+#modal.is-bench .offspring-details .offspring-row { margin-top: 0.5rem; padding-block: 0.5rem; }
+#modal.is-bench details { background: var(--lab-bg); border: 1px solid var(--lab-line); border-radius: 4px; margin-top: 0.8rem; padding: 0; overflow: hidden; }
+#modal.is-bench details > summary { cursor: pointer; padding: 0.65rem 0.9rem; color: var(--lab-gold-soft); font-weight: 600; min-height: 44px; display: flex; align-items: center; }
+#modal.is-bench details > summary:hover { background: var(--lab-panel-2); }
+#modal.is-bench details[open] > summary { border-bottom: 1px solid var(--lab-line); }
+#modal.is-bench details > :not(summary) { margin-inline: 0.8rem; }
+#modal.is-bench details > p { margin-block: 0.7rem; }
+#modal.is-bench details > .offspring-row:last-child, #modal.is-bench details > .punnett-wrap:last-child { margin-bottom: 0.8rem; }
+
+/* Punnett */
+#modal.is-bench .punnett th, #modal.is-bench .punnett td { border: 1px solid var(--lab-line); }
+#modal.is-bench .punnett th { background: var(--lab-panel-2); color: var(--lab-gold-soft); }
+#modal.is-bench .punnett td { background: var(--lab-panel); }
+#modal.is-bench .punnett caption { color: var(--lab-muted); }
+
+/* Guia da espécie e manual */
+.genetic-rules dt, .genetic-rules dd { border-bottom-color: var(--lab-line); }
+.genetic-rules dt { color: var(--lab-gold-soft); font-family: var(--lab-mono); }
+.guide-visuals figure { background: var(--lab-bg); border: 1px solid var(--lab-line); border-radius: 4px; padding: 0.3rem; }
+.guide-note { color: var(--lab-muted); }
+.combination-entry { border-top-color: var(--lab-line); }
+.combination-entry summary:hover { background: var(--lab-panel-2); }
+.combination-entry summary:focus-visible { outline-color: var(--lab-gold-soft); }
+.manual-filters > summary { color: var(--lab-gold-soft); }
+
+/* Cruzamento aprovado */
+#modal.is-bench .approval-banner { background: var(--lab-ok-bg); color: var(--lab-ok); border-bottom: 2px solid #2f6b45; font-family: var(--lab-serif); font-weight: 700; font-size: 1.05rem; border-radius: 0; }
+#modal.is-bench .bench section { background: var(--lab-panel); border: 2px solid var(--lab-line); border-radius: 4px; }
+.example-thumb { filter: drop-shadow(0 6px 4px rgba(0, 0, 0, 0.4)); }
+
+@media (max-height: 860px) {
+ .lab-sidebar { padding-block: 0.7rem; }
+ .lab-sidebar .slots { margin: 0.5rem 0 0.6rem; }
+ .lab-sidebar .slot { min-height: 138px; padding-top: 0.5rem; }
+ .lab-sidebar .slot .thumb { width: 60px; height: 60px; }
+ .slot-silhouette { width: 56px; height: 56px; font-size: 1.5rem; }
+ .analysis-panel { padding-block: 0.6rem; }
+ .analysis-panel .chance-line { padding: 0.6rem 0.9rem; margin-bottom: 0.6rem; }
+ .chance-big { font-size: 2rem; }
+ .lab-library .parent-card .thumb { width: 92px; height: 92px; }
+ .pet-art, .pet-art[data-visual] { min-height: 104px; }
+}
+@media (max-width: 1100px) {
+ .species-tabs .lab-tab { padding: 0.35rem 0.3rem 0.35rem 3.1rem; min-height: 50px; font-size: 0.92rem; }
+ .species-tabs .lab-tab .thumb { width: 38px; height: 38px; }
+ .species-count { display: none; }
+ .trait-filters { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (max-width: 1000px) {
+ .lab-library .parent-list { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); }
+ .chance-big { font-size: 2.2rem; }
+}
+@media (max-width: 700px) {
+ #modal.is-bench .modal-card { border-radius: 0; border-width: 0; box-shadow: none; }
+ .lab-sidebar .slot { min-height: 168px; }
+ .lab-sidebar .slot .thumb { width: 72px; height: 72px; }
+ .lab-library .parent-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+ .species-tabs .lab-tab { padding-left: 3rem; font-size: 0.9rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+ .lab-library .parent-card, .chance-track span { transition: none; }
+ #modal.is-bench button.parent-card:hover:not(:disabled) { transform: none; }
+}
+
+#modal.is-bench ::selection { background: var(--lab-gold); color: #2b1a05; }
+
+/* ===== Jogo de criação: viveiro, ninhada, caderno e pedido ===== */
+#modal.is-bench .stock-item { display: flex; flex-direction: column; gap: 0.3rem; min-width: 0; }
+#modal.is-bench .stock-actions { display: flex; justify-content: space-between; gap: 0.4rem; padding: 0 0.15rem; }
+#modal.is-bench .text-button { min-height: 32px; padding: 0 0.1rem; background: transparent; border: 0; box-shadow: none; color: var(--lab-gold-soft); font-size: 0.76rem; font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
+#modal.is-bench .text-button:hover { color: #fff; background: transparent; }
+#modal.is-bench .text-button.is-on { color: var(--lab-ok); text-decoration: none; }
+#modal.is-bench .text-button.is-danger { color: var(--lab-bad); }
+#modal.is-bench button.parent-card.is-reserved { border-color: var(--lab-ok); }
+.pet-selected.is-new { background: var(--lab-ok); color: #0d2616; }
+.pet-origin { color: var(--lab-muted); font-size: 0.7rem; line-height: 1.25; }
+.chip.is-wanted { border-color: var(--lab-gold); color: var(--lab-gold-soft); background: #3a2a0f; }
+.lab-order-hint.is-low { color: var(--lab-bad); font-style: normal; font-weight: 700; }
+.litter-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.6rem; margin-top: 0.6rem; }
+.litter-pup { display: flex; flex-direction: column; align-items: center; gap: 0.3rem; padding: 0.5rem; background: var(--lab-bg); border: 1px solid var(--lab-line); border-radius: 4px; text-align: center; }
+.litter-pup .thumb { width: 72px; height: 72px; }
+.litter-pup strong { font-family: var(--lab-serif); color: var(--lab-cream); }
+.litter-pup .pet-chips { justify-content: center; }
+.journal-entry { padding: 0.6rem 0.7rem; margin-top: 0.6rem; background: var(--lab-bg); border: 1px solid var(--lab-line); border-radius: 4px; }
+.journal-head { display: flex; justify-content: space-between; gap: 0.5rem; font-size: 0.82rem; color: var(--lab-muted); }
+.journal-head strong { font-family: var(--lab-serif); color: var(--lab-gold-soft); }
+.journal-parents { display: grid; gap: 0.25rem; margin: 0.4rem 0; padding: 0.4rem; background: var(--lab-panel); border-radius: 4px; }
+.journal-x { text-align: center; color: var(--lab-gold); font-weight: 700; line-height: 1; }
+.journal-pups { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.3rem; }
+.journal-pups li { display: grid; gap: 0.2rem; }
+.journal-name { font-size: 0.78rem; font-weight: 700; color: var(--lab-cream); }
+.order-card { display: grid; gap: 0.6rem; }
+.order-speech { margin: 0; font-family: var(--lab-serif); font-size: 1.05rem; font-style: italic; line-height: 1.45; }
+.day-line { display: grid; gap: 0.35rem; margin: 0; font-size: 0.85rem; }
+.day-meter { display: block; height: 10px; background: var(--lab-shadow); border: 1px solid var(--lab-line); border-radius: 2px; overflow: hidden; }
+.day-meter span { display: block; height: 100%; background: var(--lab-gold); }
+.order-stars, .order-note { margin: 0; color: var(--lab-muted); font-size: 0.8rem; line-height: 1.4; }
+.journal .empty-note, .litter .empty-note { margin-top: 0.4rem; }
+.litter-pup.is-single { margin-top: 0.6rem; padding: 0.8rem; }
+.litter-pup.is-single .thumb { width: 120px; height: 120px; }
+#modal.is-bench #btn-deliver { margin-top: 0.8rem; width: 100%; min-height: 44px; background: var(--lab-gold); color: #2b1a05; border: 2px solid #ffd36b; font-weight: 700; }
+#modal.is-bench #btn-deliver:hover { background: #ffc94d; }
+#modal.is-bench .bench-actions button.deliver { background: var(--lab-ok); color: #0d2616; border-color: #b7f0c4; margin-right: auto; }
+#modal.is-bench .bench-actions button.deliver:hover:not(:disabled) { background: #a5eebb; }

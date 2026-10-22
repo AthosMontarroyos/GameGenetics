@@ -7,79 +7,131 @@
     speed: 220,
     actorHeight: 78,
     spawn: { x: 768, y: 724, dir: 'up' },
-    service: { x: 700, y: 598, w: 160, h: 50 },
     lab: { x: 660, y: 160, w: 120, h: 100 },
     client: { x: 820, y: 632 },
-    // Obstáculos medidos no cenário 1536×1024. O vão da porta fica em x 710–830.
+    // Só paredes e objetos bloqueiam; o resto do cenário (1536×1024) é livre, inclusive rua e calçada.
+    // Medidos sobre pet-shop.png. Vão da porta: x 718–818.
     blocks: [
-      { x: 0, y: 0, w: 236, h: 1024 },
-      { x: 0, y: 0, w: 1536, h: 88 },
-      { x: 1296, y: 0, w: 240, h: 1024 },
-      { x: 0, y: 760, w: 1536, h: 264 },
-      { x: 236, y: 648, w: 474, h: 120 },
-      { x: 830, y: 648, w: 466, h: 120 },
-      { x: 420, y: 88, w: 250, h: 118 },
-      { x: 688, y: 96, w: 96, h: 100 },
-      { x: 808, y: 88, w: 488, h: 160 },
-      { x: 236, y: 214, w: 414, h: 48 },
-      { x: 786, y: 200, w: 510, h: 70 },
-      { x: 248, y: 268, w: 400, h: 172 },
-      { x: 258, y: 448, w: 188, h: 176 },
-      { x: 448, y: 492, w: 130, h: 132 },
-      { x: 650, y: 490, w: 250, h: 104 },
-      { x: 868, y: 304, w: 260, h: 156 },
-      { x: 820, y: 404, w: 80, h: 64 },
-      { x: 948, y: 496, w: 176, h: 124 },
-      { x: 1144, y: 424, w: 152, h: 200 },
-      { x: 1160, y: 250, w: 136, h: 160 },
+      // paredes externas
+      { x: 332, y: 24, w: 828, h: 40 },
+      { x: 216, y: 92, w: 136, h: 26 },
+      { x: 332, y: 24, w: 20, h: 94 },
+      { x: 212, y: 92, w: 24, h: 516 },
+      { x: 1140, y: 24, w: 20, h: 80 },
+      { x: 1140, y: 84, w: 208, h: 40 },
+      { x: 1328, y: 84, w: 20, h: 524 },
+      // paredes internas
+      { x: 212, y: 232, w: 436, h: 22 },
+      { x: 634, y: 254, w: 62, h: 100 },
+      { x: 754, y: 236, w: 16, h: 122 },
+      { x: 764, y: 236, w: 166, h: 118 },
+      { x: 924, y: 260, w: 224, h: 40 },
+      { x: 662, y: 40, w: 16, h: 152 },
+      { x: 784, y: 40, w: 14, h: 196 },
+      { x: 1136, y: 104, w: 14, h: 375 },
+      { x: 1232, y: 256, w: 16, h: 212 },
+      { x: 1236, y: 256, w: 112, h: 22 },
+      { x: 1136, y: 364, w: 112, h: 20 },
+      { x: 348, y: 186, w: 12, h: 46 },
+      { x: 712, y: 42, w: 22, h: 40 },
+      { x: 526, y: 60, w: 36, h: 30 },
+      { x: 1256, y: 277, w: 62, h: 110 },
+      // fachada, portas e quinas
+      { x: 214, y: 606, w: 52, h: 112 },
+      { x: 264, y: 640, w: 70, h: 72 },
+      { x: 331, y: 648, w: 300, h: 77 },
+      { x: 920, y: 648, w: 300, h: 77 },
+      { x: 1218, y: 640, w: 82, h: 86 },
+      { x: 1280, y: 606, w: 70, h: 56 },
+      { x: 12, y: 138, w: 18, h: 354 },
+    ],
+    // Objetos em perspectiva 3/4: [x, y, w, h, base]. Só a base (chão) bloqueia; o resto do desenho
+    // passa por cima do personagem quando ele está atrás. base = altura em px a partir do fundo, ou [x, y, w, h].
+    objects: [
+      // escritório, closet, canis e depósito
+      [249, 148, 36, 84, 24],
+      [361, 66, 90, 122, 30],
+      [361, 165, 26, 40, 20],
+      [453, 100, 198, 106, 42],
+      [686, 88, 60, 104, 30],
+      [810, 60, 270, 152, 50],
+      [1085, 104, 44, 100, 26],
+      [1154, 112, 82, 104, 30],
+      [1248, 126, 68, 98, 28],
+      [1159, 258, 25, 36, 18],
+      [1154, 308, 36, 54, 26],
+      [1158, 426, 80, 56, 30],
+      // loja: lado esquerdo e centro
+      [242, 258, 40, 188, 28],
+      [284, 313, 72, 133, 40],
+      [379, 274, 256, 104, 50],
+      [433, 355, 122, 92, 46],
+      [650, 347, 24, 46, 14],
+      [266, 494, 112, 128, 30],
+      [381, 576, 38, 60, 22],
+      [459, 498, 116, 108, 30],
+      [436, 622, 106, 30, 20],
+      [652, 490, 236, 104, 56],
+      // portas: batentes e folhas de vidro (só a ponta de baixo bloqueia)
+      [628, 620, 20, 105, 30],
+      [904, 620, 20, 105, 30],
+      { foot: [694, 700, 24, 25], occ: [[689, 603, 30, 122]] },
+      { foot: [818, 700, 32, 25], occ: [[818, 605, 32, 121]] },
+      // loja: lado direito e plantas da porta
+      [819, 366, 72, 106, 28],
+      [786, 414, 32, 52, 20],
+      [928, 296, 148, 112, 30],
+      [1080, 314, 40, 70, 22],
+      [968, 496, 126, 114, 30],
+      [1121, 584, 38, 56, 22],
+      [1003, 618, 110, 30, 20],
+      [1157, 494, 128, 116, 34],
+      [652, 660, 44, 68, 30],
+      [851, 655, 50, 72, 30],
+      [1296, 665, 42, 56, 24],
+      // exterior
+      { foot: [28, 695, 60, 26], occ: [['e', 68, 566, 74, 76], [28, 640, 60, 81]] },
+      { foot: [157, 745, 24, 26], occ: [[153, 618, 32, 42], [163, 658, 14, 87], [156, 735, 28, 36]] },
+      [118, 797, 100, 110, 56],
+      { foot: [1458, 745, 44, 26], occ: [['e', 1469, 628, 74, 80], [1444, 703, 67, 68]] },
+      { foot: [1366, 820, 26, 26], occ: [[1361, 682, 33, 42], [1371, 722, 14, 98], [1363, 813, 29, 34]] },
+      [992, 730, 138, 70, 34],
+      [1168, 742, 42, 50, 22],
+      { foot: [1424, 300, 50, 25], occ: [[1382, 105, 134, 145], [1438, 249, 24, 52], [1424, 300, 50, 25]] },
+      [130, 14, 200, 44, 14],
+      [1161, 14, 350, 50, 14],
+      [1498, 14, 30, 95, 22],
+      [144, 74, 50, 82, 26],
+      [36, 166, 82, 86, 44],
+      { foot: [72, 140, 42, 26], occ: [['e', 88, 50, 54, 70], [77, 100, 28, 61]] },
+      [12, 372, 72, 118, 50],
     ],
   };
 
-  var ANIMALS = {
-    'roxo-AA-1': { id: 'roxo-AA-1', name: 'Roxo 1', genotype: 'AA' },
-    'roxo-Aa-1': { id: 'roxo-Aa-1', name: 'Roxo 2', genotype: 'Aa' },
-    'roxo-Aa-2': { id: 'roxo-Aa-2', name: 'Roxo 3', genotype: 'Aa' },
-    'marrom-aa-1': { id: 'marrom-aa-1', name: 'Marrom 1', genotype: 'aa' },
-    'marrom-aa-2': { id: 'marrom-aa-2', name: 'Marrom 2', genotype: 'aa' },
-  };
+  // Cada objeto vira um bloco de chão; as formas do desenho viram oclusores para quem está atrás da base.
+  // Forma: [x, y, w, h] ou ['e', cx, cy, rx, ry] (elipse, para copas de árvore).
+  var PAD = 6; // margem do oclusor retangular; a máscara descarta o chão que sobrar
+  WORLD.occluders = [];
+  WORLD.objects.forEach(function (o) {
+    var simple = o instanceof Array;
+    var foot;
+    var shapes;
+    if (simple) {
+      foot = o[4] instanceof Array ? { x: o[4][0], y: o[4][1], w: o[4][2], h: o[4][3] } : { x: o[0], y: o[1] + o[3] - o[4], w: o[2], h: o[4] };
+      shapes = [[o[0], o[1], o[2], o[3]]];
+    } else {
+      foot = { x: o.foot[0], y: o.foot[1], w: o.foot[2], h: o.foot[3] };
+      shapes = o.occ;
+    }
+    WORLD.blocks.push(foot);
+    shapes.forEach(function (s) {
+      var round = s[0] === 'e';
+      var box = round ? { x: s[1] - s[3], y: s[2] - s[4], w: s[3] * 2, h: s[4] * 2 } : { x: s[0] - PAD, y: s[1] - PAD, w: s[2] + PAD * 2, h: s[3] + PAD * 2 };
+      if (box.h > foot.h || box.y < foot.y) WORLD.occluders.push({ x: box.x, y: box.y, w: box.w, h: box.h, base: foot.y + foot.h, round: round ? s : null, key: round ? '' : s.slice(0, 4).join(',') });
+    });
+  });
 
-  var ORDERS = [
-    {
-      clientId: 'cliente-12683',
-      clientName: 'Estudante',
-      phenotype: 'roxo',
-      minimum: 0,
-      exclusive: true,
-      parents: ['roxo-AA-1', 'marrom-aa-1', 'marrom-aa-2'],
-      speech: 'Quero um Mendelino de pelo roxo. Qualquer chance maior que zero já serve.',
-    },
-    {
-      clientId: 'cliente-12682',
-      clientName: 'Homem adulto',
-      phenotype: 'marrom',
-      minimum: 0.25,
-      exclusive: false,
-      parents: ['roxo-Aa-1', 'roxo-Aa-2', 'roxo-AA-1'],
-      speech: 'Quero um Mendelino de pelo marrom, com chance mínima de 25%.',
-    },
-    {
-      clientId: 'cliente-12687',
-      clientName: 'Senhora idosa',
-      phenotype: 'marrom',
-      minimum: 1,
-      exclusive: false,
-      parents: ['marrom-aa-1', 'marrom-aa-2', 'roxo-Aa-1'],
-      speech: 'Quero um Mendelino de pelo marrom com chance de 100%. Metade não basta.',
-    },
-  ];
-
-  var REMINDER = [
-    'Genótipo é o par de alelos (AA, Aa ou aa). Fenótipo é a cor visível do pelo.',
-    'A é dominante (roxo). a é recessivo (marrom). AA e Aa têm o mesmo fenótipo roxo.',
-    'Homozigose: alelos iguais (AA ou aa). Heterozigose: alelos diferentes (Aa).',
-    'Cada pai manda um alelo no gameta. As quatro células do quadro valem 25% cada uma.',
-    'A chance do pedido é a soma das células com o fenótipo pedido. O cruzamento precisa atingir a exigência do cliente.',
-  ];
+  var ORDERS = PetOrders.orders;
 
   var canvas = document.getElementById('world');
   var ctx = canvas.getContext('2d');
@@ -93,21 +145,30 @@
   var lastTime = 0;
   var loopStarted = false;
   var hintText = '';
+  var reducedMotionQuery = window.matchMedia ? window.matchMedia('(prefers-reduced-motion: reduce)') : null;
 
   var state = {
     phase: 'inicio',
     loading: false,
     orderIndex: 0,
     orderReceived: false,
+    game: null,
     parents: [null, null],
-    preview: null,
-    approved: null,
+    parentSlot: null,
+    labTab: 'filhote',
+    pup: null,
+    attempts: 0,
+    carry: false,
+    results: [],
+    say: '',
+    journalOnly: false,
     panel: null,
     message: '',
     liveNote: '',
     status: '',
     deliverLock: false,
     held: {},
+    customer: null,
     player: { x: WORLD.spawn.x, y: WORLD.spawn.y, dir: 'up' },
   };
 
@@ -140,14 +201,9 @@
     return ORDERS[state.orderIndex] || null;
   }
 
-  function phenotypeName(phenotype) {
-    return phenotype === 'roxo' ? 'pelo roxo' : 'pelo marrom';
-  }
-
-  function genotypeKind(genotype) {
-    if (genotype === 'AA') return 'homozigoto dominante';
-    if (genotype === 'Aa') return 'heterozigoto';
-    return 'homozigoto recessivo';
+  function phenotypeName(phenotype, speciesId) {
+    var names = { roxo: 'pelo roxo', marrom: 'pelo marrom', claro: 'pelo claro', cinza: 'pelo cinza', azul: 'pelo azul', verde: 'pelo verde', laranja: 'pelo laranja', amarelo: 'pelo amarelo' };
+    return (names[phenotype] || phenotype) + (speciesId ? ' de ' + PetCatalog.species[speciesId].name : '');
   }
 
   function formatPercent(value) {
@@ -156,36 +212,29 @@
     return pct.toFixed(1).replace('.', ',') + '%';
   }
 
-  function requirementText(order) {
-    if (order.exclusive) return 'qualquer chance maior que 0%';
-    if (order.minimum === 1) return 'chance de 100%';
-    return 'chance mínima de ' + formatPercent(order.minimum);
+  function animalInfo(id) {
+    var animal = PetBreeding.find(state.game, id);
+    if (!animal) throw new Error('Bicho não encontrado: ' + id);
+    return animal;
   }
 
-  function animalInfo(id) {
-    var animal = ANIMALS[id];
-    var genotype = PetGenetics.normalizeGenotype(animal.genotype);
-    return {
-      id: animal.id,
-      name: animal.name,
-      genotype: genotype,
-      phenotype: PetGenetics.phenotypeOf(genotype),
-    };
+  function traitLine(traits) {
+    return [PetCatalog.label(traits.color), 'olhos ' + traits.eyes, 'orelhas ' + PetCatalog.label(traits.ears).toLowerCase(), PetCatalog.label(traits.spots).toLowerCase(), 'rabo ' + traits.tail].join(', ');
   }
 
   function clearKeys() {
     state.held = {};
   }
 
-  function phenotypeChip(order) {
-    var name = order.phenotype === 'roxo' ? 'Pelo roxo' : 'Pelo marrom';
-    if (order.exclusive) return name + ' · chance maior que 0%';
-    if (order.minimum === 1) return name + ' · chance de 100%';
-    return name + ' · mínimo ' + formatPercent(order.minimum);
-  }
-
   function pointInZone(x, y, zone) {
     return x >= zone.x && x < zone.x + zone.w && y >= zone.y && y < zone.y + zone.h;
+  }
+
+  function nearClient() {
+    if(!state.customer||state.customer.phase!=='waiting'||state.customer.orderIndex!==state.orderIndex)return false;
+    var dx = state.player.x - state.customer.x;
+    var dy = state.player.y - state.customer.y;
+    return dx * dx + dy * dy <= 96 * 96;
   }
 
   function feetBox(x, y) {
@@ -210,41 +259,36 @@
     var objective = document.getElementById('objective');
     var status = document.getElementById('status');
     document.body.classList.toggle('is-playing', state.phase === 'mundo');
-    if (state.phase === 'concluido') progress.textContent = '3/3';
-    else if (state.phase === 'mundo') progress.textContent = 'Pedido ' + (state.orderIndex + 1) + '/3';
+    if (state.phase === 'concluido') progress.textContent = ORDERS.length + '/' + ORDERS.length + ' · ' + totalStars() + '★';
+    else if (state.phase === 'intervalo') progress.textContent = 'Nível concluído';
+    else if (state.phase === 'mundo') {
+      var active = currentOrder();
+      var levelOrders = active ? PetOrders.levels.find(function (level) { return level.id === active.levelId; }).orders : [];
+      progress.textContent = active ? PetCatalog.species[active.speciesId].name + ' · Pedido ' + (active.indexInLevel + 1) + '/' + levelOrders.length + ' · ' + totalStars() + '★' : 'Nível concluído';
+    }
     else progress.textContent = 'Nível solo';
     var order = currentOrder();
     if (state.phase !== 'mundo' || !order) {
       summary.textContent = '';
       objective.textContent = '';
     } else if (!state.orderReceived) {
-      summary.textContent = 'Pedido: aguardando cliente';
-      objective.textContent = 'Fale com o cliente (marca roxa)';
-    } else if (!state.approved) {
-      summary.textContent = 'Pedido: ' + phenotypeChip(order);
-      objective.textContent = 'Vá ao laboratório (marca azul)';
+      var waiting = state.customer && state.customer.phase === 'waiting';
+      summary.textContent = waiting ? 'Atenda o cliente' : 'Cliente a caminho';
+      objective.textContent = waiting ? 'Aproxime-se e pressione E.' : 'Aguarde a chegada ao balcão.';
     } else {
-      summary.textContent = 'Pedido: ' + phenotypeChip(order);
-      objective.textContent = 'Volte ao cliente para entregar';
+      summary.textContent = order.speech;
+      objective.textContent = state.carry && state.pup ? 'Leve ' + state.pup.name + ' até o cliente e pressione E.' : 'Escolha dois pais no laboratório e cruze.';
     }
-    status.textContent = state.status;
-  }
-
-  function reminderList() {
-    var list = el('ul');
-    REMINDER.forEach(function (line) {
-      list.append(el('li', { text: line }));
-    });
-    return el('div', { className: 'reminder' }, el('strong', { text: 'Lembrete' }), list);
+    status.textContent = state.status || '';
   }
 
   function paintSprite(thumbCanvas, image, frame) {
     var thumbCtx = thumbCanvas.getContext('2d');
-    thumbCtx.imageSmoothingEnabled = false;
-    thumbCtx.fillStyle = '#f4ead8';
-    thumbCtx.fillRect(0, 0, thumbCanvas.width, thumbCanvas.height);
+    thumbCtx.imageSmoothingEnabled = true;
+    thumbCtx.imageSmoothingQuality = 'high';
+    thumbCtx.clearRect(0, 0, thumbCanvas.width, thumbCanvas.height);
     if (!image || !frame) return;
-    var scale = (thumbCanvas.height * 0.9) / frame.h;
+    var scale = Math.min((thumbCanvas.height * 0.92) / frame.h, (thumbCanvas.width * 0.92) / frame.w);
     var dw = frame.w * scale;
     var dh = frame.h * scale;
     thumbCtx.drawImage(
@@ -257,270 +301,239 @@
     );
   }
 
-  function paintThumb(thumbCanvas, frame) {
-    paintSprite(thumbCanvas, images && images.mendelino, frame);
-  }
-
-  function makeThumb(phenotype, className) {
+  function makeThumb(speciesId, visualId, className) {
     var thumbCanvas = document.createElement('canvas');
-    thumbCanvas.width = 128;
-    thumbCanvas.height = 128;
+    thumbCanvas.width = 320;
+    thumbCanvas.height = 320;
     thumbCanvas.className = className || 'thumb';
-    paintThumb(thumbCanvas, PetAssets.frames.mendelino[phenotype]);
+    var species = PetCatalog.species[speciesId];
+    if (window.PetSprites && PetSprites.draw(thumbCanvas, speciesId, visualId, images)) return thumbCanvas;
+    var frame = PetAssets.frames.pets[visualId];
+    paintSprite(thumbCanvas, images && images[species.imageId], frame);
     return thumbCanvas;
   }
 
-  function punnettTable(result) {
-    var table = el('table', { className: 'punnett' });
-    var caption = el('caption', { text: 'Genótipos: ' + compactGenotypes(result) });
-    var head = el('tr', {},
-      el('th', { scope: 'col', text: 'Gametas' }),
-      el('th', { scope: 'col' }, el('span', { className: 'allele', text: result.gametesA[0] }), el('span', { className: 'allele-note', text: 'Pai 1' })),
-      el('th', { scope: 'col' }, el('span', { className: 'allele', text: result.gametesA[1] }), el('span', { className: 'allele-note', text: 'Pai 1' }))
-    );
-    table.append(caption, head);
-    result.grid.forEach(function (row) {
-      var tr = el('tr', {},
-        el('th', { scope: 'row' }, el('span', { className: 'allele', text: row[0].alleleRow }), el('span', { className: 'allele-note', text: 'Pai 2' }))
-      );
-      row.forEach(function (cell) {
-        tr.append(el('td', {},
-          el('strong', { text: cell.genotype }),
-          el('span', { className: 'cell-pheno', text: cell.phenotype === 'roxo' ? 'roxo' : 'marrom' })
-        ));
-      });
-      table.append(tr);
+  function currentPlan() {
+    var order = currentOrder();
+    return order && state.game ? state.game.plans[order.indexInLevel] : null;
+  }
+
+  function starText(count) { return '★★★'.slice(0, count) + '☆☆☆'.slice(0, 3 - count); }
+
+  function totalStars() { return state.results.reduce(function (sum, item) { return sum + item.stars; }, 0); }
+
+  // Só o que se vê: a aparência. Nada de genes, probabilidades ou quadros.
+  function traitChips(traits, order) {
+    var wanted = order ? order.targets : {};
+    var list = [['color', PetCatalog.label(traits.color)], ['eyes', 'olhos ' + traits.eyes], ['ears', PetCatalog.label(traits.ears)], ['spots', PetCatalog.label(traits.spots)], ['tail', 'rabo ' + traits.tail]];
+    var row = el('span', { className: 'pet-chips' });
+    list.forEach(function (entry) {
+      var isWanted = wanted[entry[0]] === traits[entry[0]];
+      row.append(el('span', { className: 'chip' + (entry[0] === 'color' ? ' chip-color' : '') + (isWanted ? ' is-wanted' : ''), text: entry[1] }));
     });
-    return el('div', { className: 'punnett-wrap' }, table);
+    return row;
+  }
+
+  function parentSlot(id) { return state.parents.indexOf(id); }
+
+  function toggleParent(id) {
+    var index = parentSlot(id);
+    if (index !== -1) {
+      state.parents[index] = null;
+      if (index === 0) { state.parents[0] = state.parents[1]; state.parents[1] = null; }
+    } else if (state.parentSlot !== null) {
+      state.parents[state.parentSlot] = id;
+    } else if (!state.parents[0]) {
+      state.parents[0] = id;
+    } else if (!state.parents[1]) {
+      state.parents[1] = id;
+    } else {
+      state.message = 'Remova um pai antes de escolher outro bicho.';
+      state.liveNote = state.message;
+      renderLab('card-' + id, true);
+      return;
+    }
+    state.parentSlot = null;
+    state.message = '';
+    state.liveNote = '';
+    renderLab('card-' + id, true);
   }
 
   function renderSlots() {
     var wrap = el('div', { className: 'slots' });
     for (var slot = 0; slot < 2; slot += 1) {
       var id = state.parents[slot];
-      var box = el('div', { className: 'slot' });
+      var box = el('div', { className: 'slot' + (state.parentSlot === slot ? ' is-target' : '') + (id ? '' : ' is-empty') });
       if (!id) {
-        box.append(el('p', { className: 'slot-line' },
-          el('strong', { text: 'Pai ' + (slot + 1) }),
-          el('span', { text: ' · vazio' })
-        ));
+        (function (position) {
+          var choose = button('Escolher pai ' + (position + 1), 'slot-empty', function () { state.parentSlot = position; renderLab('slot-choose-' + position, true); }, 'slot-choose-' + position);
+          box.append(el('span', { className: 'slot-silhouette', 'aria-hidden': 'true', text: '?' }), choose, el('span', { className: 'slot-help', text: 'Toque em um bicho da lista' }));
+        })(slot);
       } else {
         var info = animalInfo(id);
-        box.append(el('p', { className: 'slot-line' },
-          el('strong', { text: 'Pai ' + (slot + 1) }),
-          el('span', { text: ' · ' + info.name + ' · ' + info.genotype })
-        ));
-        (function (animalId) {
-          box.append(button('Remover', 'secondary', function () { selectAnimal(animalId); }));
-        })(id);
+        box.append(makeThumb(info.speciesId, info.visualId, 'thumb'), el('div', { className: 'slot-copy' },
+          el('span', { className: 'slot-label', text: 'Pai ' + (slot + 1) }),
+          el('strong', { text: info.name })));
+        (function (animalId, position) {
+          box.append(el('div', { className: 'slot-controls' },
+            button(state.parentSlot === position ? 'Escolha outro' : 'Trocar', 'text-button', function () { state.parentSlot = position; renderLab('slot-change-' + position, true); }, 'slot-change-' + position),
+            button('Remover', 'text-button', function () { toggleParent(animalId); })));
+        })(id, slot);
       }
       wrap.append(box);
+      if (slot === 0) wrap.append(el('span', { className: 'slot-cross', 'aria-hidden': 'true', text: '×' }));
     }
     return wrap;
   }
 
-  function renderParentCards(order) {
-    var list = el('div', { className: 'parent-list' });
-    order.parents.forEach(function (id) {
-      var info = animalInfo(id);
-      var selected = state.parents.indexOf(id) !== -1;
-      var card = el('button', {
-        type: 'button',
-        className: 'parent-card' + (selected ? ' is-selected' : ''),
-        id: 'parent-btn-' + id,
-      });
-      card.setAttribute('aria-pressed', selected ? 'true' : 'false');
-      card.append(
-        makeThumb(info.phenotype, 'thumb'),
-        el('span', {},
-          el('span', { className: 'who', text: info.name }),
-          el('span', { className: 'cell-pheno', text: 'Genótipo ' + info.genotype + ' · ' + genotypeKind(info.genotype) }),
-          el('span', { className: 'cell-pheno', text: 'Fenótipo: ' + phenotypeName(info.phenotype) }),
-          selected ? el('span', { className: 'badge', text: 'Selecionado' }) : null
-        )
-      );
-      card.addEventListener('click', function (event) {
-        event.preventDefault();
-        selectAnimal(id);
-      });
-      list.append(card);
+  function parentCard(animal, order) {
+    var picked = parentSlot(animal.id);
+    var card = el('button', { type: 'button', className: 'parent-card' + (picked !== -1 ? ' is-selected' : ''), id: 'card-' + animal.id });
+    card.setAttribute('aria-pressed', picked !== -1 ? 'true' : 'false');
+    card.setAttribute('aria-label', animal.name + ' · ' + traitLine(animal.traits));
+    card.append(
+      el('span', { className: 'pet-art', 'data-visual': animal.visualId }, makeThumb(animal.speciesId, animal.visualId, 'thumb'),
+        picked !== -1 ? el('span', { className: 'pet-selected', text: 'Pai ' + (picked + 1) }) : null),
+      el('span', { className: 'pet-card-copy' },
+        el('span', { className: 'who', text: animal.name }),
+        traitChips(animal.traits, order)));
+    card.addEventListener('click', function (event) { event.preventDefault(); toggleParent(animal.id); });
+    return card;
+  }
+
+  function renderRoster(order) {
+    var library = el('section', { className: 'lab-library' });
+    library.append(el('div', { className: 'collection-heading' },
+      el('h3', { text: 'Escolha os pais' }),
+      el('span', { text: state.game.roster.length + ' bichos' })));
+    library.append(el('p', { className: 'collection-notice', text: 'Você só vê a aparência. O que está escondido nos genes pode aparecer no filhote.' }));
+    var list = el('div', { className: 'parent-list', id: 'pet-collection' });
+    state.game.roster.forEach(function (animal) { list.append(parentCard(animal, order)); });
+    library.append(list);
+    return library;
+  }
+
+  function pupView(order) {
+    var box = el('section', { className: 'litter' });
+    var pup = state.pup;
+    if (!pup) {
+      box.append(el('p', { className: 'empty-note', text: 'Escolha dois pais e cruze. Nasce um filhote sorteado: ele pode ter características que os pais não mostram.' }));
+      return box;
+    }
+    box.append(el('h3', { text: pup.name + ' nasceu!' }),
+      el('p', { className: 'cross-parents', text: 'Filho de ' + pup.parentNames[0] + ' e ' + pup.parentNames[1] }),
+      el('div', { className: 'litter-pup is-single' }, makeThumb(pup.speciesId, pup.visualId, 'thumb'), traitChips(pup.traits, order)));
+    return box;
+  }
+
+  function journalView(order) {
+    var box = el('section', { className: 'journal' });
+    var journal = state.game.journal;
+    box.append(el('h3', { text: 'Caderno' }));
+    if (!journal.length) {
+      box.append(el('p', { className: 'empty-note', text: 'Cada cruzamento fica anotado aqui. Compare os pais com o filhote para descobrir o que cada um carrega.' }));
+      return box;
+    }
+    var onlyPicked = state.journalOnly && (state.parents[0] || state.parents[1]);
+    box.append(button(state.journalOnly ? 'Mostrar todos' : 'Só os escolhidos', 'text-button', function () { state.journalOnly = !state.journalOnly; renderLab('journal-filter', true); }, 'journal-filter'));
+    journal.slice().reverse().forEach(function (entry) {
+      if (onlyPicked && !entry.parents.some(function (parent) { return state.parents.indexOf(parent.id) !== -1; })) return;
+      box.append(el('div', { className: 'journal-entry' },
+        el('div', { className: 'journal-head' }, el('strong', { text: 'Cruzamento ' + entry.number }), el('span', { text: entry.parents[0].name + ' × ' + entry.parents[1].name })),
+        el('div', { className: 'journal-parents' }, traitChips(entry.parents[0].traits), el('span', { className: 'journal-x', 'aria-hidden': 'true', text: '×' }), traitChips(entry.parents[1].traits)),
+        el('div', { className: 'journal-pups' }, el('span', { className: 'journal-name', text: 'Filhote ' + entry.pup.name }), traitChips(entry.pup.traits, order))));
     });
-    return list;
+    return box;
   }
 
-  function failureMessage() {
-    return 'Escolha outro cruzamento. O atendimento não avançou.';
+  function orderView(order) {
+    var plan = currentPlan();
+    var box = el('section', { className: 'order-card' }, el('h3', { text: 'Pedido de ' + order.clientName }), el('p', { className: 'order-speech', text: order.speech }));
+    var want = el('span', { className: 'pet-chips' });
+    PetCatalog.species[order.speciesId].traits.forEach(function (trait) {
+      if (order.targets[trait.id]) want.append(el('span', { className: 'chip is-wanted', text: PetOrders.phrase(trait.id, order.targets[trait.id]) }));
+    });
+    box.append(want);
+    box.append(el('p', { className: 'day-line' }, el('strong', { text: 'Cruzamentos neste pedido: ' + state.attempts })));
+    box.append(el('p', { className: 'order-stars', text: '★★★ até ' + plan.par + ' cruzamentos · ★★ até ' + (plan.par + 2) + ' · ★ depois.' }));
+    box.append(el('p', { className: 'order-note', text: 'Cruze, confira o filhote e entregue ao cliente. Se não for o que ele pediu, é só cruzar de novo.' }));
+    return box;
   }
 
-  function firstParentButtonId() {
-    var order = currentOrder();
-    return order ? 'parent-btn-' + order.parents[0] : 'btn-fechar-painel';
+  function labTabButton(label, id, selected, activate) {
+    var control = button(label, 'lab-tab' + (selected ? ' is-active' : ''), activate, id);
+    control.setAttribute('role', 'tab');
+    control.setAttribute('aria-selected', String(selected));
+    control.setAttribute('tabindex', selected ? '0' : '-1');
+    control.addEventListener('keydown', function (event) {
+      if (['ArrowLeft', 'ArrowRight', 'Home', 'End'].indexOf(event.key) === -1) return;
+      event.preventDefault();
+      var tabs = Array.prototype.slice.call(event.currentTarget.parentElement.querySelectorAll('[role="tab"]'));
+      var index = tabs.indexOf(event.currentTarget);
+      var next = event.key === 'Home' ? 0 : event.key === 'End' ? tabs.length - 1 : (index + (event.key === 'ArrowRight' ? 1 : -1) + tabs.length) % tabs.length;
+      tabs[next].click();
+    });
+    return control;
   }
 
-  function selectionPrompt() {
-    if (!state.parents[0] && !state.parents[1]) return 'Escolha dois pais para analisar o cruzamento.';
-    if (!state.parents[1]) return 'Selecione mais um pai.';
-    return '';
-  }
-
-  function compactGenotypes(result) {
-    return 'AA ' + formatPercent(result.genotypes.AA) + ' · Aa ' + formatPercent(result.genotypes.Aa) + ' · aa ' + formatPercent(result.genotypes.aa);
-  }
-
-  function renderDialogue() {
-    var order = currentOrder();
-    dialogue.textContent = '';
-    var thumb = document.createElement('canvas');
-    thumb.className = 'thumb';
-    thumb.width = 96;
-    thumb.height = 96;
-    if (images && images[order.clientId]) {
-      paintSprite(thumb, images[order.clientId], PetAssets.frames.clients[order.clientId]);
-    }
-    var copy = el('div', { className: 'dialogue-copy' },
-      el('h2', { id: 'dialogue-name', text: order.clientName }),
-      el('p', { text: order.speech }),
-      el('p', { text: phenotypeChip(order) })
-    );
-    var actions = el('div', { className: 'dialogue-actions' },
-      button('Ir ao laboratório', '', closePanel, 'btn-ir-lab'),
-      button('Fechar', 'secondary', closePanel, 'btn-fechar-dialogo')
-    );
-    dialogue.append(thumb, copy, actions);
-    dialogue.hidden = false;
-    modal.hidden = true;
-    document.body.classList.add('modal-open');
-    syncInert();
-    document.getElementById('btn-ir-lab').focus();
-  }
-
-  function chanceSummary(chance, order) {
-    return el('p', { className: 'chance-line' },
-      el('strong', { text: 'Chance de ' + phenotypeName(order.phenotype) + ': ' + formatPercent(chance) }),
-      el('span', { className: 'chance-req', text: ' · Pedido: ' + requirementText(order) })
-    );
-  }
-
-  function renderCrossColumn() {
-    var column = el('section', { className: 'bench-cross' }, el('h3', { text: 'Cruzamento' }));
-    if (!state.preview) {
-      column.append(el('p', { className: 'empty-note', text: selectionPrompt() }));
-      return column;
-    }
-    var result = state.preview.result;
-    var parent1 = animalInfo(state.preview.parentIds[0]);
-    var parent2 = animalInfo(state.preview.parentIds[1]);
-    column.append(
-      el('p', { className: 'cross-parents', text: 'Pai 1 ' + parent1.genotype + ' · Pai 2 ' + parent2.genotype }),
-      punnettTable(result)
-    );
-    var details = el('details');
-    details.append(el('summary', { text: 'Entender o cálculo' }));
-    details.append(el('p', { text: 'Pai 1 (' + parent1.name + ', ' + parent1.genotype + ') forma os gametas ' + result.gametesA.join(' e ') + '. Pai 2 (' + parent2.name + ', ' + parent2.genotype + ') forma os gametas ' + result.gametesB.join(' e ') + '. Cada célula do quadro junta um gameta de cada pai e vale 25%. AA e Aa têm pelo roxo; aa tem pelo marrom. A chance é a soma das células com o fenótipo pedido.' }));
-    column.append(details);
-    return column;
-  }
-
-  function renderResultColumn(order) {
-    var column = el('section', { className: 'bench-result' }, el('h3', { text: 'Resultado previsto' }));
-    if (state.message) column.append(el('p', { className: 'alert', text: state.message }));
-    if (!state.preview) {
-      column.append(el('p', { className: 'empty-note', text: selectionPrompt() }));
-    } else {
-      var verdict = state.preview.ok ? 'Atende ao pedido' : 'Não atende ao pedido';
-      column.append(
-        chanceSummary(state.preview.chance, order),
-        el('p', { className: 'verdict ' + (state.preview.ok ? 'is-ok' : 'is-bad'), text: verdict })
-      );
-    }
-    return column;
+  function renderSidebar(order) {
+    var sidebar = el('aside', { className: 'lab-sidebar', 'aria-label': 'Cruzamento e filhote' },
+      el('div', { className: 'selection-heading' }, el('h3', { text: 'Seu cruzamento' }), el('span', { text: state.parents.filter(Boolean).length + '/2 pais' })), renderSlots());
+    var tabs = el('div', { className: 'analysis-tabs', role: 'tablist', 'aria-label': 'Filhote, caderno e pedido' });
+    [['filhote', 'Filhote'], ['caderno', 'Caderno'], ['pedido', 'Pedido']].forEach(function (entry) {
+      var control = labTabButton(entry[1], 'analysis-' + entry[0], state.labTab === entry[0], function () { state.labTab = entry[0]; renderLab('analysis-' + entry[0], true); });
+      control.setAttribute('aria-controls', 'analysis-panel');
+      tabs.append(control);
+    });
+    var panel = el('div', { className: 'analysis-panel', id: 'analysis-panel', role: 'tabpanel', 'aria-labelledby': 'analysis-' + state.labTab, tabindex: '0' });
+    if (state.message) panel.append(el('p', { className: 'alert', text: state.message }));
+    panel.append(state.labTab === 'caderno' ? journalView(order) : state.labTab === 'pedido' ? orderView(order) : pupView(order));
+    sidebar.append(tabs, panel);
+    return sidebar;
   }
 
   function renderBenchActions() {
     var actions = el('div', { className: 'bench-actions', role: 'group', 'aria-label': 'Ações do laboratório' });
-    if (state.panel === 'resultado' && state.approved) {
-      actions.append(
-        button('Voltar ao cliente', '', closePanel, 'btn-voltar'),
-        button('Rever os pais', 'secondary', reviseParents, 'btn-rever')
-      );
-      return actions;
-    }
     var ready = !!(state.parents[0] && state.parents[1]);
-    var confirmButton = button('Confirmar cruzamento', '', confirmCross, 'btn-confirm');
-    confirmButton.disabled = !ready;
-    var clearButton = button('Limpar seleção', 'secondary', clearParents, 'btn-limpar');
-    clearButton.disabled = !(state.parents[0] || state.parents[1]);
-    actions.append(confirmButton, clearButton);
+    var cross = button('Cruzar', '', doBreed, 'btn-cruzar');
+    cross.disabled = !ready;
+    var clear = button('Limpar seleção', 'secondary', clearParents, 'btn-limpar');
+    clear.disabled = !(state.parents[0] || state.parents[1]);
+    if (state.pup) actions.append(button('Entregar este filhote', 'deliver', reserveForDelivery, 'btn-deliver'));
+    actions.append(cross, clear);
     return actions;
-  }
-
-  function renderApprovedBench(order) {
-    var saved = state.approved;
-    var parent1 = animalInfo(saved.parentIds[0]);
-    var parent2 = animalInfo(saved.parentIds[1]);
-    var parents = el('section', { className: 'bench-parents' },
-      el('h3', { text: 'Pais' }),
-      el('p', { text: 'Pai 1: ' + parent1.name + ' · ' + parent1.genotype }),
-      el('p', { text: 'Pai 2: ' + parent2.name + ' · ' + parent2.genotype })
-    );
-    var cross = el('section', { className: 'bench-cross' },
-      el('h3', { text: 'Cruzamento' }),
-      punnettTable(saved.result)
-    );
-    var result = el('section', { className: 'bench-result' },
-      el('h3', { text: 'Resultado previsto' }),
-      chanceSummary(saved.chance, order),
-      el('p', { className: 'verdict is-ok', text: 'Atende ao pedido' }),
-      el('figure', { className: 'example' },
-        makeThumb(order.phenotype, 'thumb example-thumb'),
-        el('figcaption', { text: 'Exemplo de descendente possível. A entrega não realiza um sorteio.' })
-      )
-    );
-    return el('div', { className: 'bench' }, parents, cross, result);
   }
 
   function renderLab(focusId, preventScroll) {
     var order = currentOrder();
     var card = document.getElementById('modal-card');
-    var isResult = state.panel === 'resultado' && !!state.approved;
     var samePanel = modal.dataset.panel === state.panel;
     var savedScroll = samePanel ? card.scrollTop : 0;
     dialogue.hidden = true;
     modalTitle.textContent = 'Laboratório';
-    modalKicker.textContent = order.clientName + ' · Pedido: ' + phenotypeChip(order);
+    modalKicker.textContent = 'Escolha dois pais, cruze e entregue o filhote';
     modal.classList.add('is-bench');
     modal.classList.remove('is-help');
     modalBody.textContent = '';
-    if (isResult) {
-      modalBody.append(el('p', { className: 'approval-banner', text: 'Cruzamento aprovado. Volte ao cliente para entregar.' }));
-      modalBody.append(renderApprovedBench(order));
-    } else {
-      modalBody.append(el('div', { className: 'bench' },
-        el('section', { className: 'bench-parents' },
-          el('h3', { text: 'Pais' }),
-          renderSlots(),
-          renderParentCards(order)
-        ),
-        renderCrossColumn(),
-        renderResultColumn(order)
-      ));
-    }
+    modalBody.append(el('div', { className: 'lab-order' },
+      el('div', {}, el('span', { className: 'order-client', text: 'Pedido de ' + order.clientName }), el('strong', { text: order.speech })),
+      el('span', { className: 'lab-order-hint', text: state.attempts === 0 ? 'Nenhum cruzamento ainda' : state.attempts + (state.attempts === 1 ? ' cruzamento' : ' cruzamentos') })),
+      el('div', { className: 'lab-workspace' }, renderRoster(order), renderSidebar(order)));
     modalBody.append(renderBenchActions());
     modal.dataset.panel = state.panel;
     modal.hidden = false;
     document.body.classList.add('modal-open');
-    card.scrollTop = isResult ? 0 : savedScroll;
+    card.scrollTop = savedScroll;
     syncInert();
     announceChoice();
-    var preferred = focusId || (isResult ? 'btn-voltar' : firstParentButtonId());
-    var target = document.getElementById(preferred) || document.getElementById(firstParentButtonId());
-    if (target) target.focus({ preventScroll: isResult ? true : !!preventScroll });
+    var target = document.getElementById(focusId || 'btn-cruzar') || document.getElementById('btn-cruzar');
+    if (target && !target.disabled) target.focus({ preventScroll: !!preventScroll });
   }
 
   function renderHelp() {
     dialogue.hidden = true;
     modalTitle.textContent = 'Ajuda';
-    modalKicker.textContent = 'Controles e gene da cor';
+    modalKicker.textContent = 'Controles e como jogar';
     modal.classList.add('is-help');
     modal.classList.remove('is-bench');
     modalBody.textContent = '';
@@ -528,18 +541,50 @@
       el('h3', { text: 'Controles' }),
       el('ul', {},
         el('li', { text: 'WASD ou setas: andar.' }),
-        el('li', { text: 'E: atender, rever o pedido, abrir o laboratório ou entregar.' }),
-        el('li', { text: 'Esc: fechar o painel sem entregar.' })
+        el('li', { text: 'E: falar com o cliente, abrir o laboratório ou entregar.' }),
+        el('li', { text: 'Esc: fechar o painel.' })
       ),
-      el('h3', { text: 'Como atender' }),
-      el('p', { text: 'Fale com o cliente na marca roxa. Caminhe até a marca azul e monte o cruzamento. Só a entrega no cliente avança o pedido.' }),
-      reminderList(),
-      el('p', { text: 'Modelo didático fictício. Não descreve a genética real dos gatos.' })
+      el('h3', { text: 'Como jogar' }),
+      el('ul', {},
+        el('li', { text: 'Atenda o cliente e leia o pedido: ele quer um filhote com todas as características pedidas.' }),
+        el('li', { text: 'No laboratório, escolha dois pais e cruze. Você vê só a aparência deles; os genes ficam escondidos.' }),
+        el('li', { text: 'Nasce um filhote sorteado. Se ele tiver tudo o que o cliente pediu, escolha “Entregar este filhote” e leve até o balcão.' }),
+        el('li', { text: 'Se não tiver, cruze de novo ou troque os pais. O caderno guarda os cruzamentos: compare pais e filhotes para descobrir o que cada um carrega.' }),
+        el('li', { text: 'Quanto menos cruzamentos, mais estrelas.' })
+      ),
+      el('p', { text: 'Modelo didático fictício. Não descreve a genética real desses animais.' })
     );
     modal.hidden = false;
     document.body.classList.add('modal-open');
     syncInert();
     document.getElementById('btn-fechar-painel').focus();
+  }
+
+  function renderDialogue() {
+    var order = currentOrder();
+    dialogue.textContent = '';
+    var thumb = document.createElement('canvas');
+    thumb.className = 'dialogue-portrait';
+    thumb.width = 256;
+    thumb.height = 256;
+    thumb.setAttribute('aria-hidden', 'true');
+    if (images && images[order.clientId]) {
+      var frame = PetAssets.frames.clients[order.clientId];
+      paintSprite(thumb, images[order.clientId], { x: frame.x, y: frame.y, w: frame.w, h: Math.min(frame.w, frame.h) });
+    }
+    var copy = el('div', { className: 'dialogue-copy' },
+      el('h2', { id: 'dialogue-name', text: order.clientName }),
+      el('p', { text: state.say || order.speech })
+    );
+    var actions = el('div', { className: 'dialogue-actions' },
+      button('Continuar · E', '', closePanel, 'btn-ir-lab')
+    );
+    dialogue.append(thumb, copy, actions);
+    dialogue.hidden = false;
+    modal.hidden = true;
+    document.body.classList.add('modal-open');
+    syncInert();
+    document.getElementById('btn-ir-lab').focus();
   }
 
   function renderModal(focusId, preventScroll) {
@@ -551,11 +596,6 @@
   function announceChoice() {
     var live = document.getElementById('choice-live');
     if (!live) return;
-    if (state.panel === 'resultado' && state.approved) {
-      live.textContent = 'Cruzamento aprovado. Atende ao pedido. Chance de ' +
-        phenotypeName(currentOrder().phenotype) + ': ' + formatPercent(state.approved.chance) + '.';
-      return;
-    }
     if (state.panel !== 'pais') {
       live.textContent = '';
       return;
@@ -566,10 +606,7 @@
       var second = state.parents[1] ? animalInfo(state.parents[1]).name : '';
       if (!first) text = 'Nenhum pai selecionado.';
       else if (!second) text = 'Pai 1: ' + first + '. Selecione mais um pai.';
-      else if (state.preview) {
-        text = 'Pai 1: ' + first + '. Pai 2: ' + second + '. Chance calculada: ' + formatPercent(state.preview.chance) + '. ' +
-          (state.preview.ok ? 'Atende à chance exigida.' : 'Não atende à chance exigida.');
-      }
+      else text = 'Pai 1: ' + first + '. Pai 2: ' + second + '. Pronto para cruzar.';
     }
     if (live.textContent !== text) live.textContent = text;
   }
@@ -581,7 +618,7 @@
     var startOpen = !start.hidden;
     var endOpen = !end.hidden;
     var dialogueOpen = state.panel === 'pedido';
-    var modalOpen = state.panel === 'pais' || state.panel === 'resultado' || state.panel === 'ajuda';
+    var modalOpen = state.panel === 'pais' || state.panel === 'ajuda';
     stage.inert = startOpen || endOpen || dialogueOpen || modalOpen;
     dialogue.inert = !dialogueOpen;
     modal.inert = !modalOpen;
@@ -594,7 +631,7 @@
     var end = document.getElementById('screen-end');
     if (!start.hidden) return start;
     if (!end.hidden) return end;
-    if (state.panel === 'pais' || state.panel === 'resultado' || state.panel === 'ajuda') return modal;
+    if (state.panel === 'pais' || state.panel === 'ajuda') return modal;
     if (state.panel === 'pedido') return dialogue;
     return null;
   }
@@ -646,110 +683,95 @@
     canvas.focus();
   }
 
-  function refreshPreview() {
-    var first = state.parents[0];
-    var second = state.parents[1];
-    var order = currentOrder();
-    if (!first || !second || first === second || !order) {
-      state.preview = null;
-      return;
-    }
-    var result = PetGenetics.cross(ANIMALS[first].genotype, ANIMALS[second].genotype);
-    var chance = result.phenotypes[order.phenotype];
-    state.preview = {
-      parentIds: [first, second],
-      result: result,
-      chance: chance,
-      ok: PetGenetics.orderMet(chance, order),
-    };
-  }
-
-  function selectAnimal(id) {
-    var index = state.parents.indexOf(id);
-    if (index !== -1) {
-      state.parents[index] = null;
-      if (index === 0) {
-        state.parents[0] = state.parents[1];
-        state.parents[1] = null;
-      }
-    } else if (!state.parents[0]) {
-      state.parents[0] = id;
-    } else if (!state.parents[1]) {
-      if (state.parents[0] === id) {
-        state.message = 'Escolha dois animais diferentes. O mesmo indivíduo não pode ocupar as duas posições.';
-        state.liveNote = state.message;
-        renderModal('parent-btn-' + id, true);
-        return;
-      }
-      state.parents[1] = id;
-    } else {
-      state.message = 'Remova um pai antes de escolher outro animal.';
-      state.liveNote = state.message;
-      renderModal('parent-btn-' + id, true);
-      return;
-    }
-    state.message = '';
-    state.liveNote = '';
-    state.approved = null;
-    refreshPreview();
-    renderHud();
-    renderModal('parent-btn-' + id, true);
-  }
-
   function clearParents() {
     state.parents = [null, null];
-    state.preview = null;
-    state.approved = null;
+    state.parentSlot = null;
     state.message = '';
-    state.status = '';
     state.liveNote = '';
-    openPanel('pais', firstParentButtonId(), true);
+    renderLab('btn-cruzar', true);
   }
 
-  function reviseParents() {
-    state.approved = null;
-    state.message = '';
-    state.status = '';
-    state.liveNote = '';
-    if (!state.preview && state.parents[0] && state.parents[1]) refreshPreview();
-    openPanel('pais', firstParentButtonId(), true);
-  }
-
-  function confirmCross() {
-    var order = currentOrder();
-    if (!state.preview) {
-      state.message = 'Selecione dois animais diferentes, um em cada posição.';
+  function doBreed() {
+    if (!state.parents[0] || !state.parents[1]) {
+      state.message = 'Escolha dois pais para cruzar.';
       state.liveNote = state.message;
-      state.approved = null;
-      renderModal('btn-confirm', true);
+      renderLab('btn-cruzar', true);
       return;
     }
-    if (!state.preview.ok) {
-      state.approved = null;
-      state.message = failureMessage();
-      state.liveNote = 'Não atende ao pedido. A chance de ' + phenotypeName(order.phenotype) + ' é ' + formatPercent(state.preview.chance) + '.';
-      renderHud();
-      renderModal('btn-confirm', true);
+    var result = PetBreeding.cross(state.game, state.parents[0], state.parents[1]);
+    if (!result.ok) {
+      state.message = result.reason;
+      state.liveNote = result.reason;
+      renderLab('btn-cruzar', true);
       return;
     }
-    state.approved = state.preview;
+    state.attempts += 1;
+    state.pup = result.pup;
+    state.carry = false;
+    state.labTab = 'filhote';
     state.message = '';
-    state.liveNote = '';
-    state.status = '';
-    openPanel('resultado', 'btn-voltar');
+    state.liveNote = result.pup.name + ' nasceu: ' + traitLine(result.pup.traits) + '.';
+    renderHud();
+    renderLab('btn-deliver', true);
   }
 
-  function deliverOrder() {
-    if (state.phase !== 'mundo' || !state.approved || state.panel || state.deliverLock) return;
+  function reserveForDelivery() {
+    if (!state.pup) return;
+    state.carry = true;
+    state.status = 'Leve ' + state.pup.name + ' até o cliente.';
+    closePanel();
+  }
+
+  function mismatchText(order, pup, wrong) {
+    return wrong.map(function (key) {
+      return 'pedi ' + PetOrders.phrase(key, order.targets[key]) + ', mas ele tem ' + PetOrders.phrase(key, pup.traits[key]);
+    }).join('; ') + '.';
+  }
+
+  // O cliente confere só a aparência do filhote que o jogador trouxe.
+  function tryDeliver() {
+    var order = currentOrder();
+    var pup = state.pup;
+    if (!state.carry || !pup) {
+      state.carry = false;
+      state.status = 'Cruze no laboratório e traga o filhote.';
+      renderHud();
+      return;
+    }
+    var wrong = PetBreeding.mismatches(order.targets, pup.traits);
+    if (!wrong.length) {
+      completeOrder(PetBreeding.stars(state.attempts, currentPlan()));
+      return;
+    }
+    state.carry = false;
+    state.pup = null;
+    state.say = 'Hmm, ' + pup.name + ' não é bem o que eu queria: ' + mismatchText(order, pup, wrong) + ' Pode tentar outro cruzamento?';
+    state.status = '';
+    openPanel('pedido', 'btn-ir-lab');
+  }
+
+  function createGameFor(order) {
+    var level = PetOrders.levels.find(function (item) { return item.id === order.levelId; });
+    return PetBreeding.create(level.id, level.orders);
+  }
+
+  function completeOrder(stars) {
+    if (state.phase !== 'mundo' || state.panel || state.deliverLock) return;
     state.deliverLock = true;
-    var delivered = state.orderIndex + 1;
-    state.approved = null;
-    state.preview = null;
+    PetCustomers.leave(state.customer);
+    var finished = currentOrder();
+    state.results.push({ order: state.orderIndex, stars: stars, attempts: state.attempts });
+    state.carry = false;
+    state.pup = null;
     state.parents = [null, null];
+    state.parentSlot = null;
     state.orderReceived = false;
     state.message = '';
     state.liveNote = '';
+    state.say = '';
+    state.attempts = 0;
     state.orderIndex += 1;
+    var summary = totalStars() + ' de ' + ORDERS.length * 3 + ' estrelas';
     if (state.orderIndex >= ORDERS.length) {
       state.phase = 'concluido';
       state.status = '';
@@ -757,28 +779,59 @@
       modal.hidden = true;
       document.body.classList.remove('modal-open');
       document.getElementById('screen-end').hidden = false;
+      document.getElementById('end-title').textContent = 'Jogo concluído';
+      document.getElementById('done-count').textContent = ORDERS.length + '/' + ORDERS.length + ' pedidos entregues · ' + summary;
+      document.getElementById('end-copy').textContent = 'Você entregou todos os filhotes escolhendo os pais certos.';
+      document.getElementById('end-details').hidden = false;
+      document.getElementById('btn-next-level').hidden = true;
       syncInert();
       renderHud();
       document.getElementById('btn-restart').focus();
       state.deliverLock = false;
       return;
     }
-    state.status = 'Pedido ' + delivered + ' entregue.';
+    if (currentOrder().levelId !== finished.levelId) {
+      var levelOrders = PetOrders.levels.find(function (level) { return level.id === finished.levelId; }).orders;
+      var levelStars = state.results.filter(function (item) { return ORDERS[item.order].levelId === finished.levelId; }).reduce(function (sum, item) { return sum + item.stars; }, 0);
+      state.phase = 'intervalo';
+      state.status = '';
+      state.panel = null;
+      modal.hidden = true;
+      document.body.classList.remove('modal-open');
+      document.getElementById('screen-end').hidden = false;
+      document.getElementById('end-title').textContent = 'Nível concluído';
+      document.getElementById('done-count').textContent = levelStars + ' de ' + levelOrders.length * 3 + ' estrelas neste nível';
+      document.getElementById('end-copy').textContent = currentOrder().levelName + ' vem com outra família de bichos. Continue quando quiser.';
+      document.getElementById('end-details').hidden = true;
+      document.getElementById('btn-next-level').hidden = false;
+      syncInert();
+      renderHud();
+      document.getElementById('btn-next-level').focus();
+      state.deliverLock = false;
+      return;
+    }
+    state.status = 'Pedido entregue: ' + starText(stars);
     renderHud();
     state.deliverLock = false;
   }
 
   function interact() {
     if (state.phase !== 'mundo' || state.panel) return;
-    var atService = pointInZone(state.player.x, state.player.y, WORLD.service);
+    var atService = nearClient();
     var atLab = pointInZone(state.player.x, state.player.y, WORLD.lab);
-    if (atService && state.approved) {
-      deliverOrder();
-      return;
-    }
     if (atService) {
-      state.orderReceived = true;
-      state.status = '';
+      if (!state.orderReceived) {
+        state.orderReceived = true;
+        state.status = '';
+        state.say = '';
+        openPanel('pedido', 'btn-ir-lab');
+        return;
+      }
+      if (state.carry) {
+        tryDeliver();
+        return;
+      }
+      state.say = '';
       openPanel('pedido', 'btn-ir-lab');
       return;
     }
@@ -787,14 +840,9 @@
       renderHud();
       return;
     }
-    if (atLab && state.approved) {
-      openPanel('resultado', 'btn-voltar');
-      return;
-    }
     if (atLab) {
       state.status = '';
-      refreshPreview();
-      openPanel('pais', firstParentButtonId());
+      openPanel('pais', 'btn-cruzar');
     }
   }
 
@@ -812,10 +860,29 @@
     if (event.ctrlKey || event.metaKey || event.altKey) return;
     var surface = activeSurface();
     if (surface && event.key === 'Tab') trapTab(event, surface);
+    if (!document.getElementById('screen-start').hidden) {
+      if (event.key === 'Escape') showMenuPage('home');
+      if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+        event.preventDefault();
+        var menuButtons = focusableIn(document.getElementById('screen-start'));
+        if (menuButtons.length) {
+          var currentIndex = menuButtons.indexOf(document.activeElement);
+          var nextIndex = currentIndex < 0 ? 0 : (currentIndex + (event.key === 'ArrowDown' ? 1 : -1) + menuButtons.length) % menuButtons.length;
+          menuButtons[nextIndex].focus();
+        }
+      }
+      return;
+    }
     var arrows = event.code === 'ArrowUp' || event.code === 'ArrowDown' || event.code === 'ArrowLeft' || event.code === 'ArrowRight';
     if (state.phase === 'mundo' && !state.panel && !surface && arrows) event.preventDefault();
     if (event.repeat) return;
+    if (state.panel === 'pedido' && (event.code === 'KeyE' || event.code === 'Enter' || event.code === 'Space')) {
+      event.preventDefault();
+      closePanel();
+      return;
+    }
     if (!surface && state.phase === 'mundo' && !state.panel && isMoveCode(event.code)) state.held[event.code] = true;
+    if (!surface && state.phase === 'mundo' && !state.panel && (event.code === 'KeyH' || (event.key || '').toLowerCase() === 'h')) openPanel('ajuda', 'btn-fechar-painel');
     if (!surface && (event.code === 'KeyE' || (event.key || '').toLowerCase() === 'e')) interact();
     if (event.code === 'Escape' && state.panel) closePanel();
   }
@@ -849,9 +916,18 @@
   }
 
   function update(dt) {
+    if(state.phase!=='inicio'&&!state.panel){
+      var customerChanged=PetCustomers.update(state.customer,dt);
+      if(state.customer&&state.customer.phase==='gone'&&state.phase==='mundo'&&currentOrder()){
+        state.customer=PetCustomers.create(currentOrder(),state.orderIndex);customerChanged=true;
+      }
+      if(customerChanged)renderHud();
+    }
+    state.player.moving=false;
     if (state.phase === 'mundo' && !state.panel) {
       var axis = readAxis();
       if (axis.x || axis.y) {
+        var previousX=state.player.x,previousY=state.player.y;
         var distance = WORLD.speed * dt;
         var nextX = state.player.x + axis.x * distance;
         if (!blocked(feetBox(nextX, state.player.y))) state.player.x = nextX;
@@ -859,17 +935,18 @@
         if (!blocked(feetBox(state.player.x, nextY))) state.player.y = nextY;
         if (Math.abs(axis.x) > Math.abs(axis.y)) state.player.dir = axis.x > 0 ? 'right' : 'left';
         else state.player.dir = axis.y > 0 ? 'down' : 'up';
+        state.player.moving=state.player.x!==previousX||state.player.y!==previousY;
       }
     }
+    state.player.walkTime=state.player.moving?(state.player.walkTime||0)+dt:0;
     var nextHint = '';
     if (state.phase === 'mundo' && !state.panel) {
-      var atService = pointInZone(state.player.x, state.player.y, WORLD.service);
+      var atService = nearClient();
       var atLab = pointInZone(state.player.x, state.player.y, WORLD.lab);
-      if (atService && state.approved) nextHint = '[E] Entregar';
+      if (atService && state.carry) nextHint = '[E] Entregar';
       else if (atService && state.orderReceived) nextHint = '[E] Ver pedido';
-      else if (atService) nextHint = '[E] Atender';
-      else if (atLab && state.approved) nextHint = '[E] Ver resultado';
-      else if (atLab && state.orderReceived) nextHint = '[E] Laboratório';
+      else if (atService) nextHint = '[E] Conversar';
+      else if (atLab && state.orderReceived) nextHint = '[E] Viveiro';
     }
     if (nextHint !== hintText) {
       hintText = nextHint;
@@ -879,9 +956,9 @@
   }
 
   function drawActor(image, frame, x, y) {
-    var scale = WORLD.actorHeight / frame.h;
+    var scale = WORLD.actorHeight / (frame.referenceHeight || frame.h);
     var dw = frame.w * scale;
-    var dh = WORLD.actorHeight;
+    var dh = frame.h * scale;
     var anchor = frame.anchorX == null ? frame.w / 2 : frame.anchorX;
     ctx.drawImage(image, frame.x, frame.y, frame.w, frame.h, x - (anchor / frame.w) * dw, y - dh, dw, dh);
   }
@@ -893,25 +970,80 @@
     ctx.fill();
   }
 
-  function drawZone(zone, fill, stroke, lineWidth) {
+  function drawObjectiveArrow() {
+    if (state.panel || !currentOrder()) return;
+    var toClient = !state.orderReceived || !!state.carry;
+    if(toClient&&(!state.customer||state.customer.phase!=='waiting'))return;
+    var x = toClient ? state.customer.x : WORLD.lab.x + WORLD.lab.w / 2;
+    var targetY = toClient ? state.customer.y - WORLD.actorHeight : WORLD.lab.y + WORLD.lab.h / 2;
+    var bounce = reducedMotionQuery && reducedMotionQuery.matches ? 0 : Math.sin(lastTime / 240) * 6;
+    ctx.save();
+    ctx.translate(Math.round(x), Math.round(targetY - 42 + bounce));
+    ctx.scale(0.75, 0.75);
     ctx.beginPath();
-    ctx.ellipse(zone.x + zone.w / 2, zone.y + zone.h / 2, zone.w / 2, Math.max(8, zone.h / 2), 0, 0, Math.PI * 2);
-    ctx.fillStyle = fill;
-    ctx.fill();
-    ctx.lineWidth = lineWidth;
-    ctx.strokeStyle = stroke;
+    ctx.moveTo(-6, -14);
+    ctx.lineTo(6, -14);
+    ctx.lineTo(6, 2);
+    ctx.lineTo(17, 2);
+    ctx.lineTo(0, 19);
+    ctx.lineTo(-17, 2);
+    ctx.lineTo(-6, 2);
+    ctx.closePath();
+    ctx.lineJoin = 'round';
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = 'rgba(0, 0, 0, 0.45)';
+    ctx.fillStyle = '#ffffff';
     ctx.stroke();
+    ctx.fill();
+    ctx.restore();
   }
 
-  function drawLabel(text, x, y) {
-    ctx.font = '700 26px Segoe UI, Trebuchet MS, sans-serif';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.lineWidth = 5;
-    ctx.strokeStyle = 'rgba(255, 250, 243, 0.92)';
-    ctx.strokeText(text, x, y);
-    ctx.fillStyle = '#2a1c14';
-    ctx.fillText(text, x, y);
+  // Máscara exata do objeto (js/occluders.js): só os pixels do próprio objeto cobrem o personagem, não o chão em volta.
+  function occluderMask(o) {
+    if (o.mask !== undefined) return o.mask;
+    o.mask = null;
+    var runs = window.PetOccluders && window.PetOccluders[o.key];
+    if (!runs) return null;
+    var x0 = Math.max(0, o.x);
+    var y0 = Math.max(0, o.y);
+    var w = Math.min(WORLD.width, o.x + o.w) - x0;
+    var h = Math.min(WORLD.height, o.y + o.h) - y0;
+    var mask = document.createElement('canvas');
+    mask.width = w;
+    mask.height = h;
+    var mctx = mask.getContext('2d');
+    var pos = 0;
+    var solid = false;
+    runs.split(',').forEach(function (value) {
+      var len = +value;
+      while (solid && len > 0) {
+        var row = Math.floor(pos / w);
+        var col = pos % w;
+        var span = Math.min(len, w - col);
+        mctx.fillRect(col, row, span, 1);
+        pos += span;
+        len -= span;
+      }
+      if (!solid) pos += len;
+      solid = !solid;
+    });
+    mctx.globalCompositeOperation = 'source-in';
+    mctx.drawImage(images.scenery, x0, y0, w, h, 0, 0, w, h);
+    o.mask = { canvas: mask, x: x0, y: y0 };
+    return o.mask;
+  }
+
+  function drawOccluder(o) {
+    if (o.round) {
+      ctx.save();
+      ctx.beginPath();
+      ctx.ellipse(o.round[1], o.round[2], o.round[3], o.round[4], 0, 0, Math.PI * 2);
+      ctx.clip();
+    }
+    var mask = o.round ? null : occluderMask(o);
+    if (mask) ctx.drawImage(mask.canvas, mask.x, mask.y);
+    else ctx.drawImage(images.scenery, o.x, o.y, o.w, o.h, o.x, o.y, o.w, o.h);
+    if (o.round) ctx.restore();
   }
 
   function render() {
@@ -920,40 +1052,36 @@
     ctx.clearRect(0, 0, WORLD.width, WORLD.height);
     ctx.drawImage(images.scenery, 0, 0, WORLD.width, WORLD.height);
     if (state.phase === 'mundo') {
-      var serviceNow = !state.orderReceived || !!state.approved;
-      drawZone(
-        WORLD.service,
-        serviceNow ? 'rgba(140, 70, 180, 0.4)' : 'rgba(140, 70, 180, 0.1)',
-        serviceNow ? 'rgba(92, 45, 145, 1)' : 'rgba(92, 45, 145, 0.28)',
-        serviceNow ? 5 : 2
-      );
-      drawZone(
-        WORLD.lab,
-        serviceNow ? 'rgba(50, 110, 170, 0.1)' : 'rgba(50, 110, 170, 0.4)',
-        serviceNow ? 'rgba(24, 78, 130, 0.28)' : 'rgba(24, 78, 130, 1)',
-        serviceNow ? 2 : 5
-      );
-      drawLabel('Cliente', WORLD.client.x, WORLD.client.y - WORLD.actorHeight - 20);
-      drawLabel('Laboratório', WORLD.lab.x + WORLD.lab.w / 2, WORLD.lab.y + WORLD.lab.h + 28);
       var order = currentOrder();
       var entities = [{
+        x: state.player.x,
         y: state.player.y,
         draw: function () {
           drawShadow(state.player.x, state.player.y);
-          drawActor(images.player, PetAssets.frames.player[state.player.dir], state.player.x, state.player.y);
+          drawActor(images.player, PetAssets.walkFrame(state.player.dir,state.player.moving,state.player.walkTime), state.player.x, state.player.y);
         },
       }];
-      if (order) {
+      if (state.customer&&state.customer.phase!=='gone') {
         entities.push({
-          y: WORLD.client.y,
+          x: state.customer.x,
+          y: state.customer.y,
           draw: function () {
-            drawShadow(WORLD.client.x, WORLD.client.y);
-            drawActor(images[order.clientId], PetAssets.frames.clients[order.clientId], WORLD.client.x, WORLD.client.y);
+            drawShadow(state.customer.x, state.customer.y);
+            var customer=state.customer;
+            var frame=PetAssets.clientFrame(customer.clientId,customer.dir,customer.moving,customer.clock);
+            drawActor(images[customer.clientId],frame,customer.x,customer.y);
           },
         });
       }
+      WORLD.occluders.forEach(function (o) {
+        var behind = entities.some(function (e) {
+          return e.y < o.base && e.x + 40 > o.x && e.x - 40 < o.x + o.w && e.y > o.y && e.y - WORLD.actorHeight < o.y + o.h;
+        });
+        if (behind) entities.push({ y: o.base, draw: function () { drawOccluder(o); } });
+      });
       entities.sort(function (a, b) { return a.y - b.y; });
       entities.forEach(function (entity) { entity.draw(); });
+      drawObjectiveArrow();
     }
   }
 
@@ -977,8 +1105,15 @@
     state.orderIndex = 0;
     state.orderReceived = false;
     state.parents = [null, null];
-    state.preview = null;
-    state.approved = null;
+    state.parentSlot = null;
+    state.labTab = 'filhote';
+    state.pup = null;
+    state.attempts = 0;
+    state.carry = false;
+    state.results = [];
+    state.say = '';
+    state.journalOnly = false;
+    state.game = createGameFor(currentOrder());
     state.panel = null;
     state.message = '';
     state.liveNote = '';
@@ -987,6 +1122,8 @@
     state.player.x = WORLD.spawn.x;
     state.player.y = WORLD.spawn.y;
     state.player.dir = WORLD.spawn.dir;
+    state.player.moving=false;state.player.walkTime=0;
+    state.customer=PetCustomers.create(currentOrder(),state.orderIndex);
     clearKeys();
     hintText = '';
     hintEl.hidden = true;
@@ -1001,6 +1138,17 @@
     syncInert();
     renderHud();
     ensureLoop();
+  }
+
+  function continueLevel() {
+    if (state.phase !== 'intervalo') return;
+    document.getElementById('screen-end').hidden = true;
+    state.phase = 'mundo';
+    state.game = createGameFor(currentOrder());
+    state.status = '';
+    syncInert();
+    renderHud();
+    canvas.focus();
   }
 
   function showLoadError(failed) {
@@ -1043,8 +1191,36 @@
     canvas.focus();
   }
 
+  function showMenuPage(page) {
+    document.getElementById('menu-home').hidden = page !== 'home';
+    document.getElementById('menu-instructions').hidden = page !== 'instructions';
+    document.getElementById('menu-credits').hidden = page !== 'credits';
+    if (page === 'home') document.getElementById('btn-play').focus();
+    else document.getElementById('btn-back-' + page).focus();
+  }
+
+  function preloadMenuPets() {
+    if (!window.PetAssets || !window.PetCatalog) return;
+    ['gato', 'cachorro', 'coelho'].forEach(function (speciesId) {
+      var species = PetCatalog.species[speciesId];
+      var image = new Image();
+      image.onload = function () {
+        if (!images) images = {};
+        images[species.atlasId] = image;
+        PetSprites.draw(document.getElementById('menu-' + speciesId), speciesId, species.variants[0].id, images);
+      };
+      image.onerror = function () { document.getElementById('menu-' + speciesId).hidden = true; };
+      image.src = window.PetSpriteData && PetSpriteData[species.atlasId] || PetAssets.files[species.atlasId];
+    });
+  }
+
   document.getElementById('btn-play').addEventListener('click', onPlay);
+  document.getElementById('btn-how-to').addEventListener('click', function () { showMenuPage('instructions'); });
+  document.getElementById('btn-credits').addEventListener('click', function () { showMenuPage('credits'); });
+  document.getElementById('btn-back-instructions').addEventListener('click', function () { showMenuPage('home'); });
+  document.getElementById('btn-back-credits').addEventListener('click', function () { showMenuPage('home'); });
   document.getElementById('btn-restart').addEventListener('click', onRestart);
+  document.getElementById('btn-next-level').addEventListener('click', continueLevel);
   window.addEventListener('keydown', onKeyDown);
   window.addEventListener('keyup', onKeyUp);
   window.addEventListener('blur', clearKeys);
@@ -1071,4 +1247,5 @@
   renderHud();
   syncInert();
   preloadScenery();
+  preloadMenuPets();
 })();

@@ -4,7 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pet Shop Mendel</title>
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/style.css?v=families-contrast-20261022-1">
+    <link rel="stylesheet" href="css/lab.css?v=lab-game-3">
+    <link rel="stylesheet" href="css/hud.css?v=hud-2">
   </head>
   <body>
     <div id="playfield">
@@ -14,43 +16,79 @@
           <div id="hud">
             <div class="hud-bar">
               <p id="progress">Nível solo</p>
-              <button type="button" id="btn-help">Ajuda</button>
             </div>
             <p id="order-summary" aria-live="polite">Fale com o cliente</p>
             <p id="objective"></p>
             <p id="status" role="status"></p>
           </div>
+          <button type="button" id="btn-help" aria-label="Ajuda" title="Ajuda (H)">Ajuda · H</button>
           <p id="hint" hidden></p>
         </div>
       </div>
       <section id="dialogue" hidden role="dialog" aria-modal="true" aria-labelledby="dialogue-name"></section>
     </div>
 
-    <section id="screen-start">
-      <div class="screen-card">
-        <h1>Pet Shop Mendel</h1>
-        <p>Atenda três clientes escolhendo cruzamentos que alcancem a chance pedida.</p>
-        <p id="load-error" class="alert" hidden></p>
-        <button type="button" id="btn-play">Jogar</button>
+    <section id="screen-start" aria-label="Menu inicial">
+      <div class="menu-scenery" aria-hidden="true"></div>
+      <div class="menu-content">
+        <div id="menu-home">
+          <h1 class="menu-title"><span>Pet Shop</span>Mendel</h1>
+          <nav class="menu-actions" aria-label="Menu principal">
+            <button type="button" id="btn-play" class="menu-action menu-play">Jogar</button>
+            <button type="button" id="btn-how-to" class="menu-action">Como jogar</button>
+            <button type="button" id="btn-credits" class="menu-action">Créditos</button>
+          </nav>
+        </div>
+        <section id="menu-instructions" class="menu-detail" hidden aria-labelledby="instructions-title" tabindex="-1">
+          <h2 id="instructions-title">Como jogar</h2>
+          <dl class="menu-controls">
+            <dt><kbd>W A S D</kbd> ou <kbd>↑ ↓ ← →</kbd></dt><dd>Andar pela loja</dd>
+            <dt><kbd>E</kbd></dt><dd>Conversar, abrir a bancada e entregar</dd>
+            <dt><kbd>Esc</kbd></dt><dd>Fechar conversas e painéis</dd>
+            <dt><kbd>H</kbd></dt><dd>Consultar a ajuda</dd>
+          </dl>
+          <p>Aproxime-se do cliente e receba o pedido. No laboratório você vê só a aparência dos bichos: escolha dois pais, cruze e veja o filhote sorteado.</p>
+          <p>Se o filhote tem tudo o que o cliente pediu, leve até o balcão. Se não, cruze de novo. Quanto menos cruzamentos, mais estrelas.</p>
+          <button type="button" class="menu-action menu-back" id="btn-back-instructions">Voltar ao menu</button>
+        </section>
+        <section id="menu-credits" class="menu-detail" hidden aria-labelledby="credits-title" tabindex="-1">
+          <h2 id="credits-title">Pet Shop Mendel</h2>
+          <p>Um jogo educacional sobre herança genética, probabilidades e as descobertas de Mendel.</p>
+          <dl class="menu-credits-list">
+            <dt>Animais da loja</dt><dd>Gatinho, cachorrinho e coelhinho</dd>
+            <dt>Desenvolvimento</dt><dd>HTML, CSS e JavaScript</dd>
+            <dt>Arte</dt><dd>Cenário e sprites do projeto</dd>
+          </dl>
+          <p class="menu-note">Os cruzamentos usam modelos didáticos fictícios e não representam a genética real dos animais.</p>
+          <button type="button" class="menu-action menu-back" id="btn-back-credits">Voltar ao menu</button>
+        </section>
+        <p id="load-error" class="alert" role="alert" hidden></p>
       </div>
+      <div class="menu-pets" aria-hidden="true">
+        <canvas id="menu-coelho" width="480" height="480"></canvas>
+        <canvas id="menu-gato" width="480" height="480"></canvas>
+        <canvas id="menu-cachorro" width="480" height="480"></canvas>
+      </div>
+      <footer class="menu-footer"><span>Teclado e mouse</span></footer>
     </section>
 
     <section id="screen-end" hidden>
       <div class="screen-card">
-        <h2>Nível concluído</h2>
-        <p class="done-count">3/3 pedidos concluídos</p>
-        <p>Você entregou os três pedidos com cruzamentos que batiam com a chance pedida.</p>
-        <details>
-          <summary>O que este nível mostrou</summary>
+        <h2 id="end-title">Nível concluído</h2>
+        <p id="done-count" class="done-count">3/3 pedidos concluídos</p>
+        <p id="end-copy">Você entregou os filhotes escolhendo os pais certos.</p>
+        <details id="end-details">
+          <summary>O que o jogo mostrou</summary>
           <ul>
-            <li>Genótipo é o par de alelos; fenótipo é a cor visível.</li>
-            <li>A é dominante (pelo roxo) e a é recessivo (pelo marrom).</li>
-            <li>AA e Aa são roxos. aa é marrom.</li>
-            <li>O quadro de Punnett junta um alelo de cada pai. Cada célula vale 25%.</li>
-            <li>A entrega mostra um descendente possível e não faz um sorteio.</li>
+            <li>A aparência não revela tudo: um bicho pode carregar uma característica que não aparece e passá-la adiante.</li>
+            <li>Quando dois pais sem uma característica geram um filhote com ela, os dois carregavam essa característica escondida.</li>
+            <li>Cor, olhos, orelhas, manchas e rabo são herdados de forma independente, em um modelo fictício.</li>
+            <li>Cada filhote é um sorteio: repetir o cruzamento pode dar filhotes diferentes.</li>
+            <li>Duas características recessivas iguais nos pais sempre aparecem no filhote.</li>
           </ul>
         </details>
         <button type="button" id="btn-restart">Jogar novamente</button>
+        <button type="button" id="btn-next-level" hidden>Continuar</button>
       </div>
     </section>
 
@@ -68,8 +106,16 @@
       </div>
     </div>
 
-    <script src="js/assets.js" defer></script>
-    <script src="js/genetics.js" defer></script>
-    <script src="js/main.js" defer></script>
+    <script src="js/pet-art-data.js?v=families-contrast-20261022-1" defer></script>
+    <script src="js/client-frames.js?v=clients-walk-1" defer></script>
+    <script src="js/assets.js?v=clients-walk-1" defer></script>
+    <script src="js/genetics.js?v=lab-20261022-2" defer></script>
+    <script src="js/catalog.js?v=families-contrast-20261022-1" defer></script>
+    <script src="js/orders.js?v=clients-walk-1" defer></script>
+    <script src="js/sprites.js?v=families-contrast-20261022-1" defer></script>
+    <script src="js/breeding.js?v=game-2" defer></script>
+    <script src="js/occluders.js?v=collide-5" defer></script>
+    <script src="js/customers.js?v=clients-walk-1" defer></script>
+    <script src="js/main.js?v=clients-walk-1" defer></script>
   </body>
 </html>
