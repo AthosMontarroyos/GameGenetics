@@ -1,33 +1,45 @@
 # Pet Shop Mendel
 
-Projeto escolar de um jogo educacional de genética mendeliana em pixel art.
-Base em HTML, CSS e JavaScript puro, sem dependências, frameworks ou backend.
+Jogo educacional no navegador sobre um gene fictício da cor do Mendelino.
+Este protótipo tem um nível solo, em português, com três atendimentos.
 
 ## Como abrir
 
-Abra `index.html` diretamente no navegador. Nesta etapa, a página fica em branco:
-ela apenas referencia o CSS e o JavaScript locais. Não é necessário instalar nada.
+Abra `index.html` no navegador (Chrome, Edge ou Firefox). Dê um duplo clique no arquivo ou arraste-o para uma janela do navegador.
 
-## Estrutura
+Não é preciso instalar programas, baixar pacotes nem usar um servidor. O jogo usa HTML, CSS, JavaScript e as imagens PNG da pasta `assets`. Mantenha juntas, ao lado de `index.html`, as pastas `assets`, `css` e `js`.
 
-- `index.html`: documento inicial com os links para CSS e JavaScript.
-- `css/style.css`: arquivo reservado para os estilos.
-- `js/main.js`: ponto de entrada reservado para a implementação futura.
-- `assets/scenery/`: cenário fixo.
-- `assets/players/`: sprite sheets do Geneticista e do Laboratorista.
-- `assets/npcs/`: sprite sheets dos clientes e demais NPCs.
-- `assets/animals/`: sprites e sheets de Mendelino, Gencko e Nibbli.
-- `assets/cars/`: carros decorativos do exterior.
-- `.gitkeep`: arquivos vazios que mantêm as pastas de assets no Git.
+Se uma imagem necessária não abrir, a tela inicial mostra o caminho que falhou.
 
-Os assets serão fornecidos separadamente. Dimensões, frames e layouts das sheets
-serão definidos somente após receber os arquivos reais.
+## Como jogar
 
-## Próxima etapa
+1. Clique em **Jogar**.
+2. Ande com **WASD** ou as **setas**. O HUD mostra o pedido e a próxima ação. **Ajuda** reúne os controles e a teoria.
+3. Fale com o cliente na marca roxa e pressione **E**. O diálogo traz o pedido. **Ir ao laboratório** só fecha a conversa.
+4. Vá à marca azul e pressione **E**. A bancada mostra os pais, o quadro de Punnett e a chance.
+5. Confirme um cruzamento que atenda ao pedido e volte ao cliente para entregar.
+6. Repita nos três clientes. **Jogar novamente** reinicia o nível sem recarregar a página.
 
-Receber e conferir os assets antes de iniciar a implementação. O planejamento
-prevê modo solo completo e coop local opcional, com o fluxo:
-cliente → pedido → escolha dos pais → genética/Punnett → cruzamento → resultado → entrega.
+Uma escolha abaixo da chance pedida não avança o pedido. **Limpar seleção** ou **Rever os pais** permite corrigir. Fechar o painel não entrega o pedido.
 
-Esta base ainda não contém interface de jogo, mecânicas, movimentação, sistema
-genético ou assets.
+## O que o nível mostra
+
+- Genótipo (AA, Aa, aa) e fenótipo (pelo roxo ou marrom).
+- Alelo **A** dominante e alelo **a** recessivo.
+- Homozigose (AA ou aa) e heterozigose (Aa). AA e Aa têm a mesma aparência roxa.
+- Gametas de cada pai e o quadro de Punnett 2×2, com 25% por célula.
+- A chance calculada a partir dos pais escolhidos, não de uma proporção fixa.
+
+É um modelo didático fictício, não uma descrição da genética real dos gatos. O exemplo de descendente mostra um resultado possível; a entrega não faz um sorteio.
+
+## Arquivos do protótipo
+
+- `index.html`: telas, painéis e canvas.
+- `css/style.css`: layout, painéis e botões.
+- `js/assets.js`: caminhos e recortes dos sprites usados.
+- `js/genetics.js`: gametas, cruzamento, fenótipo e validação do pedido.
+- `js/main.js`: mundo, teclado, pedidos e interface.
+
+## Fora deste protótipo
+
+Cooperativo, outros níveis, outras espécies, genética de dois genes, sons, animação completa de caminhada, moedas e contas de jogador.

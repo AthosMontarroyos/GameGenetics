@@ -5,8 +5,71 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pet Shop Mendel</title>
     <link rel="stylesheet" href="css/style.css">
-    <script src="js/main.js" defer></script>
   </head>
   <body>
+    <div id="playfield">
+      <div id="stage">
+        <div id="frame">
+          <canvas id="world" width="1536" height="1024" tabindex="0" aria-label="Mapa do pet shop"></canvas>
+          <div id="hud">
+            <div class="hud-bar">
+              <p id="progress">Nível solo</p>
+              <button type="button" id="btn-help">Ajuda</button>
+            </div>
+            <p id="order-summary" aria-live="polite">Fale com o cliente</p>
+            <p id="objective"></p>
+            <p id="status" role="status"></p>
+          </div>
+          <p id="hint" hidden></p>
+        </div>
+      </div>
+      <section id="dialogue" hidden role="dialog" aria-modal="true" aria-labelledby="dialogue-name"></section>
+    </div>
+
+    <section id="screen-start">
+      <div class="screen-card">
+        <h1>Pet Shop Mendel</h1>
+        <p>Atenda três clientes escolhendo cruzamentos que alcancem a chance pedida.</p>
+        <p id="load-error" class="alert" hidden></p>
+        <button type="button" id="btn-play">Jogar</button>
+      </div>
+    </section>
+
+    <section id="screen-end" hidden>
+      <div class="screen-card">
+        <h2>Nível concluído</h2>
+        <p class="done-count">3/3 pedidos concluídos</p>
+        <p>Você entregou os três pedidos com cruzamentos que batiam com a chance pedida.</p>
+        <details>
+          <summary>O que este nível mostrou</summary>
+          <ul>
+            <li>Genótipo é o par de alelos; fenótipo é a cor visível.</li>
+            <li>A é dominante (pelo roxo) e a é recessivo (pelo marrom).</li>
+            <li>AA e Aa são roxos. aa é marrom.</li>
+            <li>O quadro de Punnett junta um alelo de cada pai. Cada célula vale 25%.</li>
+            <li>A entrega mostra um descendente possível e não faz um sorteio.</li>
+          </ul>
+        </details>
+        <button type="button" id="btn-restart">Jogar novamente</button>
+      </div>
+    </section>
+
+    <div id="modal" hidden>
+      <div class="modal-card" id="modal-card" role="dialog" aria-modal="true" aria-labelledby="modal-title" tabindex="-1">
+        <div class="panel-head">
+          <div>
+            <h2 id="modal-title"></h2>
+            <p id="modal-kicker"></p>
+          </div>
+          <button type="button" id="btn-fechar-painel" class="secondary">Fechar</button>
+        </div>
+        <p id="choice-live" class="visually-hidden" aria-live="polite"></p>
+        <div id="modal-body"></div>
+      </div>
+    </div>
+
+    <script src="js/assets.js" defer></script>
+    <script src="js/genetics.js" defer></script>
+    <script src="js/main.js" defer></script>
   </body>
 </html>
