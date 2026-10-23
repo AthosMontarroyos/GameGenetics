@@ -47,6 +47,11 @@ Quanto menos cruzamentos, mais estrelas (até 3 por pedido). Cada nível tem uma
 - `assets/players/atendente-walk.png`: um personagem, três quadros por direção.
 - `tests/phase05.test.js`: genética, cruzamento e filhote sorteado, pedidos, entrega, estrelas e trajeto dos clientes. Execute `node tests/phase05.test.js`.
 
+## Para quem desenvolve
+
+- `CLAUDE.md` e `.claude/rules/`: instruções para o Claude Code. `.cursor/rules/`: as mesmas regras para o Cursor.
+- `docs/arquitetura.md`: módulos e fluxo do jogo. `docs/genetica.md`: genes, pedidos e estrelas.
+
 ## Fora deste protótipo
 
 Cooperativo e seleção de personagem não fazem parte do escopo. Os seis clientes usam 16 quadros cada: quatro passos para cada direção, na entrada e na saída. Os recortes e apoios estão em `js/client-frames.js`, gerados por `node tools/build-client-frames.js`. O atendente também possui caminhada em quatro direções.

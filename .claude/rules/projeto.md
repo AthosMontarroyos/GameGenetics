@@ -1,0 +1,9 @@
+# Projeto
+
+Pet Shop: jogo educacional de genética mendeliana fictícia, no navegador. Três níveis (gatinho, cachorrinho, coelhinho), um atendente e quatro pedidos por nível.
+
+- Roda abrindo `index.html`. Sem build, sem `npm install`, sem servidor. Não introduza bundler, framework ou dependência de runtime.
+- Texto do jogo, comentários e documentação em português do Brasil.
+- Escopo fechado: cooperativo e seleção de personagem estão fora. Não adicione sem pedido explícito.
+- Mapa de arquivos e fluxo do jogo: `docs/arquitetura.md`. Regras de conteúdo: `docs/genetica.md`.
+- Ao mudar comportamento, atualize `README.md` e o doc correspondente em `docs/` no mesmo commit.
