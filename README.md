@@ -1,4 +1,4 @@
-# Pet Shop Mendel
+# Pet Shop
 
 Jogo educacional no navegador sobre modelos fictícios de herança para gatinho, cachorrinho e coelhinho.
 São três níveis para um jogador (um por espécie), com um único atendente e quatro pedidos por nível.
