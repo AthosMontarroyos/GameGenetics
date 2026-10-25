@@ -455,3 +455,8 @@
 #modal.is-bench #btn-deliver:hover { background: #ffc94d; }
 #modal.is-bench .bench-actions button.deliver { background: var(--lab-ok); color: #0d2616; border-color: #b7f0c4; margin-right: auto; }
 #modal.is-bench .bench-actions button.deliver:hover:not(:disabled) { background: #a5eebb; }
+
+#modal.is-bench .chance-box { flex: 0 0 auto; display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.25rem 0.9rem; margin: 0; padding: 0.55rem 1.25rem; background: var(--lab-panel-2); border-top: 1px solid var(--line); color: var(--lab-cream); font-size: 0.9rem; }
+#modal.is-bench .chance-box strong { font-size: 1rem; }
+#modal.is-bench .chance-best { opacity: 0.85; font-size: 0.85rem; }
+@media (max-width: 640px) { #modal.is-bench .chance-box { padding: 0.5rem 0.8rem; font-size: 0.82rem; } }

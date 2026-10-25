@@ -27,7 +27,7 @@ Quanto menos cruzamentos, mais estrelas (até 3 por pedido). Cada nível tem uma
 ## O que o jogo mostra
 
 - Cinco características nas três espécies: cor, olhos, orelhas, manchas e rabo, herdadas por seis genes independentes (dois para a cor).
-- Dominância e recessividade, sem mostrar genótipos, porcentagens ou quadros de Punnett: o jogador deduz pelos filhotes e pelo caderno.
+- Dominância e recessividade, sem mostrar genótipos nem quadros de Punnett: o jogador deduz pelos filhotes e pelo caderno. No laboratório, a caixa de chance mostra a probabilidade de o par escolhido gerar o que o cliente pediu e a melhor chance do viveiro (calculadas pelos alelos dos pais, como o sorteio do filhote).
 - Portadores: um bicho pode ter uma característica escondida e passá-la adiante.
 - Sorte e raciocínio: cada filhote é um sorteio, mas todo pedido tem pais no catálogo que o geram.
 

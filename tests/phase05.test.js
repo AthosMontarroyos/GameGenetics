@@ -106,7 +106,7 @@ const nodes=new Map();
 function node(){return{hidden:true,inert:false,disabled:false,textContent:'',dataset:{},classList:{add(){},remove(){},toggle(){}},getContext(){return{drawImage(){},fillRect(){},clearRect(){}}},addEventListener(){},append(){},setAttribute(){},focus(){},querySelectorAll(){return[]},contains(){return false},closest(){return null}};}
 game.document={body:node(),getElementById(id){if(!nodes.has(id))nodes.set(id,node());return nodes.get(id)},createElement(){return node()},addEventListener(){}};
 game.window=game;game.addEventListener=()=>{};game.requestAnimationFrame=()=>0;game.Image=function(){Object.defineProperty(this,'src',{set(){}})};
-let source=fs.readFileSync('js/main.js','utf8').replace(/\}\)\(\);\s*$/,'renderHud=function(){};syncInert=function(){};renderLab=function(){};globalThis.__game={state,interact,closePanel,clearParents,continueLevel,resetPlay,currentOrder,update,blocked,feetBox,WORLD,doBreed,toggleParent,reserveForDelivery,tryDeliver,currentPlan};})();');
+let source=fs.readFileSync('js/main.js','utf8').replace(/\}\)\(\);\s*$/,'renderHud=function(){};syncInert=function(){};renderLab=function(){};globalThis.__game={state,interact,closePanel,clearParents,continueLevel,resetPlay,currentOrder,update,blocked,feetBox,WORLD,doBreed,toggleParent,reserveForDelivery,tryDeliver,currentPlan,labChance};})();');
 new vm.Script(source,{filename:'js/main.js'}).runInContext(game);
 assert.ok(!/requestAnimationFrame|\bctx\b/.test(fs.readFileSync('js/main.js','utf8')),'main.js não desenha nem tem loop próprio');
 const flow=game.__game,state=flow.state;
@@ -151,4 +151,14 @@ for(const dir of ['up','down','left','right']){
   assert.notEqual(context.PetAssets.walkFrame(dir,true,0).x,context.PetAssets.walkFrame(dir,true,.14).x);
 }
 assert.deepEqual(Object.values(c.species).map(s=>s.name),['Gatinho','Cachorrinho','Coelhinho']);
+{
+  // Laboratório: a chance exibida vem da mesma lógica de cruzamento do catálogo e nunca passa da melhor do viveiro.
+  flow.resetPlay();
+  const order=flow.currentOrder(),roster=state.game.roster,a=roster[0],b=roster[1];
+  state.parents=[null,null];assert.equal(flow.labChance(order),null,'sem pais, não há chance');
+  state.parents=[a.id,b.id];
+  close(flow.labChance(order),c.chanceFor(c.cross(order.speciesId,a.genotype,b.genotype),order.targets));
+  assert.ok(flow.labChance(order)<=flow.currentPlan().chance+1e-10,'nenhum par passa da melhor chance do plano');
+  state.parents=[null,null];
+}
 console.log('OK: genética por traços, pedidos sem porcentagem, pais do catálogo → filhote sorteado, caderno, entrega, estrelas e 12 pedidos em 3 níveis.');

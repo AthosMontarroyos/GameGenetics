@@ -319,7 +319,7 @@
 
   function totalStars() { return state.results.reduce(function (sum, item) { return sum + item.stars; }, 0); }
 
-  // Só o que se vê: a aparência. Nada de genes, probabilidades ou quadros.
+  // Só o que se vê: a aparência. Os genes ficam ocultos; a chance do pedido aparece no laboratório (chanceView).
   function traitChips(traits, order) {
     var wanted = order ? order.targets : {};
     var list = [['color', PetCatalog.label(traits.color)], ['eyes', 'olhos ' + traits.eyes], ['ears', PetCatalog.label(traits.ears)], ['spots', PetCatalog.label(traits.spots)], ['tail', 'rabo ' + traits.tail]];
@@ -489,6 +489,28 @@
     return sidebar;
   }
 
+  // Chance de um filhote do par escolhido atender ao pedido, pela mesma lógica de cruzamento do catálogo.
+  function labChance(order) {
+    if (!state.parents[0] || !state.parents[1]) return null;
+    var first = animalInfo(state.parents[0]);
+    var second = animalInfo(state.parents[1]);
+    return PetCatalog.chanceFor(PetCatalog.cross(order.speciesId, first.genotype, second.genotype), order.targets);
+  }
+
+  function chanceView(order) {
+    var plan = currentPlan();
+    var chance = labChance(order);
+    var box = el('div', { className: 'chance-box', role: 'status' });
+    if (chance === null) {
+      box.append(el('span', { text: 'Escolha dois pais para ver a chance de sair o que o cliente pediu.' }));
+    } else {
+      box.append(el('strong', { text: 'Chance de sair o que o cliente pediu: ' + formatPercent(chance) }));
+      if (chance === 0) box.append(el('span', { text: 'Com esse par é impossível: troque um dos pais.' }));
+    }
+    if (plan && plan.chance > 0) box.append(el('span', { className: 'chance-best', text: 'Melhor par do viveiro: ' + formatPercent(plan.chance) }));
+    return box;
+  }
+
   function renderBenchActions() {
     var actions = el('div', { className: 'bench-actions', role: 'group', 'aria-label': 'Ações do laboratório' });
     var ready = !!(state.parents[0] && state.parents[1]);
@@ -516,7 +538,7 @@
       el('div', {}, el('span', { className: 'order-client', text: 'Pedido de ' + order.clientName }), el('strong', { text: order.speech })),
       el('span', { className: 'lab-order-hint', text: state.attempts === 0 ? 'Nenhum cruzamento ainda' : state.attempts + (state.attempts === 1 ? ' cruzamento' : ' cruzamentos') })),
       el('div', { className: 'lab-workspace' }, renderRoster(order), renderSidebar(order)));
-    modalBody.append(renderBenchActions());
+    modalBody.append(chanceView(order), renderBenchActions());
     modal.dataset.panel = state.panel;
     modal.hidden = false;
     document.body.classList.add('modal-open');
