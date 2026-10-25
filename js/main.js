@@ -134,7 +134,7 @@
   var ORDERS = PetOrders.orders;
 
   var canvas = document.getElementById('world');
-  var ctx = canvas.getContext('2d');
+  var worldFailed = !window.PetWorld;
   var modal = document.getElementById('modal');
   var modalTitle = document.getElementById('modal-title');
   var modalKicker = document.getElementById('modal-kicker');
@@ -142,10 +142,7 @@
   var dialogue = document.getElementById('dialogue');
   var hintEl = document.getElementById('hint');
   var images = null;
-  var lastTime = 0;
-  var loopStarted = false;
   var hintText = '';
-  var reducedMotionQuery = window.matchMedia ? window.matchMedia('(prefers-reduced-motion: reduce)') : null;
 
   var state = {
     phase: 'inicio',
@@ -955,49 +952,6 @@
     }
   }
 
-  function drawActor(image, frame, x, y) {
-    var scale = WORLD.actorHeight / (frame.referenceHeight || frame.h);
-    var dw = frame.w * scale;
-    var dh = frame.h * scale;
-    var anchor = frame.anchorX == null ? frame.w / 2 : frame.anchorX;
-    ctx.drawImage(image, frame.x, frame.y, frame.w, frame.h, x - (anchor / frame.w) * dw, y - dh, dw, dh);
-  }
-
-  function drawShadow(x, y) {
-    ctx.fillStyle = 'rgba(40, 24, 16, 0.28)';
-    ctx.beginPath();
-    ctx.ellipse(x, y, 16, 6, 0, 0, Math.PI * 2);
-    ctx.fill();
-  }
-
-  function drawObjectiveArrow() {
-    if (state.panel || !currentOrder()) return;
-    var toClient = !state.orderReceived || !!state.carry;
-    if(toClient&&(!state.customer||state.customer.phase!=='waiting'))return;
-    var x = toClient ? state.customer.x : WORLD.lab.x + WORLD.lab.w / 2;
-    var targetY = toClient ? state.customer.y - WORLD.actorHeight : WORLD.lab.y + WORLD.lab.h / 2;
-    var bounce = reducedMotionQuery && reducedMotionQuery.matches ? 0 : Math.sin(lastTime / 240) * 6;
-    ctx.save();
-    ctx.translate(Math.round(x), Math.round(targetY - 42 + bounce));
-    ctx.scale(0.75, 0.75);
-    ctx.beginPath();
-    ctx.moveTo(-6, -14);
-    ctx.lineTo(6, -14);
-    ctx.lineTo(6, 2);
-    ctx.lineTo(17, 2);
-    ctx.lineTo(0, 19);
-    ctx.lineTo(-17, 2);
-    ctx.lineTo(-6, 2);
-    ctx.closePath();
-    ctx.lineJoin = 'round';
-    ctx.lineWidth = 2;
-    ctx.strokeStyle = 'rgba(0, 0, 0, 0.45)';
-    ctx.fillStyle = '#ffffff';
-    ctx.stroke();
-    ctx.fill();
-    ctx.restore();
-  }
-
   // Máscara exata do objeto (js/occluders.js): só os pixels do próprio objeto cobrem o personagem, não o chão em volta.
   function occluderMask(o) {
     if (o.mask !== undefined) return o.mask;
@@ -1031,73 +985,6 @@
     mctx.drawImage(images.scenery, x0, y0, w, h, 0, 0, w, h);
     o.mask = { canvas: mask, x: x0, y: y0 };
     return o.mask;
-  }
-
-  function drawOccluder(o) {
-    if (o.round) {
-      ctx.save();
-      ctx.beginPath();
-      ctx.ellipse(o.round[1], o.round[2], o.round[3], o.round[4], 0, 0, Math.PI * 2);
-      ctx.clip();
-    }
-    var mask = o.round ? null : occluderMask(o);
-    if (mask) ctx.drawImage(mask.canvas, mask.x, mask.y);
-    else ctx.drawImage(images.scenery, o.x, o.y, o.w, o.h, o.x, o.y, o.w, o.h);
-    if (o.round) ctx.restore();
-  }
-
-  function render() {
-    if (!images) return;
-    ctx.imageSmoothingEnabled = false;
-    ctx.clearRect(0, 0, WORLD.width, WORLD.height);
-    ctx.drawImage(images.scenery, 0, 0, WORLD.width, WORLD.height);
-    if (state.phase === 'mundo') {
-      var order = currentOrder();
-      var entities = [{
-        x: state.player.x,
-        y: state.player.y,
-        draw: function () {
-          drawShadow(state.player.x, state.player.y);
-          drawActor(images.player, PetAssets.walkFrame(state.player.dir,state.player.moving,state.player.walkTime), state.player.x, state.player.y);
-        },
-      }];
-      if (state.customer&&state.customer.phase!=='gone') {
-        entities.push({
-          x: state.customer.x,
-          y: state.customer.y,
-          draw: function () {
-            drawShadow(state.customer.x, state.customer.y);
-            var customer=state.customer;
-            var frame=PetAssets.clientFrame(customer.clientId,customer.dir,customer.moving,customer.clock);
-            drawActor(images[customer.clientId],frame,customer.x,customer.y);
-          },
-        });
-      }
-      WORLD.occluders.forEach(function (o) {
-        var behind = entities.some(function (e) {
-          return e.y < o.base && e.x + 40 > o.x && e.x - 40 < o.x + o.w && e.y > o.y && e.y - WORLD.actorHeight < o.y + o.h;
-        });
-        if (behind) entities.push({ y: o.base, draw: function () { drawOccluder(o); } });
-      });
-      entities.sort(function (a, b) { return a.y - b.y; });
-      entities.forEach(function (entity) { entity.draw(); });
-      drawObjectiveArrow();
-    }
-  }
-
-  function tick(time) {
-    if (!lastTime) lastTime = time;
-    var dt = Math.min(0.05, (time - lastTime) / 1000);
-    lastTime = time;
-    update(dt);
-    render();
-    requestAnimationFrame(tick);
-  }
-
-  function ensureLoop() {
-    if (loopStarted) return;
-    loopStarted = true;
-    requestAnimationFrame(tick);
   }
 
   function resetPlay() {
@@ -1137,7 +1024,6 @@
     document.body.classList.remove('modal-open');
     syncInert();
     renderHud();
-    ensureLoop();
   }
 
   function continueLevel() {
@@ -1170,8 +1056,9 @@
       if (!window.PetAssets || !window.PetGenetics) {
         throw new Error('scripts locais de genética ou de imagens');
       }
-      if (!ctx) throw new Error('canvas');
+      if (worldFailed) throw new Error('vendor/phaser.min.js');
       if (!images || !images.player) images = await PetAssets.loadAll();
+      PetWorld.setImages(images);
       document.getElementById('screen-start').hidden = true;
       document.getElementById('screen-end').hidden = true;
       resetPlay();
@@ -1239,13 +1126,51 @@
     image.onload = function () {
       if (!images) images = {};
       if (!images.scenery) images.scenery = image;
-      if (ctx && images.scenery) ctx.drawImage(images.scenery, 0, 0, WORLD.width, WORLD.height);
+      if (window.PetWorld) PetWorld.setImages(images);
     };
     image.src = PetAssets.files.scenery;
+  }
+
+  // Dados que o motor de render (js/world-engine.js) desenha a cada quadro.
+  function worldView() {
+    if (state.phase !== 'mundo') return null;
+    var actors = [{ key: 'player', frame: PetAssets.walkFrame(state.player.dir, state.player.moving, state.player.walkTime), x: state.player.x, y: state.player.y }];
+    var customer = state.customer;
+    if (customer && customer.phase !== 'gone') {
+      actors.push({ key: customer.clientId, frame: PetAssets.clientFrame(customer.clientId, customer.dir, customer.moving, customer.clock), x: customer.x, y: customer.y });
+    }
+    var arrow = null;
+    if (!state.panel && currentOrder()) {
+      var toClient = !state.orderReceived || !!state.carry;
+      if (!toClient || (customer && customer.phase === 'waiting')) {
+        arrow = {
+          x: toClient ? customer.x : WORLD.lab.x + WORLD.lab.w / 2,
+          y: (toClient ? customer.y - WORLD.actorHeight : WORLD.lab.y + WORLD.lab.h / 2) - 42,
+        };
+      }
+    }
+    return { actors: actors, arrow: arrow };
+  }
+
+  function startWorld() {
+    canvas = PetWorld.init(document.getElementById('world'), {
+      world: WORLD,
+      update: function (dt) { if (state.phase !== 'inicio') update(dt); },
+      view: worldView,
+      occluderMask: occluderMask,
+    });
   }
 
   renderHud();
   syncInert();
   preloadScenery();
   preloadMenuPets();
+  if (window.PetWorld) {
+    try {
+      startWorld();
+    } catch (failed) {
+      worldFailed = true;
+      showLoadError('vendor/phaser.min.js');
+    }
+  }
 })();

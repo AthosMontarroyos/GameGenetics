@@ -1,5 +1,7 @@
 # Pet Shop Mendel
 
+Criado por [AthosMontarroyos](https://github.com/AthosMontarroyos).
+
 Jogo educacional no navegador sobre modelos fictícios de herança para gatinho, cachorrinho e coelhinho.
 São três níveis para um jogador (um por espécie), com um único atendente e quatro pedidos por nível.
 
@@ -46,6 +48,10 @@ Quanto menos cruzamentos, mais estrelas (até 3 por pedido). Cada nível tem uma
 - `assets/animals/familias-anime.png`: atlas compartilhado de gato, cachorro e coelho.
 - `assets/players/atendente-walk.png`: um personagem, três quadros por direção.
 - `tests/phase05.test.js`: genética, cruzamento e filhote sorteado, pedidos, entrega, estrelas e trajeto dos clientes. Execute `node tests/phase05.test.js`.
+
+## Créditos
+
+Criado por [AthosMontarroyos](https://github.com/AthosMontarroyos).
 
 ## Fora deste protótipo
 

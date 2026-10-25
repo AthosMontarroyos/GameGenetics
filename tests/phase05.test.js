@@ -4,7 +4,7 @@ const fs=require('node:fs');
 const vm=require('node:vm');
 const context={};vm.createContext(context);
 for(const file of ['js/genetics.js','js/catalog.js','js/orders.js','js/customers.js','js/client-frames.js','js/assets.js','js/breeding.js'])new vm.Script(fs.readFileSync(file,'utf8'),{filename:file}).runInContext(context);
-for(const file of ['js/assets.js','js/main.js','js/sprites.js'])new vm.Script(fs.readFileSync(file,'utf8'),{filename:file});
+for(const file of ['js/assets.js','js/main.js','js/sprites.js','js/world-engine.js'])new vm.Script(fs.readFileSync(file,'utf8'),{filename:file});
 const {PetGenetics:g,PetCatalog:c,PetOrders:d}=context;
 const close=(actual,expected)=>assert.ok(Math.abs(actual-expected)<1e-10,`${actual} != ${expected}`);
 const pairs=['AA','Aa','aa'];
@@ -108,6 +108,7 @@ game.document={body:node(),getElementById(id){if(!nodes.has(id))nodes.set(id,nod
 game.window=game;game.addEventListener=()=>{};game.requestAnimationFrame=()=>0;game.Image=function(){Object.defineProperty(this,'src',{set(){}})};
 let source=fs.readFileSync('js/main.js','utf8').replace(/\}\)\(\);\s*$/,'renderHud=function(){};syncInert=function(){};renderLab=function(){};globalThis.__game={state,interact,closePanel,clearParents,continueLevel,resetPlay,currentOrder,update,blocked,feetBox,WORLD,doBreed,toggleParent,reserveForDelivery,tryDeliver,currentPlan};})();');
 new vm.Script(source,{filename:'js/main.js'}).runInContext(game);
+assert.ok(!/requestAnimationFrame|\bctx\b/.test(fs.readFileSync('js/main.js','utf8')),'main.js não desenha nem tem loop próprio');
 const flow=game.__game,state=flow.state;
 flow.resetPlay();
 state.player.x=820;state.player.y=632;flow.interact();assert.equal(state.orderReceived,false,'cliente ainda não chegou');

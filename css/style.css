@@ -126,6 +126,11 @@ button.parent-card:focus-visible .badge {
   image-rendering: pixelated;
 }
 
+#world canvas {
+  display: block;
+  image-rendering: pixelated;
+}
+
 #hud {
   display: none;
   position: absolute;
@@ -709,3 +714,6 @@ body.modal-open { overflow: hidden; }
   .menu-scenery::before { animation: none; }
   .menu-action { transition: none; }
 }
+
+.menu-credits-list dd a { color: #ffe0a1; text-decoration: underline; text-underline-offset: 3px; }
+.menu-credits-list dd a:hover, .menu-credits-list dd a:focus-visible { color: #fff5d9; }

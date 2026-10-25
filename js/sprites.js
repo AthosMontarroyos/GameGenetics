@@ -1,90 +1,113 @@
 (function(root){
   'use strict';
-  var families={},sprites={};
-  var rows={gato:[0,340],cachorro:[340,310],coelho:[645,379]},columns=[0,438,790,1170,1536];
-  var palettes={preto:[218,.08,.34,.012],cinza:[214,.075,.86,.095],marrom:[25,.55,.79,.05],claro:[39,.22,.45,.54]};
-  // Coordinates follow the face, so markings stay attached across ear/tail drawings.
-  var markings={gato:[[-.38,-.35,.34,.63],[.43,1.04,.4,.61]],cachorro:[[-.4,.02,.34,.48],[.41,1.27,.47,.69]],coelho:[[.35,-.2,.36,.55],[-.39,1.03,.45,.57]]};
-  function canvas(w,h){var c=document.createElement('canvas');c.width=w;c.height=h;return c;}
-  function cropAnimal(image,rect){
-    var source=canvas(Math.ceil(rect.w),Math.ceil(rect.h)),ctx=source.getContext('2d',{willReadFrequently:true});
-    ctx.drawImage(image,rect.x,rect.y,rect.w,rect.h,0,0,source.width,source.height);
-    var pixels=ctx.getImageData(0,0,source.width,source.height),data=pixels.data,w=source.width,h=source.height;
-    // Retain the complete animal; discard stray pixels from adjacent atlas cells.
-    var labels=new Int32Array(w*h),queue=new Int32Array(w*h),label=0,best=0,bestSize=0;
-    for(var start=0;start<labels.length;start++){
-      if(labels[start]||data[start*4+3]<=24)continue;
-      label++;var head=0,tail=1;queue[0]=start;labels[start]=label;
-      while(head<tail){var p=queue[head++],x=p%w,y=Math.floor(p/w);
-        var neighbors=[x>0?p-1:-1,x<w-1?p+1:-1,y>0?p-w:-1,y<h-1?p+w:-1];
-        for(var j=0;j<neighbors.length;j++){var next=neighbors[j];if(next>=0&&!labels[next]&&data[next*4+3]>24){labels[next]=label;queue[tail++]=next;}}
-      }
-      if(tail>bestSize){bestSize=tail;best=label;}
-    }
-    if(bestSize<1000)throw new Error('Desenho da família vazio.');
-    var minX=w,minY=h,maxX=0,maxY=0;
-    for(var i=0;i<labels.length;i++){
-      if(labels[i]!==best){data[i*4+3]=0;continue;}
-      var col=i%w,row=Math.floor(i/w);minX=Math.min(minX,col);maxX=Math.max(maxX,col);minY=Math.min(minY,row);maxY=Math.max(maxY,row);
-    }
-    var anchor=0,lines=0;
-    for(var yy=Math.floor(minY+(maxY-minY)*.3);yy<minY+(maxY-minY)*.43;yy++){
-      var left=w,right=0;for(var xx=minX;xx<=maxX;xx++)if(labels[yy*w+xx]===best){left=Math.min(left,xx);right=Math.max(right,xx);}
-      if(left<=right){anchor+=(left+right)/2-minX;lines++;}
-    }
-    ctx.putImageData(pixels,0,0);
-    var output=canvas(maxX-minX+1,maxY-minY+1);
-    output.getContext('2d').drawImage(source,minX,minY,output.width,output.height,0,0,output.width,output.height);
-    output.anchorX=lines?anchor/lines:output.width/2;return output;
+  // Padrão: grade 32x32, vista frontal, camadas (rabo, orelhas, corpo, cabeça, manchas, rosto).
+  // Cada característica genética troca só a sua camada; a cor vem da paleta de 3 tons.
+  var N=32,cache={};
+  var furs={
+    preto:{base:'#3d3d4a',shadow:'#272732',light:'#5a5a6e',spot:'#f1e6d2'},
+    cinza:{base:'#9ca0ad',shadow:'#7b7f8e',light:'#bec2cd',spot:'#f4eadb'},
+    marrom:{base:'#8c5a34',shadow:'#6b4024',light:'#ab774a',spot:'#f1e1c6'},
+    claro:{base:'#ead6ab',shadow:'#cbb386',light:'#f8ecce',spot:'#9a6a40'}
+  };
+  var eyeColors={azuis:'#2f86ff',verdes:'#35c768'};
+  var OUT='#1d1a24',PINK='#e98ea0',MUZZLE='#f4ead6',NOSE='#c2566b',PUPIL='#101820',WHITE='#ffffff';
+
+  function mask(){return new Uint8Array(N*N);}
+  function has(m,x,y){return x>=0&&y>=0&&x<N&&y<N&&m[y*N+x]===1;}
+  function ellipse(m,cx,cy,rx,ry){
+    for(var y=0;y<N;y++)for(var x=0;x<N;x++){var dx=(x+.5-cx)/rx,dy=(y+.5-cy)/ry;if(dx*dx+dy*dy<=1)m[y*N+x]=1;}
   }
-  function prepare(id,image){
-    if(families[id])return families[id];
-    var sx=(image.naturalWidth||image.width)/1536,sy=(image.naturalHeight||image.height)/1024;
-    var animals=[0,1,2,3].map(function(index){return cropAnimal(image,{x:columns[index]*sx,y:rows[id][0]*sy,w:(columns[index+1]-columns[index])*sx,h:rows[id][1]*sy});});
-    var height=Math.max.apply(null,animals.map(function(a){return a.height;})),half=Math.max.apply(null,animals.map(function(a){return Math.max(a.anchorX,a.width-a.anchorX);}));
-    animals.scale=Math.min(296/height,148/half);families[id]=animals;return animals;
-  }
-  function hsl(r,g,b){r/=255;g/=255;b/=255;var max=Math.max(r,g,b),min=Math.min(r,g,b),d=max-min,l=(max+min)/2,s=d===0?0:d/(1-Math.abs(2*l-1)),h=0;if(d){if(max===r)h=((g-b)/d)%6;else if(max===g)h=(b-r)/d+2;else h=(r-g)/d+4;h*=60;if(h<0)h+=360;}return[h,s,l];}
-  function rgb(h,s,l){var c=(1-Math.abs(2*l-1))*s,x=c*(1-Math.abs((h/60)%2-1)),m=l-c/2,values=h<60?[c,x,0]:h<120?[x,c,0]:h<180?[0,c,x]:h<240?[0,x,c]:h<300?[x,0,c]:[c,0,x];return values.map(function(v){return Math.round((v+m)*255);});}
-  function faceGeometry(source,data){
-    if(source.face)return source.face;
-    var minX=source.width,maxX=0,minY=source.height,maxY=0;
-    for(var i=0;i<data.length;i+=4){if(data[i+3]<100)continue;var value=hsl(data[i],data[i+1],data[i+2]);
-      if(value[0]>=175&&value[0]<=240&&value[1]>.3&&value[2]>.15){var p=i/4,x=p%source.width,y=Math.floor(p/source.width);minX=Math.min(minX,x);maxX=Math.max(maxX,x);minY=Math.min(minY,y);maxY=Math.max(maxY,y);}
+  function side(px,py,ax,ay,bx,by){return (px-bx)*(ay-by)-(ax-bx)*(py-by);}
+  function tri(m,x1,y1,x2,y2,x3,y3,k){
+    if(k){var cx=(x1+x2+x3)/3,cy=(y1+y2+y3)/3;x1=cx+(x1-cx)*k;y1=cy+(y1-cy)*k;x2=cx+(x2-cx)*k;y2=cy+(y2-cy)*k;x3=cx+(x3-cx)*k;y3=cy+(y3-cy)*k;}
+    for(var y=0;y<N;y++)for(var x=0;x<N;x++){
+      var px=x+.5,py=y+.5,a=side(px,py,x1,y1,x2,y2),b=side(px,py,x2,y2,x3,y3),c=side(px,py,x3,y3,x1,y1);
+      if(!((a<0||b<0||c<0)&&(a>0||b>0||c>0)))m[y*N+x]=1;
     }
-    source.face=maxX>minX?{x:(minX+maxX)/2,y:(minY+maxY)/2,span:maxX-minX}:{x:source.anchorX,y:source.height*.4,span:source.width*.38};return source.face;
   }
-  function inMarking(id,x,y){
-    return markings[id].some(function(m){var dx=(x-m[0])/m[2],dy=(y-m[1])/m[3],angle=Math.atan2(dy,dx);
-      return dx*dx+dy*dy<1+.07*Math.sin(angle*9)+.035*Math.sin(angle*17);
+  function path(m,points,r){
+    for(var i=0;i<points.length-1;i++){
+      var a=points[i],b=points[i+1],steps=Math.ceil(Math.hypot(b[0]-a[0],b[1]-a[1])*2);
+      for(var s=0;s<=steps;s++){var t=s/steps;ellipse(m,a[0]+(b[0]-a[0])*t,a[1]+(b[1]-a[1])*t,r,r);}
+    }
+  }
+  function minus(m,other){for(var i=0;i<m.length;i++)if(other[i])m[i]=0;return m;}
+  function inter(m,other){for(var i=0;i<m.length;i++)if(!other[i])m[i]=0;return m;}
+
+  // Forma de cada espécie e de cada valor de característica (orelhas e rabo).
+  function shape(id,t){
+    var s={tail:mask(),back:mask(),front:mask(),inner:mask(),body:mask(),head:mask(),hx:16,hy:14,eyeY:13,eyeDx:4,muzzleY:17,muzzleRx:3,muzzleRy:2};
+    var longTail=t.tail==='longo',erect=t.ears==='eretas';
+    if(id==='gato'){
+      ellipse(s.body,16,24.5,7,6);ellipse(s.head,16,14,8,6.5);
+      if(longTail)path(s.tail,[[23,28],[27,26],[28,21],[26,16]],1.6);else ellipse(s.tail,24.5,28,2,2);
+      if(erect){tri(s.back,8,9,10,1,15,7);tri(s.back,24,9,22,1,17,7);tri(s.inner,8,9,10,1,15,7,.55);tri(s.inner,24,9,22,1,17,7,.55);}
+      else{ellipse(s.front,8.5,9.5,2.6,1.6);ellipse(s.front,6.2,10.7,2.2,1.5);ellipse(s.front,23.5,9.5,2.6,1.6);ellipse(s.front,25.8,10.7,2.2,1.5);}
+    }else if(id==='cachorro'){
+      ellipse(s.body,16,24.5,8,6);ellipse(s.head,16,14,8,7);s.muzzleY=17.5;s.muzzleRx=4;s.muzzleRy=2.6;
+      if(longTail)path(s.tail,[[23,28],[27,25],[29,20],[28,15]],1.7);else ellipse(s.tail,25,28,2,2);
+      if(erect){tri(s.back,7.5,10,8.5,3,14,7);tri(s.back,24.5,10,23.5,3,18,7);tri(s.inner,7.5,10,8.5,3,14,7,.5);tri(s.inner,24.5,10,23.5,3,18,7,.5);}
+      else{ellipse(s.front,6,14,3,5.5);ellipse(s.front,26,14,3,5.5);}
+    }else{
+      ellipse(s.body,16,25.5,7,5);ellipse(s.head,16,17,7,6);s.hy=17;s.eyeY=16;s.eyeDx=3.8;s.muzzleY=20;s.muzzleRx=2.6;s.muzzleRy=1.8;
+      if(longTail)ellipse(s.tail,24.5,27,3.4,3.4);else ellipse(s.tail,23.5,29,2,2);
+      if(erect){ellipse(s.back,11.5,7,2.4,6.2);ellipse(s.back,20.5,7,2.4,6.2);ellipse(s.inner,11.5,7.5,1.2,4.2);ellipse(s.inner,20.5,7.5,1.2,4.2);}
+      else{ellipse(s.front,7.5,19,2.6,5);ellipse(s.front,24.5,19,2.6,5);}
+    }
+    ellipse(s.body,12,29.5,2.6,1.2);ellipse(s.body,20,29.5,2.6,1.2);
+    return s;
+  }
+
+  function paint(grid,m,fur){
+    for(var y=0;y<N;y++)for(var x=0;x<N;x++){
+      if(!m[y*N+x])continue;
+      var shadow=!has(m,x+1,y)||!has(m,x,y+1)||!has(m,x+1,y+1),light=!has(m,x-1,y)||!has(m,x,y-1);
+      grid[y*N+x]=shadow?fur.shadow:light?fur.light:fur.base;
+    }
+  }
+  function fill(grid,m,color){for(var i=0;i<m.length;i++)if(m[i])grid[i]=color;}
+  function dot(grid,x,y,color){if(x>=0&&y>=0&&x<N&&y<N)grid[y*N+x]=color;}
+
+  function build(id,traits){
+    var s=shape(id,traits),fur=furs[traits.color]||furs.cinza,g=new Array(N*N);
+    paint(g,s.tail,fur);paint(g,s.back,fur);paint(g,s.body,fur);paint(g,s.head,fur);paint(g,s.front,fur);
+    fill(g,minus(s.inner,s.head),PINK);
+    if(traits.spots==='manchado'){
+      var h=mask(),b=mask();
+      ellipse(h,s.hx-5,s.hy-3.5,3.2,2.8);ellipse(b,20.5,24,3.4,3);ellipse(b,11.5,23,2,2);
+      fill(g,inter(h,s.head),fur.spot);fill(g,minus(inter(b,s.body),s.head),fur.spot);
+    }
+    var solid=g.map(function(c){return !!c;});
+    for(var y=0;y<N;y++)for(var x=0;x<N;x++){
+      if(solid[y*N+x])continue;
+      if((x>0&&solid[y*N+x-1])||(x<N-1&&solid[y*N+x+1])||(y>0&&solid[(y-1)*N+x])||(y<N-1&&solid[(y+1)*N+x]))g[y*N+x]=OUT;
+    }
+    var mz=mask();ellipse(mz,16,s.muzzleY,s.muzzleRx,s.muzzleRy);fill(g,inter(mz,s.head),MUZZLE);
+    var ny=Math.floor(s.muzzleY-1);
+    dot(g,15,ny,NOSE);dot(g,16,ny,NOSE);dot(g,14,ny+1,OUT);dot(g,17,ny+1,OUT);dot(g,15,ny+2,OUT);dot(g,16,ny+2,OUT);
+    var a=Math.round(15-s.eyeDx),eye=eyeColors[traits.eyes]||eyeColors.azuis;
+    [a,31-a-2].forEach(function(x0,i){
+      for(var dy=-1;dy<=1;dy++)for(var dx=0;dx<3;dx++)dot(g,x0+dx,s.eyeY+dy,eye);
+      dot(g,x0+1,s.eyeY,PUPIL);dot(g,x0+(i?2:0),s.eyeY-1,WHITE);
     });
+    return g;
   }
-  function render(id,traits,images){
-    var key=id+'::'+root.PetCatalog.appearanceKey(traits);if(sprites[key])return sprites[key];
-    var spec=root.PetCatalog.species[id],image=images[spec.atlasId];if(!image)return null;
-    // Each family owns four complete frontal drawings. No parts are exchanged.
-    var index=(traits.ears===spec.ears[0]?0:2)+(traits.tail==='curto'?1:0),family=prepare(id,image),source=family[index];
-    var animal=canvas(source.width,source.height),ctx=animal.getContext('2d',{willReadFrequently:true});ctx.drawImage(source,0,0);
-    var pixels=ctx.getImageData(0,0,animal.width,animal.height),data=pixels.data,palette=palettes[traits.color],face=faceGeometry(source,data);
-    for(var i=0;i<data.length;i+=4){
-      if(data[i+3]===0)continue;
-      var value=hsl(data[i],data[i+1],data[i+2]),next=null;
-      var px=i/4,x=(px%animal.width-face.x)/face.span,y=(Math.floor(px/animal.width)-face.y)/face.span;
-      var nose=Math.pow(x/.14,2)+Math.pow((y-.3)/.13,2)<1;
-      if(value[0]>=175&&value[0]<=240&&value[1]>.25&&value[2]>.1){next=rgb(traits.eyes==='verdes'?139:209,Math.max(.72,value[1]),value[2]);}
-      else if(!nose&&value[1]<.22&&value[2]>.13&&value[2]<.86){
-        var light=Math.min(.94,value[2]*palette[2]+palette[3]);
-        var spot=traits.spots==='manchado'&&inMarking(id,x,y);
-        var spotLight=traits.color==='claro'?.12+value[2]*.36:traits.color==='cinza'?.055+value[2]*.34:Math.min(.96,.58+value[2]*.46);
-        next=spot?rgb(traits.color==='claro'?25:32,traits.color==='claro'?.35:.06,spotLight):rgb(palette[0],palette[1],light);
-      }
-      if(next){data[i]=next[0];data[i+1]=next[1];data[i+2]=next[2];}
+
+  function sprite(id,traits){
+    var key=id+'::'+root.PetCatalog.appearanceKey(traits);if(cache[key])return cache[key];
+    var grid=build(id,traits),c=document.createElement('canvas');c.width=N;c.height=N;
+    var ctx=c.getContext('2d'),img=ctx.createImageData(N,N);
+    for(var i=0;i<grid.length;i++){
+      var col=grid[i];if(!col)continue;
+      img.data[i*4]=parseInt(col.slice(1,3),16);img.data[i*4+1]=parseInt(col.slice(3,5),16);img.data[i*4+2]=parseInt(col.slice(5,7),16);img.data[i*4+3]=255;
     }
-    ctx.putImageData(pixels,0,0);
-    var output=canvas(320,320),pen=output.getContext('2d'),scale=family.scale;
-    pen.imageSmoothingEnabled=true;pen.imageSmoothingQuality='high';pen.drawImage(animal,160-source.anchorX*scale,308-animal.height*scale,animal.width*scale,animal.height*scale);
-    sprites[key]=output;return output;
+    ctx.putImageData(img,0,0);cache[key]=c;return c;
   }
-  function draw(target,id,visualId,images){var source=render(id,root.PetCatalog.traitsForVisual(id,visualId),images||{});if(!source)return false;var ctx=target.getContext('2d');ctx.clearRect(0,0,target.width,target.height);ctx.drawImage(source,0,0,target.width,target.height);return true;}
+  function draw(target,id,visualId){
+    if(!root.PetCatalog||!root.PetCatalog.species[id])return false;
+    var ctx=target.getContext('2d');ctx.clearRect(0,0,target.width,target.height);
+    ctx.imageSmoothingEnabled=false;ctx.drawImage(sprite(id,root.PetCatalog.traitsForVisual(id,visualId)),0,0,target.width,target.height);
+    return true;
+  }
   root.PetSprites={draw:draw};
 })(typeof globalThis!=='undefined'?globalThis:this);

@@ -1,3 +1,5 @@
 .claude/
 .impeccable/
 node_modules/
+
+.kuru/
