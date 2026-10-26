@@ -373,18 +373,27 @@
   }
 
   function renderSlots(order) {
+    var ROLE_NAMES = ['Mãe', 'Pai'];
+    var ROLE_ICONS = ['♀', '♂'];
+    var ROLE_CSS   = ['sex-femea', 'sex-macho'];
+    var SLOT_CSS   = ['slot-mae', 'slot-pai'];
+    function slotLabel(pos) {
+      return el('span', { className: 'slot-label' },
+        el('span', { className: 'sex-icon ' + ROLE_CSS[pos], text: ROLE_ICONS[pos] }),
+        ROLE_NAMES[pos]);
+    }
     var wrap = el('div', { className: 'slots' });
     for (var slot = 0; slot < 2; slot += 1) {
       var id = state.parents[slot];
-      var box = el('div', { className: 'slot' + (state.parentSlot === slot ? ' is-target' : '') + (id ? ' is-filled' : ' is-empty') });
+      var box = el('div', { className: 'slot ' + SLOT_CSS[slot] + (state.parentSlot === slot ? ' is-target' : '') + (id ? ' is-filled' : ' is-empty') });
       if (!id) {
         (function (position) {
-          var choose = button('Escolher pai ' + (position + 1), 'slot-empty', function () { state.parentSlot = position; renderLab('slot-choose-' + position, true); }, 'slot-choose-' + position);
-          box.append(el('span', { className: 'slot-label', text: 'Pai ' + (position + 1) }), el('span', { className: 'slot-silhouette', 'aria-hidden': 'true', text: '?' }), choose, el('span', { className: 'slot-help', text: 'Toque em um bicho da lista' }));
+          var choose = button('Escolher ' + ROLE_NAMES[position].toLowerCase(), 'slot-empty', function () { state.parentSlot = position; renderLab('slot-choose-' + position, true); }, 'slot-choose-' + position);
+          box.append(slotLabel(position), el('span', { className: 'slot-silhouette', 'aria-hidden': 'true', text: '?' }), choose, el('span', { className: 'slot-help', text: 'Toque em um bicho da lista' }));
         })(slot);
       } else {
         var info = animalInfo(id);
-        box.append(el('span', { className: 'slot-label', text: 'Pai ' + (slot + 1) }),
+        box.append(slotLabel(slot),
           makeThumb(info.speciesId, info.visualId, 'thumb'),
           el('strong', { className: 'slot-name', text: info.name }));
         (function (animalId, position) {
@@ -406,7 +415,7 @@
     card.setAttribute('aria-label', animal.name + ' · ' + traitLine(animal.traits));
     card.append(
       el('span', { className: 'pet-art', 'data-visual': animal.visualId }, makeThumb(animal.speciesId, animal.visualId, 'thumb'),
-        picked !== -1 ? el('span', { className: 'pet-selected', text: 'Pai ' + (picked + 1) }) : null),
+        picked !== -1 ? el('span', { className: 'pet-selected', text: picked === 0 ? 'Mãe' : 'Pai' }) : null),
       el('span', { className: 'pet-card-copy' },
         el('span', { className: 'who', text: animal.name }),
         traitChips(animal.traits, orderFor(animal.speciesId, order))));
@@ -519,6 +528,36 @@
   }
 
   function analysisView(order) {
+    function alleleSpan(a) { return el('span', { className: 'al al-' + (a === a.toUpperCase() ? 'dom' : 'rec'), text: a }); }
+    function allelePill(pair) { return el('span', { className: 'al-pair' }, alleleSpan(pair[0]), alleleSpan(pair[1])); }
+    function punnettTable(gene) {
+      var tbl = el('div', { className: 'punnett-tbl' });
+      var hdr = el('div', { className: 'punnett-r' });
+      hdr.append(el('span', { className: 'punnett-corner' }));
+      gene.gametesA.forEach(function(g) {
+        hdr.append(el('span', { className: 'punnett-hd' }, el('span', { className: 'sex-icon sex-femea', text: '♀' }), alleleSpan(g.genotype)));
+      });
+      tbl.append(hdr);
+      gene.grid.forEach(function(row) {
+        var dr = el('div', { className: 'punnett-r' });
+        dr.append(el('span', { className: 'punnett-sd' }, el('span', { className: 'sex-icon sex-macho', text: '♂' }), alleleSpan(row.gamete)));
+        row.cells.forEach(function(cell) {
+          var rec = cell.key === cell.key.toLowerCase();
+          dr.append(el('span', { className: 'punnett-cell' + (rec ? ' is-rec' : ' is-dom') }, allelePill(cell.key)));
+        });
+        tbl.append(dr);
+      });
+      return tbl;
+    }
+    function parentGenoEl(genotype, spec) {
+      var row = el('div', { className: 'parent-geno' });
+      spec.traits.forEach(function(trait) {
+        var grp = el('span', { className: 'geno-group' }, el('span', { className: 'geno-lbl', text: trait.name }));
+        trait.genes.forEach(function(gene) { grp.append(allelePill(genotype[gene])); });
+        row.append(grp);
+      });
+      return row;
+    }
     var box = el('section', { className: 'analysis' });
     var first = state.parents[0] ? animalInfo(state.parents[0]) : null;
     var second = state.parents[1] ? animalInfo(state.parents[1]) : null;
@@ -534,7 +573,9 @@
     var forOrder = orderFor(speciesId, order);
     var targets = forOrder ? forOrder.targets : {};
     if (forOrder) {
-      var chance = PetCatalog.chanceFor(result, targets);
+      var nonSexTargets = {};
+      Object.keys(targets).forEach(function (k) { if (k !== 'sex') nonSexTargets[k] = targets[k]; });
+      var chance = PetCatalog.chanceFor(result, nonSexTargets) * (targets.sex ? 0.5 : 1);
       var plan = currentPlan();
       var fill = el('span', { className: 'meter-fill' });
       fill.style.width = Math.round(chance * 100) + '%';
@@ -545,6 +586,26 @@
     } else {
       box.append(el('p', { className: 'training-note', text: 'Treino: o cliente quer ' + PetOrders.nouns[order.speciesId] + '. Esta análise não conta para o pedido.' }));
     }
+    // Fenótipos individuais de cada pai
+    var maeCard = el('div', { className: 'parent-pheno-card parent-pheno-mae' },
+      el('div', { className: 'parent-pheno-head' },
+        el('span', { className: 'sex-icon sex-femea', text: '♀' }),
+        el('strong', { className: 'parent-role-label', text: 'Mãe' }),
+        el('span', { className: 'parent-pheno-name', text: first.name })),
+      traitChips(first.traits, forOrder),
+      parentGenoEl(first.genotype, spec));
+    var paiCard = el('div', { className: 'parent-pheno-card parent-pheno-pai' },
+      el('div', { className: 'parent-pheno-head' },
+        el('span', { className: 'sex-icon sex-macho', text: '♂' }),
+        el('strong', { className: 'parent-role-label', text: 'Pai' }),
+        el('span', { className: 'parent-pheno-name', text: second.name })),
+      traitChips(second.traits, forOrder),
+      parentGenoEl(second.genotype, spec));
+    box.append(el('div', { className: 'parents-pheno' },
+      maeCard,
+      el('span', { className: 'parent-pheno-sep', 'aria-hidden': 'true', text: '×' }),
+      paiCard));
+
     var rows = el('div', { className: 'trait-rows' });
     spec.traits.forEach(function (trait) {
       var probs = result.traitProbabilities[trait.id];
@@ -560,15 +621,63 @@
         bar.append(seg);
         legend.append(el('li', { className: wantedValue === value ? 'is-wanted' : '' }, dot(trait.id, value, index), el('span', { text: valueText(trait.id, value) }), el('strong', { text: p >= 0.9995 ? 'sempre' : formatPercent(p) })));
       });
-      rows.append(el('div', { className: 'trait-row' + (wantedValue ? ' is-asked' : '') },
+      var traitRowEl = el('div', { className: 'trait-row' + (wantedValue ? ' is-asked' : '') },
         el('div', { className: 'trait-head' }, el('strong', { text: trait.name }), wantedValue ? el('span', { className: 'trait-tag', text: 'pedido' }) : null,
           el('span', { className: 'trait-parents' },
-            el('span', { className: 'mini' }, dot(trait.id, first.traits[trait.id], trait.values.indexOf(first.traits[trait.id])), valueText(trait.id, first.traits[trait.id])),
+            el('span', { className: 'mini' }, el('span', { className: 'sex-icon sex-femea mini-sex', text: '♀' }), dot(trait.id, first.traits[trait.id], trait.values.indexOf(first.traits[trait.id])), valueText(trait.id, first.traits[trait.id])),
             el('span', { className: 'mini-x', 'aria-hidden': 'true', text: '×' }),
-            el('span', { className: 'mini' }, dot(trait.id, second.traits[trait.id], trait.values.indexOf(second.traits[trait.id])), valueText(trait.id, second.traits[trait.id])))),
-        bar, legend));
+            el('span', { className: 'mini' }, el('span', { className: 'sex-icon sex-macho mini-sex', text: '♂' }), dot(trait.id, second.traits[trait.id], trait.values.indexOf(second.traits[trait.id])), valueText(trait.id, second.traits[trait.id])))),
+        bar, legend);
+      if (trait.genes.length === 1) {
+        var locusIdx = spec.loci.indexOf(trait.genes[0]);
+        traitRowEl.append(punnettTable(result.perGene[locusIdx]));
+      }
+      rows.append(traitRowEl);
     });
     box.append(rows);
+
+    var basePhenoEntries = Object.keys(result.appearances).map(function (key) {
+      return { traits: PetCatalog.traitsFromKey(key), p: result.appearances[key] };
+    });
+    var phenoEntries = [];
+    ['macho', 'femea'].forEach(function (sex) {
+      basePhenoEntries.forEach(function (entry) {
+        phenoEntries.push({ traits: Object.assign({}, entry.traits, { sex: sex }), p: entry.p * 0.5 });
+      });
+    });
+    phenoEntries.sort(function (a, b) {
+      if (Math.abs(b.p - a.p) > 1e-9) return b.p - a.p;
+      return a.traits.sex === 'macho' ? -1 : 1;
+    });
+
+    if (phenoEntries.length > 0) {
+      var phenoCount = phenoEntries.length;
+      var phenoHead = el('div', { className: 'pheno-head' },
+        el('strong', { text: 'Fenótipos possíveis' }),
+        el('span', { className: 'pheno-count', text: phenoCount + (phenoCount === 1 ? ' combinação' : ' combinações') }));
+      var phenoList = el('div', { className: 'pheno-list' });
+      var nonSexTargetsPh = {};
+      Object.keys(targets).forEach(function (k) { if (k !== 'sex') nonSexTargetsPh[k] = targets[k]; });
+      phenoEntries.forEach(function (entry) {
+        var traitsMatch = Object.keys(nonSexTargetsPh).length === 0 || PetCatalog.matches(entry.traits, nonSexTargetsPh);
+        var sexMatch = !targets.sex || entry.traits.sex === targets.sex;
+        var isTarget = Object.keys(targets).length > 0 && traitsMatch && sexMatch;
+        var pctFill = el('span', { className: 'pheno-fill' });
+        pctFill.style.width = Math.max(2, Math.round(entry.p * 100)) + '%';
+        var sexIcon = entry.traits.sex === 'macho' ? '♂' : '♀';
+        var descText = PetCatalog.label(entry.traits.color) + ' · olhos ' + entry.traits.eyes + ' · ' + PetCatalog.label(entry.traits.ears).toLowerCase() + ' · ' + PetCatalog.label(entry.traits.spots).toLowerCase() + ' · rabo ' + entry.traits.tail;
+        phenoList.append(el('div', { className: 'pheno-row' + (isTarget ? ' is-target' : '') },
+          el('span', { className: isTarget ? 'pheno-match' : 'pheno-rank', 'aria-hidden': 'true', text: isTarget ? '✓' : '' }),
+          el('span', { className: 'pheno-desc' },
+            el('span', { className: 'sex-icon sex-' + entry.traits.sex, 'aria-label': entry.traits.sex, text: sexIcon }),
+            el('span', { className: 'dot', 'data-tone': entry.traits.color }),
+            el('span', { text: descText })),
+          el('span', { className: 'pheno-bar-wrap' }, el('span', { className: 'pheno-bar' }, pctFill)),
+          el('strong', { className: 'pheno-pct', text: entry.p >= 0.9995 ? 'sempre' : formatPercent(entry.p) })));
+      });
+      box.append(el('div', { className: 'pheno-section' }, phenoHead, phenoList));
+    }
+
     return box;
   }
 
@@ -595,6 +704,9 @@
       var value = order.targets[trait.id];
       if (value) want.append(el('span', { className: 'chip is-wanted chip-' + trait.id }, trait.id === 'color' || trait.id === 'eyes' ? dot(trait.id, value) : null, PetOrders.phrase(trait.id, value)));
     });
+    if (order.targets.sex) want.append(el('span', { className: 'chip is-wanted chip-sex' },
+      el('span', { className: 'sex-icon sex-' + order.targets.sex, text: order.targets.sex === 'macho' ? '♂' : '♀' }),
+      PetOrders.phrase('sex', order.targets.sex)));
     return el('div', { className: 'lab-ribbon' },
       el('div', { className: 'ribbon-copy' }, el('span', { className: 'order-client', text: 'Pedido de ' + order.clientName }), el('strong', { text: order.speech }), want),
       el('div', { className: 'ribbon-meta' },
@@ -608,7 +720,11 @@
     var first = animalInfo(state.parents[0]);
     var second = animalInfo(state.parents[1]);
     if (first.speciesId !== order.speciesId || second.speciesId !== order.speciesId) return null;
-    return PetCatalog.chanceFor(PetCatalog.cross(order.speciesId, first.genotype, second.genotype), order.targets);
+    var tgt = order.targets || {};
+    var noSex = {};
+    Object.keys(tgt).forEach(function (k) { if (k !== 'sex') noSex[k] = tgt[k]; });
+    var base = PetCatalog.chanceFor(PetCatalog.cross(order.speciesId, first.genotype, second.genotype), noSex);
+    return tgt.sex ? base * 0.5 : base;
   }
 
   function renderBenchActions() {
@@ -1253,6 +1369,18 @@
     openPanel('ajuda');
   });
   document.getElementById('btn-fechar-painel').addEventListener('click', closePanel);
+  // Dev helper: allows automated test access to the lab modal
+  window.__devOpenLab = function () {
+    if (state.phase !== 'mundo') return 'wrong phase: ' + state.phase;
+    state.orderReceived = true;
+    if (state.labSpecies !== currentOrder().speciesId) {
+      state.labSpecies = currentOrder().speciesId;
+      state.parents = [null, null];
+      state.parentSlot = null;
+    }
+    openPanel('pais', 'btn-cruzar');
+    return 'ok';
+  };
 
   function preloadScenery() {
     if (!window.PetAssets) return;

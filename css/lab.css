@@ -1,32 +1,33 @@
 /* ==========================================================================
    Laboratório — mesa de cruzamento.
-   Visual de "adesivo": creme quente, contorno marrom grosso e cantos redondos,
-   no mesmo estilo das artes dos bichos. Carregado depois de style.css.
+   Visual de caderno de laboratório: fundo quadriculado, cores frias,
+   bordas retas, tipografia científica.
    ========================================================================== */
 
 #modal.is-bench {
-  --lb-ink: #4a2c17;
-  --lb-ink-soft: #7a5638;
-  --lb-edge: #5a3920;
-  --lb-cream: #fff4e0;
-  --lb-paper: #fffaf0;
-  --lb-peach: #ffe6c7;
-  --lb-line: #ecd3ac;
-  --lb-coral: #ff8a4c;
-  --lb-coral-dark: #e9702f;
-  --lb-sky: #2f86ff;
-  --lb-sky-bg: #e6f0ff;
-  --lb-leaf: #2fa85a;
-  --lb-leaf-bg: #dff6e5;
-  --lb-pink: #f4a3a3;
-  --lb-bad-bg: #ffe3dc;
-  --lb-font: 'Nunito', 'Trebuchet MS', 'Segoe UI', sans-serif;
+  --lb-ink:        #1a2332;
+  --lb-ink-soft:   #4b5a6e;
+  --lb-edge:       #8696a7;
+  --lb-cream:      #f0f3f7;
+  --lb-paper:      #ffffff;
+  --lb-peach:      #dde5ef;
+  --lb-line:       #c4cfd9;
+  --lb-coral:      #c8581a;
+  --lb-coral-dark: #a84912;
+  --lb-sky:        #2563a8;
+  --lb-sky-bg:     #e6f0fb;
+  --lb-leaf:       #1a6b44;
+  --lb-leaf-bg:    #e0f3ea;
+  --lb-pink:       #f0b3b3;
+  --lb-bad-bg:     #fce8e4;
+  --lb-mono:       'Courier New', Consolas, 'Lucida Console', monospace;
+  --lb-font:       'Nunito', 'Trebuchet MS', 'Segoe UI', sans-serif;
   padding: 1rem;
   align-items: center;
-  background: rgba(58, 33, 15, 0.58);
+  background: rgba(10, 18, 30, 0.72);
 }
 
-/* --- Moldura ----------------------------------------------------------- */
+/* --- Moldura -------------------------------------------------------------- */
 #modal.is-bench .modal-card {
   width: min(1240px, 100%);
   height: calc(100dvh - 2rem);
@@ -38,59 +39,62 @@
   color: var(--lb-ink);
   font-family: var(--lb-font);
   background-color: var(--lb-cream);
-  background-image: radial-gradient(#f4dcb6 1.3px, transparent 1.4px);
-  background-size: 20px 20px;
-  border: 3px solid var(--lb-edge);
-  border-radius: 28px;
-  box-shadow: 0 8px 0 rgba(58, 33, 15, 0.6), 0 28px 60px rgba(0, 0, 0, 0.4);
+  background-image:
+    linear-gradient(rgba(120, 150, 185, 0.18) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(120, 150, 185, 0.18) 1px, transparent 1px);
+  background-size: 24px 24px;
+  border: 1.5px solid var(--lb-edge);
+  border-radius: 10px;
+  box-shadow: 0 12px 40px rgba(10, 18, 35, 0.45);
 }
 #modal.is-bench .panel-head {
   position: static;
   flex: 0 0 auto;
   margin: 0;
-  padding: 0.75rem 1.2rem 0.75rem 1.5rem;
+  padding: 0.7rem 1.2rem 0.7rem 1.5rem;
   background: var(--lb-peach);
-  border-bottom: 3px solid var(--lb-edge);
+  border-bottom: 1.5px solid var(--lb-edge);
 }
-#modal.is-bench .panel-head h2 { margin: 0; font-size: 1.5rem; font-weight: 800; color: var(--lb-ink); letter-spacing: 0.01em; }
+#modal.is-bench .panel-head h2 { margin: 0; font-size: 1.4rem; font-weight: 800; color: var(--lb-ink); letter-spacing: 0.03em; text-transform: uppercase; }
 #modal.is-bench #modal-kicker { display: none; }
 #modal.is-bench #modal-body { display: flex; flex-direction: column; flex: 1; min-height: 0; overflow: hidden; }
-#modal.is-bench h3 { margin: 0; font-size: 1.05rem; font-weight: 800; color: var(--lb-ink); }
+#modal.is-bench h3 { margin: 0; font-size: 1rem; font-weight: 800; color: var(--lb-ink); letter-spacing: 0.02em; text-transform: uppercase; }
 
-/* --- Botões ------------------------------------------------------------ */
-#modal.is-bench button { border-radius: 14px; font-family: var(--lb-font); }
+/* --- Botões --------------------------------------------------------------- */
+#modal.is-bench button { border-radius: 5px; font-family: var(--lb-font); }
 #modal.is-bench #btn-fechar-painel {
-  min-height: 40px; padding: 0.35rem 1.1rem;
-  background: #fff; color: var(--lb-ink); border: 3px solid var(--lb-edge);
-  box-shadow: 0 3px 0 var(--lb-edge); font-weight: 800;
+  min-height: 38px; padding: 0.3rem 1rem;
+  background: var(--lb-paper); color: var(--lb-ink);
+  border: 1.5px solid var(--lb-edge);
+  box-shadow: 0 1px 0 var(--lb-edge); font-weight: 700;
 }
 #modal.is-bench #btn-fechar-painel:hover { background: var(--lb-cream); }
-#modal.is-bench #btn-fechar-painel:active { transform: translateY(3px); box-shadow: none; }
-#modal.is-bench :focus-visible { outline: 3px solid var(--lb-sky); outline-offset: 2px; }
+#modal.is-bench #btn-fechar-painel:active { transform: translateY(1px); box-shadow: none; }
+#modal.is-bench :focus-visible { outline: 2px solid var(--lb-sky); outline-offset: 2px; }
 #modal.is-bench .text-button {
-  min-height: 28px; padding: 0.1rem 0.35rem; background: transparent; border: 0;
+  min-height: 26px; padding: 0.1rem 0.35rem; background: transparent; border: 0;
   color: var(--lb-sky); font-size: 0.78rem; font-weight: 700; text-decoration: underline; text-underline-offset: 3px;
 }
-#modal.is-bench .text-button:hover { background: transparent; color: #1c5fc2; }
+#modal.is-bench .text-button:hover { background: transparent; color: #1a4d8a; }
 
-/* --- Faixa do pedido --------------------------------------------------- */
+/* --- Faixa do pedido ------------------------------------------------------ */
 .lab-ribbon {
   flex: 0 0 auto;
   display: flex; align-items: center; justify-content: space-between; gap: 1.2rem;
   margin: 0.9rem 1.3rem 0;
-  padding: 0.65rem 1.1rem;
-  background: #fff;
-  border: 3px solid var(--lb-edge);
-  border-radius: 20px;
-  box-shadow: 0 4px 0 rgba(90, 57, 32, 0.25);
+  padding: 0.6rem 1rem;
+  background: var(--lb-paper);
+  border: 1.5px solid var(--lb-edge);
+  border-radius: 6px;
+  box-shadow: 0 1px 3px rgba(100, 130, 160, 0.15);
 }
-.ribbon-copy { display: grid; gap: 0.25rem; min-width: 0; }
-.order-client { font-size: 0.72rem; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: var(--lb-ink-soft); }
-.ribbon-copy strong { font-size: 1.12rem; font-weight: 800; line-height: 1.3; }
-.ribbon-meta { display: grid; gap: 0.25rem; justify-items: end; flex: 0 0 auto; text-align: right; font-size: 0.82rem; color: var(--lb-ink-soft); font-weight: 700; }
-.ribbon-stars { color: #c98a00; }
+.ribbon-copy { display: grid; gap: 0.2rem; min-width: 0; }
+.order-client { font-size: 0.68rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: var(--lb-ink-soft); }
+.ribbon-copy strong { font-size: 1.05rem; font-weight: 800; line-height: 1.3; }
+.ribbon-meta { display: grid; gap: 0.2rem; justify-items: end; flex: 0 0 auto; text-align: right; font-size: 0.8rem; color: var(--lb-ink-soft); font-weight: 700; }
+.ribbon-stars { color: #996600; }
 
-/* --- Esqueleto: viveiro + mesa ---------------------------------------- */
+/* --- Esqueleto: viveiro + mesa ------------------------------------------- */
 .lab-workspace {
   display: grid;
   grid-template-columns: minmax(0, 1.08fr) minmax(400px, 0.92fr);
@@ -101,233 +105,361 @@
 .lab-library, .lab-table {
   min-width: 0; min-height: 0;
   display: flex; flex-direction: column;
-  padding: 0.9rem 1rem 0.9rem;
+  padding: 0.8rem 0.9rem;
   background: var(--lb-paper);
-  border: 3px solid var(--lb-edge);
-  border-radius: 24px;
-  box-shadow: 0 4px 0 rgba(90, 57, 32, 0.25);
+  border: 1.5px solid var(--lb-edge);
+  border-radius: 8px;
+  box-shadow: 0 1px 4px rgba(100, 130, 160, 0.12);
 }
 .collection-heading, .selection-heading { display: flex; justify-content: space-between; align-items: center; gap: 0.5rem; }
-.collection-heading { margin: 0.8rem 0 0.4rem; }
+.collection-heading { margin: 0.7rem 0 0.4rem; }
 .collection-heading > span, .selection-heading > span {
-  padding: 0.12rem 0.65rem; border-radius: 999px; background: var(--lb-peach);
-  font-size: 0.76rem; font-weight: 800; color: var(--lb-ink-soft);
+  padding: 0.1rem 0.55rem; border-radius: 999px; background: var(--lb-peach);
+  font-size: 0.72rem; font-weight: 800; color: var(--lb-ink-soft);
 }
-.collection-notice { margin: 0 0 0.6rem; font-size: 0.82rem; color: var(--lb-ink-soft); font-weight: 600; }
+.collection-notice { margin: 0 0 0.5rem; font-size: 0.8rem; color: var(--lb-ink-soft); font-weight: 600; }
 
-/* --- Abas de espécie --------------------------------------------------- */
-.species-tabs { display: flex; gap: 0.5rem; flex: 0 0 auto; }
+/* --- Abas de espécie ----------------------------------------------------- */
+.species-tabs { display: flex; gap: 0.4rem; flex: 0 0 auto; }
 .lab-tab {
   position: relative;
   background: var(--lb-peach); color: var(--lb-ink-soft);
-  border: 3px solid transparent; border-radius: 16px;
-  font-weight: 800; transition: transform 120ms, background 120ms;
+  border: 1.5px solid transparent; border-radius: 5px;
+  font-weight: 700; transition: transform 100ms, background 100ms;
 }
-.lab-tab:hover { background: #ffdcaa; color: var(--lb-ink); }
-.lab-tab.is-active { background: #fff; color: var(--lb-ink); border-color: var(--lb-coral); box-shadow: 0 3px 0 var(--lb-coral); }
+.lab-tab:hover { background: #cfd9e6; color: var(--lb-ink); }
+.lab-tab.is-active { background: var(--lb-paper); color: var(--lb-ink); border-color: var(--lb-sky); box-shadow: 0 2px 0 var(--lb-sky); }
 .species-tabs .lab-tab {
-  flex: 1; min-width: 0; min-height: 64px;
-  display: flex; align-items: center; gap: 0.45rem;
-  padding: 0.3rem 0.6rem 0.3rem 0.35rem; text-align: left; font-size: 0.98rem;
+  flex: 1; min-width: 0; min-height: 58px;
+  display: flex; align-items: center; gap: 0.4rem;
+  padding: 0.3rem 0.55rem 0.3rem 0.3rem; text-align: left; font-size: 0.94rem;
 }
-.species-tabs .lab-tab .thumb { flex: 0 0 auto; width: 48px; height: 48px; border-radius: 50%; background: #fff; border: 2px solid var(--lb-line); }
-.species-tabs .lab-tab.is-active .thumb { border-color: var(--lb-coral); }
+.species-tabs .lab-tab .thumb { flex: 0 0 auto; width: 44px; height: 44px; border-radius: 50%; background: var(--lb-peach); border: 1.5px solid var(--lb-line); }
+.species-tabs .lab-tab.is-active .thumb { border-color: var(--lb-sky); }
 .species-count { display: none; }
 .species-tabs .lab-tab.is-order::after {
-  content: 'pedido'; position: absolute; top: -9px; right: 8px;
-  padding: 0.05rem 0.5rem; border-radius: 999px; background: var(--lb-coral); color: #fff;
-  font-size: 0.6rem; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase;
+  content: 'pedido'; position: absolute; top: -8px; right: 7px;
+  padding: 0.04rem 0.45rem; border-radius: 999px; background: var(--lb-coral); color: #fff;
+  font-size: 0.58rem; font-weight: 800; letter-spacing: 0.07em; text-transform: uppercase;
 }
 
-/* --- Cards dos bichos -------------------------------------------------- */
+/* --- Cards dos bichos ---------------------------------------------------- */
 .lab-library .parent-list {
   display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-auto-rows: max-content; align-content: start;
-  gap: 0.6rem; flex: 1; min-height: 0; overflow-y: auto; padding: 4px 6px 0.6rem 3px;
+  gap: 0.5rem; flex: 1; min-height: 0; overflow-y: auto; padding: 3px 5px 0.5rem 2px;
   scrollbar-width: thin; scrollbar-color: var(--lb-edge) transparent;
 }
 #modal.is-bench button.parent-card {
-  display: flex; flex-direction: row; align-items: stretch; gap: 0.5rem;
-  min-height: 0; height: auto; padding: 0.45rem;
-  background: #fff; color: var(--lb-ink); text-align: left;
-  border: 3px solid var(--lb-line); border-radius: 18px; box-shadow: 0 3px 0 var(--lb-line);
-  transition: transform 120ms, border-color 120ms, box-shadow 120ms, background 120ms;
+  display: flex; flex-direction: row; align-items: stretch; gap: 0.45rem;
+  min-height: 0; height: auto; padding: 0.4rem;
+  background: var(--lb-paper); color: var(--lb-ink); text-align: left;
+  border: 1.5px solid var(--lb-line); border-radius: 7px; box-shadow: 0 1px 0 var(--lb-line);
+  transition: transform 100ms, border-color 100ms, box-shadow 100ms, background 100ms;
 }
-#modal.is-bench button.parent-card:hover:not(:disabled) { background: #fffdf8; border-color: var(--lb-coral); box-shadow: 0 3px 0 var(--lb-coral); transform: translateY(-2px); }
-#modal.is-bench button.parent-card.is-selected { background: var(--lb-sky-bg); border-color: var(--lb-sky); box-shadow: 0 3px 0 var(--lb-sky); }
-#modal.is-bench button.parent-card:disabled { opacity: 0.55; }
+#modal.is-bench button.parent-card:hover:not(:disabled) { background: #f8fafc; border-color: var(--lb-sky); box-shadow: 0 2px 0 var(--lb-sky); transform: translateY(-1px); }
+#modal.is-bench button.parent-card.is-selected { background: var(--lb-sky-bg); border-color: var(--lb-sky); box-shadow: 0 2px 0 var(--lb-sky); }
+#modal.is-bench button.parent-card:disabled { opacity: 0.5; }
 .pet-art {
-  position: relative; flex: 0 0 82px; width: 82px; align-self: center;
+  position: relative; flex: 0 0 78px; width: 78px; align-self: center;
   display: grid; place-items: center; aspect-ratio: 1;
   background: var(--lb-peach); border-radius: 50%;
 }
-.pet-art .thumb { width: 78px; height: 78px; background: transparent; border-radius: 0; }
+.pet-art .thumb { width: 74px; height: 74px; background: transparent; border-radius: 0; }
 .thumb { image-rendering: auto; }
 .pet-selected {
-  position: absolute; left: 50%; bottom: -6px; transform: translateX(-50%);
-  padding: 0.05rem 0.6rem; border-radius: 999px; background: var(--lb-sky); color: #fff;
-  font-size: 0.66rem; font-weight: 800; white-space: nowrap;
+  position: absolute; left: 50%; bottom: -5px; transform: translateX(-50%);
+  padding: 0.04rem 0.55rem; border-radius: 999px; background: var(--lb-sky); color: #fff;
+  font-size: 0.62rem; font-weight: 800; white-space: nowrap;
 }
-.pet-card-copy { flex: 1; min-width: 0; display: grid; align-content: center; gap: 0.25rem; padding: 0.1rem 0.1rem 0.1rem 0; }
-#modal.is-bench .parent-card .who { font-size: 1rem; font-weight: 800; color: var(--lb-ink); }
+.pet-card-copy { flex: 1; min-width: 0; display: grid; align-content: center; gap: 0.2rem; padding: 0.1rem 0.05rem 0.1rem 0; }
+#modal.is-bench .parent-card .who { font-size: 0.96rem; font-weight: 800; color: var(--lb-ink); }
 
-/* --- Chips de fenótipo ------------------------------------------------- */
-.pet-chips { display: flex; flex-wrap: wrap; gap: 0.2rem; }
+/* --- Chips de fenótipo --------------------------------------------------- */
+.pet-chips { display: flex; flex-wrap: wrap; gap: 0.18rem; }
 .chip {
-  display: inline-flex; align-items: center; gap: 0.25rem;
-  padding: 0.12rem 0.5rem; border-radius: 999px;
-  background: var(--lb-cream); border: 1.5px solid var(--lb-line); color: var(--lb-ink-soft);
-  font-size: 0.68rem; font-weight: 700; line-height: 1.25; white-space: nowrap;
+  display: inline-flex; align-items: center; gap: 0.22rem;
+  padding: 0.1rem 0.45rem; border-radius: 999px;
+  background: var(--lb-cream); border: 1px solid var(--lb-line); color: var(--lb-ink-soft);
+  font-size: 0.66rem; font-weight: 700; line-height: 1.25; white-space: nowrap;
 }
-.chip.is-wanted { background: var(--lb-leaf-bg); border-color: var(--lb-leaf); color: #1a6a3a; }
+.chip.is-wanted { background: var(--lb-leaf-bg); border-color: var(--lb-leaf); color: #145535; }
 .dot {
-  flex: 0 0 auto; display: inline-block; width: 0.7rem; height: 0.7rem; border-radius: 50%;
-  background: var(--lb-peach); border: 1.5px solid var(--lb-edge);
+  flex: 0 0 auto; display: inline-block; width: 0.65rem; height: 0.65rem; border-radius: 50%;
+  background: var(--lb-peach); border: 1px solid var(--lb-edge);
 }
-.dot[data-tone="preto"], .prob-seg[data-tone="preto"] { background: #3d3d4a; }
-.dot[data-tone="cinza"], .prob-seg[data-tone="cinza"] { background: #9ca0ad; }
+.dot[data-tone="preto"],  .prob-seg[data-tone="preto"]  { background: #3d3d4a; }
+.dot[data-tone="cinza"],  .prob-seg[data-tone="cinza"]  { background: #9ca0ad; }
 .dot[data-tone="marrom"], .prob-seg[data-tone="marrom"] { background: #8c5a34; }
-.dot[data-tone="claro"], .prob-seg[data-tone="claro"] { background: #ead6ab; }
-.dot[data-tone="azuis"], .prob-seg[data-tone="azuis"] { background: #2f86ff; }
-.dot[data-tone="verdes"], .prob-seg[data-tone="verdes"] { background: #35c768; }
-.dot[data-slot="0"], .prob-seg[data-slot="0"] { background: #e0a866; }
-.dot[data-slot="1"], .prob-seg[data-slot="1"] { background: #f2b8b0; }
-.dot[data-tone] { }
+.dot[data-tone="claro"],  .prob-seg[data-tone="claro"]  { background: #ead6ab; }
+.dot[data-tone="azuis"],  .prob-seg[data-tone="azuis"]  { background: #2563a8; }
+.dot[data-tone="verdes"], .prob-seg[data-tone="verdes"] { background: #22a65a; }
+.dot[data-slot="0"], .prob-seg[data-slot="0"] { background: #d4a060; }
+.dot[data-slot="1"], .prob-seg[data-slot="1"] { background: #e88888; }
 
-/* --- Mesa: pais -------------------------------------------------------- */
-.lab-table { gap: 0.6rem; }
+/* --- Mesa: pais ---------------------------------------------------------- */
+.lab-table { gap: 0.55rem; }
 .slots { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; gap: 0.4rem; }
 .slot {
-  position: relative; display: grid; justify-items: center; align-content: start; gap: 0.25rem;
-  min-height: 150px; padding: 0.5rem 0.5rem 0.4rem; min-width: 0;
-  background: #fff; border: 3px dashed var(--lb-line); border-radius: 20px; text-align: center;
+  position: relative; display: grid; justify-items: center; align-content: start; gap: 0.2rem;
+  min-height: 140px; padding: 0.45rem 0.45rem 0.35rem; min-width: 0;
+  background: var(--lb-paper); border: 1.5px dashed var(--lb-line); border-radius: 7px; text-align: center;
 }
-.slot.is-filled { border-style: solid; border-color: var(--lb-edge); box-shadow: 0 3px 0 rgba(90, 57, 32, 0.3); }
+.slot.is-filled { border-style: solid; border-color: var(--lb-edge); box-shadow: 0 1px 3px rgba(100, 130, 160, 0.18); }
 .slot.is-target { border-color: var(--lb-sky); background: var(--lb-sky-bg); }
-.slot-label { font-size: 0.7rem; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: var(--lb-ink-soft); }
-.slot .thumb { width: 80px; height: 80px; background: transparent; }
-.slot-name { font-size: 1.02rem; font-weight: 800; }
+.slot-label { font-size: 0.66rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: var(--lb-ink-soft); }
+.slot .thumb { width: 76px; height: 76px; background: transparent; }
+.slot-name { font-size: 0.98rem; font-weight: 800; }
 .slot .pet-chips { justify-content: center; }
 .slot-silhouette {
-  display: grid; place-items: center; width: 78px; height: 78px; border-radius: 50%;
-  background: var(--lb-peach); color: var(--lb-coral); font-size: 2.2rem; font-weight: 800;
+  display: grid; place-items: center; width: 72px; height: 72px; border-radius: 50%;
+  background: var(--lb-peach); color: var(--lb-edge); font-size: 2rem; font-weight: 800;
 }
-.slot-empty { min-height: 38px; width: 100%; padding: 0.25rem 0.5rem; background: var(--lb-peach); color: var(--lb-ink); border: 2px solid var(--lb-line); font-size: 0.82rem; font-weight: 800; }
-.slot-empty:hover { background: #ffdcaa; }
-.slot-help { font-size: 0.74rem; color: var(--lb-ink-soft); font-weight: 600; }
-.slot-controls { display: flex; justify-content: center; gap: 0.4rem; }
+.slot-empty { min-height: 34px; width: 100%; padding: 0.2rem 0.45rem; background: var(--lb-peach); color: var(--lb-ink); border: 1px solid var(--lb-line); font-size: 0.8rem; font-weight: 700; }
+.slot-empty:hover { background: #cfd9e6; }
+.slot-help { font-size: 0.7rem; color: var(--lb-ink-soft); font-weight: 600; }
+.slot-controls { display: flex; justify-content: center; gap: 0.35rem; }
 .slot-cross {
-  display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%;
-  background: var(--lb-coral); color: #fff; border: 3px solid var(--lb-edge); font-size: 1.1rem; font-weight: 800;
+  display: grid; place-items: center; width: 30px; height: 30px; border-radius: 50%;
+  background: var(--lb-coral); color: #fff; border: 1.5px solid var(--lb-coral-dark); font-size: 1rem; font-weight: 800;
 }
 
-/* --- Mesa: abas e painéis ---------------------------------------------- */
-.analysis-tabs { display: flex; gap: 0.3rem; padding: 0.25rem; background: var(--lb-peach); border-radius: 18px; }
-.analysis-tabs .lab-tab { flex: 1; min-height: 38px; padding: 0.3rem 0.5rem; font-size: 0.86rem; white-space: nowrap; border-radius: 14px; background: transparent; }
-.analysis-tabs .lab-tab:hover { background: rgba(255, 255, 255, 0.55); }
-.analysis-tabs .lab-tab.is-active { background: #fff; border-color: var(--lb-edge); box-shadow: 0 2px 0 var(--lb-edge); }
-.analysis-panel { flex: 1; min-height: 0; overflow: auto; padding: 0.1rem 0.2rem 0.4rem 0; scrollbar-width: thin; scrollbar-color: var(--lb-edge) transparent; }
+/* --- Mesa: abas e painéis ------------------------------------------------ */
+.analysis-tabs { display: flex; gap: 0.25rem; padding: 0.2rem; background: var(--lb-peach); border-radius: 7px; }
+.analysis-tabs .lab-tab { flex: 1; min-height: 34px; padding: 0.25rem 0.45rem; font-size: 0.84rem; white-space: nowrap; border-radius: 5px; background: transparent; }
+.analysis-tabs .lab-tab:hover { background: rgba(255, 255, 255, 0.5); }
+.analysis-tabs .lab-tab.is-active { background: var(--lb-paper); border-color: var(--lb-edge); box-shadow: 0 1px 0 var(--lb-edge); }
+.analysis-panel { flex: 1; min-height: 0; overflow: auto; padding: 0.1rem 0.15rem 0.4rem 0; scrollbar-width: thin; scrollbar-color: var(--lb-edge) transparent; }
 .analysis-panel h3 { margin-bottom: 0.2rem; }
-.empty-note, .analysis-empty p, .training-note { margin: 0; font-size: 0.88rem; font-weight: 600; color: var(--lb-ink-soft); }
-.analysis-empty { display: grid; gap: 0.35rem; padding: 0.9rem; background: var(--lb-cream); border: 2px dashed var(--lb-line); border-radius: 16px; }
-.analysis-empty strong { font-size: 1rem; }
-.training-note { padding: 0.5rem 0.7rem; margin-bottom: 0.6rem; background: var(--lb-sky-bg); border-radius: 12px; color: #1c4d99; }
-#modal.is-bench .alert { margin: 0 0 0.6rem; padding: 0.5rem 0.7rem; background: var(--lb-bad-bg); border: 2px solid var(--lb-coral); border-radius: 12px; color: var(--lb-ink); font-size: 0.85rem; font-weight: 700; }
+.empty-note, .analysis-empty p, .training-note { margin: 0; font-size: 0.86rem; font-weight: 600; color: var(--lb-ink-soft); }
+.analysis-empty { display: grid; gap: 0.3rem; padding: 0.8rem; background: var(--lb-cream); border: 1.5px dashed var(--lb-line); border-radius: 6px; }
+.analysis-empty strong { font-size: 0.96rem; }
+.training-note { padding: 0.45rem 0.65rem; margin-bottom: 0.55rem; background: var(--lb-sky-bg); border-radius: 5px; color: #1a4d8a; }
+#modal.is-bench .alert { margin: 0 0 0.55rem; padding: 0.45rem 0.65rem; background: var(--lb-bad-bg); border: 1.5px solid var(--lb-coral); border-radius: 5px; color: var(--lb-ink); font-size: 0.84rem; font-weight: 700; }
 
-/* --- Análise de fenótipos ---------------------------------------------- */
-.chance-card { display: grid; gap: 0.35rem; margin-bottom: 0.7rem; padding: 0.65rem 0.8rem; background: #fff1d6; border: 3px solid var(--lb-edge); border-radius: 18px; }
+/* --- Análise de fenótipos ------------------------------------------------ */
+.chance-card { display: grid; gap: 0.3rem; margin-bottom: 0.65rem; padding: 0.6rem 0.75rem; background: var(--lb-cream); border: 1.5px solid var(--lb-edge); border-radius: 7px; }
 .chance-main { display: flex; align-items: baseline; justify-content: space-between; gap: 0.5rem; }
-.chance-label { font-size: 0.82rem; font-weight: 800; color: var(--lb-ink-soft); }
-.chance-number { font-size: 1.9rem; font-weight: 800; line-height: 1; font-variant-numeric: tabular-nums; }
-.meter { display: block; height: 14px; border-radius: 999px; background: #fff; border: 2.5px solid var(--lb-edge); overflow: hidden; }
-.meter-fill { display: block; height: 100%; min-width: 0; background: var(--lb-coral); border-radius: 999px; transition: width 240ms; }
-.chance-card.is-high { background: var(--lb-leaf-bg); }
+.chance-label { font-size: 0.78rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: var(--lb-ink-soft); }
+.chance-number { font-size: 1.8rem; font-weight: 800; line-height: 1; font-family: var(--lb-mono); font-variant-numeric: tabular-nums; }
+.meter { display: block; height: 12px; border-radius: 999px; background: var(--lb-paper); border: 1.5px solid var(--lb-edge); overflow: hidden; }
+.meter-fill { display: block; height: 100%; min-width: 0; background: var(--lb-coral); border-radius: 999px; transition: width 200ms; }
+.chance-card.is-high { background: var(--lb-leaf-bg); border-color: var(--lb-leaf); }
 .chance-card.is-high .meter-fill { background: var(--lb-leaf); }
-.chance-card.is-zero { background: var(--lb-bad-bg); }
-.chance-best { font-size: 0.78rem; font-weight: 700; color: var(--lb-ink-soft); }
+.chance-card.is-zero { background: var(--lb-bad-bg); border-color: #c0392b; }
+.chance-best { font-size: 0.74rem; font-weight: 700; color: var(--lb-ink-soft); }
 .chance-best:empty { display: none; }
-.trait-rows { display: grid; gap: 0.5rem; }
-.trait-row { display: grid; gap: 0.3rem; padding: 0.5rem 0.7rem 0.55rem; background: #fff; border: 2px solid var(--lb-line); border-radius: 14px; }
-.trait-row.is-asked { border-color: var(--lb-leaf); background: #f6fdf8; }
+.trait-rows { display: grid; gap: 0.45rem; }
+.trait-row { display: grid; gap: 0.25rem; padding: 0.45rem 0.65rem 0.5rem; background: var(--lb-paper); border: 1.5px solid var(--lb-line); border-radius: 6px; }
+.trait-row.is-asked { border-color: var(--lb-leaf); background: #f5fcf8; }
 .trait-head { display: flex; align-items: center; justify-content: space-between; gap: 0.4rem; }
-.trait-head strong { font-size: 0.86rem; font-weight: 800; }
-.trait-parents { display: inline-flex; align-items: center; gap: 0.3rem; margin-left: auto; font-size: 0.72rem; font-weight: 700; color: var(--lb-ink-soft); }
-.mini { display: inline-flex; align-items: center; gap: 0.25rem; padding: 0.05rem 0.45rem; border-radius: 999px; background: var(--lb-cream); }
+.trait-head strong { font-size: 0.82rem; font-weight: 800; letter-spacing: 0.04em; text-transform: uppercase; }
+.trait-parents { display: inline-flex; align-items: center; gap: 0.28rem; margin-left: auto; font-size: 0.7rem; font-weight: 700; color: var(--lb-ink-soft); }
+.mini { display: inline-flex; align-items: center; gap: 0.22rem; padding: 0.04rem 0.4rem; border-radius: 999px; background: var(--lb-cream); }
 .mini-x { color: var(--lb-coral); font-weight: 800; }
-.trait-tag { padding: 0.05rem 0.55rem; border-radius: 999px; background: var(--lb-leaf); color: #fff; font-size: 0.62rem; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; }
-.prob-bar { display: flex; height: 18px; overflow: hidden; border-radius: 999px; border: 2.5px solid var(--lb-edge); background: #fff; }
+.trait-tag { padding: 0.04rem 0.5rem; border-radius: 999px; background: var(--lb-leaf); color: #fff; font-size: 0.6rem; font-weight: 800; letter-spacing: 0.07em; text-transform: uppercase; }
+.prob-bar { display: flex; height: 16px; overflow: hidden; border-radius: 999px; border: 1.5px solid var(--lb-edge); background: var(--lb-cream); }
 .prob-seg { display: block; flex: 1 1 0; min-width: 0; }
-.prob-seg + .prob-seg { border-left: 2.5px solid var(--lb-edge); }
-.prob-seg.is-wanted { background-image: repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.5) 0 5px, transparent 5px 10px); }
-.prob-legend { display: flex; flex-wrap: wrap; gap: 0.15rem 0.9rem; margin: 0; padding: 0; list-style: none; }
-.prob-legend li { display: inline-flex; align-items: center; gap: 0.3rem; font-size: 0.78rem; font-weight: 600; color: var(--lb-ink-soft); }
-.prob-legend strong { color: var(--lb-ink); font-weight: 800; font-variant-numeric: tabular-nums; }
-.prob-legend li.is-wanted { color: #1a6a3a; }
+.prob-seg + .prob-seg { border-left: 1.5px solid var(--lb-edge); }
+.prob-seg.is-wanted { background-image: repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.45) 0 4px, transparent 4px 8px); }
+.prob-legend { display: flex; flex-wrap: wrap; gap: 0.12rem 0.8rem; margin: 0; padding: 0; list-style: none; }
+.prob-legend li { display: inline-flex; align-items: center; gap: 0.28rem; font-size: 0.76rem; font-weight: 600; color: var(--lb-ink-soft); }
+.prob-legend strong { color: var(--lb-ink); font-weight: 800; font-family: var(--lb-mono); font-variant-numeric: tabular-nums; }
+.prob-legend li.is-wanted { color: #145535; }
 .prob-legend li.is-wanted::before { content: '✓'; color: var(--lb-leaf); font-weight: 800; }
 
-/* --- Filhote e caderno ------------------------------------------------- */
-.litter { display: grid; gap: 0.5rem; }
-.cross-parents { margin: 0; font-size: 0.86rem; font-weight: 600; color: var(--lb-ink-soft); }
-.litter-pup { display: flex; align-items: center; gap: 0.8rem; padding: 0.6rem; background: #fff; border: 3px solid var(--lb-edge); border-radius: 20px; }
-.litter-pup .thumb { flex: 0 0 auto; width: 120px; height: 120px; background: var(--lb-peach); border-radius: 50%; }
-.check-list { display: grid; gap: 0.3rem; margin: 0; padding: 0; list-style: none; }
-.check-list li { display: flex; align-items: center; gap: 0.5rem; padding: 0.35rem 0.6rem; border-radius: 12px; font-size: 0.84rem; font-weight: 700; }
-.check-list .is-ok { background: var(--lb-leaf-bg); color: #1a6a3a; }
-.check-list .is-miss { background: var(--lb-bad-bg); color: #9b3a1c; }
-.check-mark { display: grid; place-items: center; flex: 0 0 auto; width: 20px; height: 20px; border-radius: 50%; background: #fff; font-size: 0.75rem; font-weight: 800; }
-.journal { display: grid; gap: 0.5rem; }
-.journal-entry { display: grid; gap: 0.35rem; padding: 0.55rem 0.7rem; background: #fff; border: 2px solid var(--lb-line); border-radius: 14px; }
-.journal-head { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0.3rem; font-size: 0.82rem; }
-.journal-head span { color: var(--lb-ink-soft); font-weight: 600; }
-.journal-parents { display: grid; gap: 0.25rem; }
-.journal-x { font-size: 0.8rem; font-weight: 800; color: var(--lb-coral); }
-.journal-pups { display: grid; gap: 0.25rem; }
-.journal-name { font-size: 0.8rem; font-weight: 800; }
+/* --- Fenótipos possíveis ------------------------------------------------- */
+.pheno-section {
+  margin-top: 0.75rem;
+  padding: 0.6rem 0.75rem 0.65rem;
+  background: var(--lb-paper);
+  border: 1.5px solid var(--lb-line);
+  border-radius: 6px;
+}
+.pheno-head {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+.pheno-head strong {
+  font-size: 0.8rem; font-weight: 800; letter-spacing: 0.05em; text-transform: uppercase; color: var(--lb-ink);
+}
+.pheno-count {
+  padding: 0.08rem 0.55rem; border-radius: 999px;
+  background: var(--lb-peach); font-size: 0.7rem; font-weight: 800; color: var(--lb-ink-soft);
+  font-family: var(--lb-mono);
+}
+.pheno-list { display: grid; gap: 0.22rem; }
+.pheno-row {
+  display: grid;
+  grid-template-columns: 18px 1fr 64px 3.8rem;
+  align-items: center; gap: 0.4rem;
+  padding: 0.28rem 0.45rem;
+  border-radius: 4px;
+  background: var(--lb-cream);
+}
+.pheno-row.is-target {
+  background: var(--lb-leaf-bg);
+  border: 1px solid var(--lb-leaf);
+}
+.pheno-match { color: var(--lb-leaf); font-weight: 800; font-size: 0.86rem; text-align: center; line-height: 1; }
+.pheno-rank { width: 18px; }
+.pheno-desc {
+  display: flex; align-items: center; gap: 0.3rem;
+  font-size: 0.72rem; font-weight: 600; color: var(--lb-ink-soft);
+  min-width: 0; overflow: hidden;
+}
+.pheno-desc > span:last-child { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pheno-row.is-target .pheno-desc { color: #145535; }
+.pheno-bar-wrap { width: 64px; }
+.pheno-bar {
+  display: block; height: 7px; border-radius: 999px;
+  background: var(--lb-line); overflow: hidden;
+}
+.pheno-fill { display: block; height: 100%; background: var(--lb-edge); border-radius: 999px; }
+.pheno-row.is-target .pheno-fill { background: var(--lb-leaf); }
+.pheno-pct {
+  font-size: 0.78rem; font-weight: 800;
+  font-family: var(--lb-mono); font-variant-numeric: tabular-nums;
+  color: var(--lb-ink); text-align: right;
+}
 
-/* --- Ações ------------------------------------------------------------- */
+.sex-icon {
+  font-size: 0.82em; font-weight: 800; letter-spacing: 0;
+  margin-right: 3px; flex-shrink: 0;
+  font-family: var(--lb-mono);
+}
+.sex-macho { color: var(--lb-sky); }
+.sex-femea { color: var(--lb-coral); }
+
+.chip-sex { display: inline-flex; align-items: center; gap: 3px; }
+.chip-sex .sex-icon { margin-right: 0; }
+
+/* --- Separação Mãe / Pai -------------------------------------------------- */
+.slot-label { display: inline-flex; align-items: center; gap: 3px; }
+.slot-mae .slot-label .sex-icon { color: var(--lb-coral); }
+.slot-pai .slot-label .sex-icon { color: var(--lb-sky); }
+
+.parents-pheno {
+  display: grid; grid-template-columns: 1fr auto 1fr;
+  gap: 8px; align-items: start;
+  margin-bottom: 10px; padding: 8px 10px;
+  background: var(--lb-cream); border: 1px solid var(--lb-line); border-radius: 8px;
+}
+.parent-pheno-card { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.parent-pheno-card.parent-pheno-mae { }
+.parent-pheno-card.parent-pheno-pai { }
+.parent-pheno-head {
+  display: flex; align-items: center; gap: 4px; flex-wrap: wrap;
+}
+.parent-role-label {
+  font-size: 0.68rem; font-weight: 800; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--lb-ink);
+}
+.parent-pheno-name { font-size: 0.78rem; color: var(--lb-ink-soft); }
+.parent-pheno-sep {
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.9rem; color: var(--lb-edge); padding-top: 10px;
+}
+.mini-sex { font-size: 0.7em; margin-right: 1px; }
+
+/* --- Genótipo e Punnett --------------------------------------------------- */
+.al-pair {
+  display: inline-flex; gap: 0;
+  font-family: var(--lb-mono); font-size: 0.82rem; font-weight: 700;
+  background: var(--lb-paper); border: 1px solid var(--lb-line);
+  border-radius: 3px; padding: 1px 3px; line-height: 1; vertical-align: middle;
+}
+.al { display: inline; }
+.al-dom { color: var(--lb-ink); }
+.al-rec { color: var(--lb-ink-soft); font-style: italic; }
+
+.parent-geno {
+  display: flex; flex-wrap: wrap; gap: 5px 10px;
+  margin-top: 5px; padding-top: 5px; border-top: 1px solid var(--lb-line);
+}
+.geno-group { display: inline-flex; align-items: center; gap: 3px; }
+.geno-lbl {
+  font-size: 0.65rem; font-weight: 700; letter-spacing: 0.05em;
+  text-transform: uppercase; color: var(--lb-ink-soft); margin-right: 1px;
+}
+
+.punnett-tbl { margin-top: 6px; display: inline-flex; flex-direction: column; gap: 2px; }
+.punnett-r { display: flex; gap: 2px; align-items: center; }
+.punnett-corner { width: 24px; flex-shrink: 0; }
+.punnett-hd, .punnett-sd {
+  display: inline-flex; align-items: center; justify-content: center; gap: 1px;
+  min-width: 36px; height: 24px; font-size: 0.72rem;
+  background: var(--lb-cream); border: 1px solid var(--lb-line); border-radius: 3px;
+}
+.punnett-cell {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 36px; height: 24px; border: 1px solid var(--lb-line); border-radius: 3px;
+}
+.punnett-cell.is-dom { background: var(--lb-paper); }
+.punnett-cell.is-rec { background: var(--lb-bad-bg); }
+
+/* --- Filhote e caderno --------------------------------------------------- */
+.litter { display: grid; gap: 0.45rem; }
+.cross-parents { margin: 0; font-size: 0.84rem; font-weight: 600; color: var(--lb-ink-soft); }
+.litter-pup { display: flex; align-items: center; gap: 0.75rem; padding: 0.55rem; background: var(--lb-paper); border: 1.5px solid var(--lb-edge); border-radius: 8px; }
+.litter-pup .thumb { flex: 0 0 auto; width: 110px; height: 110px; background: var(--lb-peach); border-radius: 50%; }
+.check-list { display: grid; gap: 0.25rem; margin: 0; padding: 0; list-style: none; }
+.check-list li { display: flex; align-items: center; gap: 0.45rem; padding: 0.3rem 0.55rem; border-radius: 5px; font-size: 0.82rem; font-weight: 700; }
+.check-list .is-ok { background: var(--lb-leaf-bg); color: #145535; }
+.check-list .is-miss { background: var(--lb-bad-bg); color: #8b2415; }
+.check-mark { display: grid; place-items: center; flex: 0 0 auto; width: 18px; height: 18px; border-radius: 50%; background: rgba(255,255,255,0.6); font-size: 0.7rem; font-weight: 800; }
+.journal { display: grid; gap: 0.45rem; }
+.journal-entry { display: grid; gap: 0.3rem; padding: 0.5rem 0.65rem; background: var(--lb-paper); border: 1.5px solid var(--lb-line); border-radius: 5px; }
+.journal-head { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0.25rem; font-size: 0.8rem; }
+.journal-head span { color: var(--lb-ink-soft); font-weight: 600; }
+.journal-parents { display: grid; gap: 0.22rem; }
+.journal-x { font-size: 0.78rem; font-weight: 800; color: var(--lb-coral); }
+.journal-pups { display: grid; gap: 0.22rem; }
+.journal-name { font-size: 0.78rem; font-weight: 800; }
+
+/* --- Ações --------------------------------------------------------------- */
 #modal.is-bench .bench-actions {
-  position: static; flex: 0 0 auto; display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 0.5rem;
-  margin: 0; padding: 0.6rem 0 0; background: transparent; border: 0; border-top: 2px dashed var(--lb-line); box-shadow: none;
+  position: static; flex: 0 0 auto; display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 0.45rem;
+  margin: 0; padding: 0.55rem 0 0; background: transparent; border: 0; border-top: 1.5px solid var(--lb-line); box-shadow: none;
 }
 #modal.is-bench .bench-actions button {
-  min-width: 0; min-height: 46px; padding: 0.4rem 1.2rem;
-  background: var(--lb-coral); color: #fff; border: 3px solid var(--lb-edge); box-shadow: 0 4px 0 var(--lb-edge);
-  font-size: 1rem; font-weight: 800; text-shadow: 0 1px 0 rgba(90, 57, 32, 0.5);
-  transition: transform 100ms, box-shadow 100ms, background 120ms;
+  min-width: 0; min-height: 42px; padding: 0.35rem 1.1rem;
+  background: var(--lb-coral); color: #fff; border: 1.5px solid var(--lb-coral-dark); box-shadow: 0 2px 0 var(--lb-coral-dark);
+  font-size: 0.96rem; font-weight: 800; letter-spacing: 0.03em;
+  transition: transform 80ms, box-shadow 80ms, background 100ms;
 }
 #modal.is-bench .bench-actions button:hover:not(:disabled) { background: var(--lb-coral-dark); }
-#modal.is-bench .bench-actions button:active:not(:disabled) { transform: translateY(4px); box-shadow: 0 0 0 var(--lb-edge); }
-#modal.is-bench .bench-actions button.secondary { min-height: 40px; padding: 0.3rem 0.9rem; font-size: 0.88rem; background: #fff; color: var(--lb-ink); text-shadow: none; }
-#modal.is-bench .bench-actions button.deliver { flex: 1 0 100%; }
+#modal.is-bench .bench-actions button:active:not(:disabled) { transform: translateY(2px); box-shadow: 0 0 0 var(--lb-coral-dark); }
+#modal.is-bench .bench-actions button.secondary { min-height: 38px; padding: 0.28rem 0.85rem; font-size: 0.84rem; background: var(--lb-paper); color: var(--lb-ink); border-color: var(--lb-edge); box-shadow: 0 1px 0 var(--lb-edge); }
 #modal.is-bench .bench-actions button.secondary:hover:not(:disabled) { background: var(--lb-cream); }
-#modal.is-bench .bench-actions button.deliver { background: var(--lb-leaf); }
-#modal.is-bench .bench-actions button.deliver:hover:not(:disabled) { background: #26904c; }
-#modal.is-bench .bench-actions button:disabled { opacity: 0.45; box-shadow: 0 4px 0 var(--lb-edge); }
+#modal.is-bench .bench-actions button.deliver { flex: 1 0 100%; background: var(--lb-leaf); border-color: var(--lb-leaf); box-shadow: 0 2px 0 #14573a; }
+#modal.is-bench .bench-actions button.deliver:hover:not(:disabled) { background: #14573a; }
+#modal.is-bench .bench-actions button:disabled { opacity: 0.4; box-shadow: none; }
 
-/* --- Telas menores ----------------------------------------------------- */
+/* --- Telas menores ------------------------------------------------------- */
 @media (max-height: 800px) {
-  .slot { min-height: 128px; }
-  .slot .thumb { width: 56px; height: 56px; }
+  .slot { min-height: 120px; }
+  .slot .thumb { width: 52px; height: 52px; }
   .slot-help { display: none; }
-  .slot-silhouette { width: 60px; height: 60px; font-size: 1.7rem; }
-  .species-tabs .lab-tab { min-height: 54px; }
-  .species-tabs .lab-tab .thumb { width: 40px; height: 40px; }
+  .slot-silhouette { width: 56px; height: 56px; font-size: 1.6rem; }
+  .species-tabs .lab-tab { min-height: 50px; }
+  .species-tabs .lab-tab .thumb { width: 38px; height: 38px; }
 }
 @media (max-height: 720px) {
-  .lab-ribbon { margin-top: 0.6rem; padding: 0.4rem 0.9rem; }
+  .lab-ribbon { margin-top: 0.55rem; padding: 0.38rem 0.85rem; }
   .collection-notice { display: none; }
-  .slot { min-height: 108px; gap: 0.1rem; }
-  .slot .thumb { width: 46px; height: 46px; }
-  .slot-silhouette { width: 46px; height: 46px; font-size: 1.4rem; }
-  .species-tabs .lab-tab { min-height: 46px; }
-  .species-tabs .lab-tab .thumb { width: 34px; height: 34px; }
-  .lab-workspace { padding-top: 0.6rem; padding-bottom: 0.8rem; }
+  .slot { min-height: 100px; gap: 0.08rem; }
+  .slot .thumb { width: 42px; height: 42px; }
+  .slot-silhouette { width: 42px; height: 42px; font-size: 1.3rem; }
+  .species-tabs .lab-tab { min-height: 44px; }
+  .species-tabs .lab-tab .thumb { width: 32px; height: 32px; }
+  .lab-workspace { padding-top: 0.55rem; padding-bottom: 0.75rem; }
 }
 @media (max-width: 1000px) {
   #modal.is-bench { padding: 0.4rem; }
-  #modal.is-bench .modal-card { height: calc(100dvh - 0.8rem); border-radius: 20px; }
+  #modal.is-bench .modal-card { height: calc(100dvh - 0.8rem); border-radius: 7px; }
   #modal.is-bench #modal-body { overflow: auto; }
   .lab-workspace { grid-template-columns: minmax(0, 1fr); flex: 0 0 auto; padding: 0.8rem 0.8rem 1rem; }
-  .lab-ribbon { margin: 0.7rem 0.8rem 0; flex-wrap: wrap; }
+  .lab-ribbon { margin: 0.65rem 0.8rem 0; flex-wrap: wrap; }
   .ribbon-meta { justify-items: start; text-align: left; }
   .lab-library .parent-list { overflow: visible; max-height: none; }
   .analysis-panel { overflow: visible; }
@@ -335,7 +467,7 @@
 @media (max-width: 560px) {
   .lab-library .parent-list { grid-template-columns: minmax(0, 1fr); }
   .slots { grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); }
-  .species-tabs .lab-tab { padding-right: 0.3rem; font-size: 0.84rem; }
+  .species-tabs .lab-tab { padding-right: 0.25rem; font-size: 0.82rem; }
 }
 @media (prefers-reduced-motion: reduce) {
   #modal.is-bench * { transition: none !important; }

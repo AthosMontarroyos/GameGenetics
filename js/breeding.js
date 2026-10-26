@@ -39,6 +39,7 @@
       }
       chance *= p;
     });
+    if (targets.sex) chance *= 0.5;
     return chance;
   }
 

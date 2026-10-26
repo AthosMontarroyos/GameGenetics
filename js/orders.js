@@ -17,35 +17,39 @@
       {speciesId:'coelho',targets:{ears:'caidas'}}
     ]},
     {id:'nivel-2',title:'Dois detalhes',orders:[
-      {speciesId:'gato',targets:{color:'marrom',eyes:'verdes'}},
-      {speciesId:'cachorro',targets:{eyes:'verdes',tail:'curto'}},
+      {speciesId:'gato',targets:{color:'marrom',eyes:'verdes',sex:'femea'}},
+      {speciesId:'cachorro',targets:{eyes:'verdes',tail:'curto',sex:'macho'}},
       {speciesId:'coelho',targets:{color:'preto',spots:'manchado'}}
     ]},
     {id:'nivel-3',title:'Pedidos exigentes',orders:[
-      {speciesId:'gato',targets:{color:'claro',ears:'dobradas',tail:'curto'}},
-      {speciesId:'cachorro',targets:{color:'claro',eyes:'verdes',spots:'liso'}},
+      {speciesId:'gato',targets:{color:'claro',ears:'dobradas',tail:'curto',sex:'macho'}},
+      {speciesId:'cachorro',targets:{color:'claro',eyes:'verdes',spots:'liso',sex:'femea'}},
       {speciesId:'coelho',targets:{color:'cinza',eyes:'verdes',tail:'curto'}}
     ]},
     {id:'nivel-4',title:'Mestre dos cruzamentos',orders:[
-      {speciesId:'gato',targets:{color:'claro',eyes:'verdes',ears:'dobradas',spots:'liso',tail:'curto'}},
-      {speciesId:'cachorro',targets:{color:'claro',eyes:'verdes',ears:'caidas',spots:'liso',tail:'longo'}},
-      {speciesId:'coelho',targets:{color:'preto',eyes:'verdes',ears:'caidas',spots:'liso',tail:'curto'}}
+      {speciesId:'gato',targets:{color:'claro',eyes:'verdes',ears:'dobradas',spots:'liso',tail:'curto',sex:'macho'}},
+      {speciesId:'cachorro',targets:{color:'claro',eyes:'verdes',ears:'caidas',spots:'liso',tail:'longo',sex:'femea'}},
+      {speciesId:'coelho',targets:{color:'preto',eyes:'verdes',ears:'caidas',spots:'liso',tail:'curto',sex:'macho'}}
     ]}
   ];
   var nouns={gato:'um gatinho',cachorro:'um cachorrinho',coelho:'um coelhinho'};
+  var femaleNouns={gato:'uma gatinha',cachorro:'uma cachorrinha',coelho:'uma coelhinha'};
   function phrase(trait,value){
+    if(trait==='sex')return value==='femea'?'fêmea':'macho';
     if(trait==='eyes')return 'olhos '+value;
     if(trait==='ears')return 'orelhas '+root.PetCatalog.label(value).toLowerCase();
     if(trait==='spots')return value==='manchado'?'com manchas':'sem manchas';
     if(trait==='tail')return 'rabo '+value;
     return root.PetCatalog.label(value).toLowerCase();
   }
-  // "Quero um gatinho marrom, de olhos verdes e com manchas."
+  // "Quero uma gatinha marrom, de olhos verdes e com manchas."
   function speechFor(client,speciesId,targets){
+    var noun=targets.sex==='femea'?femaleNouns[speciesId]:nouns[speciesId];
+    var sexSuffix=targets.sex==='macho'?' macho':'';
     var parts=[];
     if(targets.color)parts.push(phrase('color',targets.color));
     var rest=['eyes','ears','spots','tail'].filter(function(key){return targets[key];}).map(function(key){return phrase(key,targets[key]);});
-    var text=nouns[speciesId]+(parts.length?' '+parts[0]:'');
+    var text=noun+sexSuffix+(parts.length?' '+parts[0]:'');
     if(rest.length){
       var joined=rest.length>1?rest.slice(0,-1).join(', ')+' e '+rest[rest.length-1]:rest[0];
       text+=(parts.length?', ':' ')+(rest[0].indexOf('com ')===0||rest[0].indexOf('sem ')===0?'':'de ')+joined;

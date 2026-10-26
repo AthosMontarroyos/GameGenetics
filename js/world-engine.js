@@ -162,12 +162,14 @@
         scale: { mode: Phaser.Scale.FIT, autoCenter: Phaser.Scale.CENTER_BOTH },
         input: { keyboard: false },
         audio: { noAudio: true },
+        pauseOnBlur: false,
         banner: false,
         scene: WorldScene,
       });
       if (!game.canvas) throw new Error('canvas');
       game.canvas.setAttribute('tabindex', '0');
       game.canvas.setAttribute('aria-label', 'Mapa do pet shop');
+      game.events.on('pause', function () { game.resume(); });
       return game.canvas;
     },
     setImages: function (map) {
