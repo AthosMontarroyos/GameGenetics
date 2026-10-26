@@ -1,4 +1,4 @@
-# Padrão visual — Pet Shop Mendel
+# Padrão visual — Pet Shop
 
 Regra de ouro: todo bicho do jogo (gato, cachorro, coelho) segue este documento. Se uma imagem não bate com ele, não entra.
 

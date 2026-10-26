@@ -1,4 +1,4 @@
-# Pet Shop Mendel
+# Pet Shop
 
 Criado por [AthosMontarroyos](https://github.com/AthosMontarroyos).
 
