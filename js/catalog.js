@@ -2,9 +2,9 @@
   'use strict';
   var loci = ['A','B','E','O','M','T'];
   var definitions = {
-    gato: { name:'Gatinho', colors:['preto','cinza','marrom','claro'], ears:['eretas','dobradas'], earLabel:'Orelhas', imageId:'pet-families', atlasId:'pet-families' },
-    cachorro: { name:'Cachorrinho', colors:['marrom','preto','cinza','claro'], ears:['eretas','caidas'], earLabel:'Orelhas', imageId:'pet-families', atlasId:'pet-families' },
-    coelho: { name:'Coelhinho', colors:['cinza','marrom','claro','preto'], ears:['eretas','caidas'], earLabel:'Orelhas', imageId:'pet-families', atlasId:'pet-families' }
+    gato: { name:'Gato', colors:['preto','cinza','marrom','claro'], ears:['eretas','dobradas'], earLabel:'Orelhas', imageId:'pet-families', atlasId:'pet-families' },
+    cachorro: { name:'Cachorro', colors:['marrom','preto','cinza','claro'], ears:['eretas','caidas'], earLabel:'Orelhas', imageId:'pet-families', atlasId:'pet-families' },
+    coelho: { name:'Coelho', colors:['cinza','marrom','claro','preto'], ears:['eretas','caidas'], earLabel:'Orelhas', imageId:'pet-families', atlasId:'pet-families' }
   };
   var labels = { roxo:'Roxo', cinza:'Cinza', marrom:'Marrom', claro:'Claro', preto:'Preto', azul:'Azul', verde:'Verde', laranja:'Laranja', amarelo:'Amarelo', azuis:'Azuis', verdes:'Verdes', eretas:'Eretas', dobradas:'Dobradas', caidas:'Caídas', alta:'Alta', baixa:'Baixa', manchado:'Com manchas', liso:'Sem manchas', longo:'Longo', curto:'Curto' };
   var traitKeys = ['color','eyes','ears','spots','tail'];
