@@ -30,7 +30,7 @@ for(const spec of Object.values(c.species)){
     }
   }
   assert.equal(spec.traits.length,5);assert.equal(spec.loci.length,6);
-  assert.ok(fs.existsSync('assets/animals/familias-anime.png'));
+  assert.ok(fs.existsSync('assets/animals/arte-v1/'+spec.id+'-preto-azuis-eretas-liso-longo.png'));
   const animals=c.individuals.filter(a=>a.speciesId===spec.id);assert.equal(animals.length,16);
   for(const trait of spec.traits)for(const value of trait.values)assert.ok(animals.some(a=>a.traits[trait.id]===value),`${spec.id}/${trait.id}/${value}: ausente no plantel`);
   for(const animal of animals){assert.equal(c.visualFor(spec.id,c.traitsFor(spec.id,animal.genotype)),animal.visualId);assert.equal(Object.keys(animal.genotype).length,6);}
@@ -54,32 +54,36 @@ for(const spec of Object.values(c.species)){
 }
 // ---- Pedidos em linguagem natural e cruzamento com genes escondidos ----
 const B=context.PetBreeding;
-assert.equal(d.levels.length,3);for(const level of d.levels)assert.equal(level.orders.length,4);
+assert.equal(d.levels.length,4);for(const level of d.levels){assert.equal(level.orders.length,3);assert.equal(JSON.stringify(level.orders.map(o=>o.speciesId)),JSON.stringify(['gato','cachorro','coelho']),'cada nível tem os três bichos');}
 assert.equal(d.orders.length,12);
 for(const order of d.orders){assert.ok(!/%|chance|gene/i.test(order.speech),'o pedido não deve citar chance nem genes: '+order.speech);assert.ok(Object.keys(order.targets).length>=1);}
 assert.equal(d.orders[0].speech,'Oi! Quero um gatinho cinza.');
 assert.equal(d.speechFor({open:'Quero'},'cachorro',{eyes:'verdes',tail:'curto'}),'Quero um cachorrinho de olhos verdes e rabo curto.');
 for(const level of d.levels){
-  const game=B.create(level.id,level.orders,3);
-  assert.equal(game.roster.length,16,'os pais vêm do catálogo');assert.equal(game.plans.length,4);
+  const game=B.create(level.orders,3);
+  assert.equal(game.roster.length,48,'os pais vêm do catálogo, dos três bichos');for(const id of Object.keys(c.species))assert.equal(B.rosterOf(game,id).length,16);assert.equal(game.plans.length,3);
   level.orders.forEach((order,index)=>{
     assert.ok(game.plans[index].chance>0,'há pais que geram: '+order.speech);
     assert.ok(game.plans[index].par>=2&&game.plans[index].par<=8);
   });
 }
 {
-  const game=B.create('gato',d.levels[0].orders,11),first=game.roster[0],second=game.roster[1];
+  const game=B.create(d.levels[0].orders,11),first=B.rosterOf(game,'gato')[0],second=B.rosterOf(game,'gato')[1];
   const result=B.cross(game,first.id,second.id);
   assert.equal(result.ok,true);assert.equal(game.journal.length,1);assert.equal(game.pupCount,1);
   g.normalizeLoci(result.pup.genotype,c.species.gato.loci);
   assert.equal(JSON.stringify(result.pup.traits),JSON.stringify(c.traitsFor('gato',result.pup.genotype)));
   assert.equal(JSON.stringify(result.pup.parents),JSON.stringify([first.id,second.id]));
   assert.equal(B.cross(game,first.id,first.id).ok,false);assert.equal(B.cross(game,first.id,'inexistente').ok,false);
+  const dog=B.rosterOf(game,'cachorro')[0],rabbit=B.rosterOf(game,'coelho')[0];
+  assert.equal(B.cross(game,first.id,dog.id).ok,false,'espécies diferentes não cruzam');
+  const dogPup=B.cross(game,dog.id,B.rosterOf(game,'cachorro')[1].id);assert.equal(dogPup.ok,true);assert.equal(dogPup.pup.speciesId,'cachorro');assert.ok(/^cachorro-f/.test(dogPup.pup.id));
+  assert.equal(B.cross(game,rabbit.id,B.rosterOf(game,'coelho')[1].id).pup.speciesId,'coelho');assert.equal(game.journal[game.journal.length-1].pup.speciesId,'coelho');
   assert.equal(B.stars(2,{par:3}),3);assert.equal(B.stars(5,{par:3}),2);assert.equal(B.stars(9,{par:3}),1);
 }
 { // as regras de herança: Ee × Ee dá ~25% de olhos verdes; EE × ee só dá olhos azuis
-  const game=B.create('gato',d.levels[0].orders,5),mk=(id,geno)=>({id,name:id,speciesId:'gato',genotype:geno,traits:c.traitsFor('gato',geno),visualId:'x'});
-  const base=game.roster[0].genotype;
+  const game=B.create(d.levels[0].orders,5),mk=(id,geno)=>({id,name:id,speciesId:'gato',genotype:geno,traits:c.traitsFor('gato',geno),visualId:'x'});
+  const base=B.rosterOf(game,'gato')[0].genotype;
   game.roster.push(mk('het1',Object.assign({},base,{E:'Ee'})),mk('het2',Object.assign({},base,{E:'Ee'})),mk('pure',Object.assign({},base,{E:'EE'})),mk('rec',Object.assign({},base,{E:'ee'})),mk('rec2',Object.assign({},base,{E:'ee'})));
   let green=0;const N=2000;for(let n=0;n<N;n++)if(B.cross(game,'het1','het2').pup.traits.eyes==='verdes')green++;
   assert.ok(Math.abs(green/N-.25)<.04,'olhos verdes ~25%: '+green/N);
@@ -93,8 +97,8 @@ for(const level of d.levels){
 }
 { // todo pedido é cumprível: cruzando o melhor par, o filhote certo nasce em tempo razoável
   for(const level of d.levels)level.orders.forEach(order=>{
-    const game=B.create(level.id,level.orders,9);let best=null;
-    for(let i=0;i<game.roster.length;i++)for(let j=i+1;j<game.roster.length;j++){const p=B.pairChance(level.id,game.roster[i].genotype,game.roster[j].genotype,order.targets);if(!best||p>best.p)best={p,a:game.roster[i],b:game.roster[j]};}
+    const game=B.create(level.orders,9),pool=B.rosterOf(game,order.speciesId);let best=null;
+    for(let i=0;i<pool.length;i++)for(let j=i+1;j<pool.length;j++){const p=B.pairChance(order.speciesId,pool[i].genotype,pool[j].genotype,order.targets);if(!best||p>best.p)best={p,a:pool[i],b:pool[j]};}
     let tries=0;while(tries<400&&!B.meets(order.targets,B.cross(game,best.a.id,best.b.id).pup.traits))tries++;
     assert.ok(tries<400,'o melhor par gera o pedido: '+order.speech+' p='+best.p);
   });
@@ -126,7 +130,7 @@ for(let index=0;index<d.orders.length;index++){
   atLab();flow.interact();assert.equal(state.panel,null,'o laboratório só abre depois de atender o cliente');
   atClient();flow.interact();assert.equal(state.orderReceived,true);assert.equal(state.panel,'pedido');flow.closePanel();
   atLab();flow.interact();assert.equal(state.panel,'pais');
-  const roster=state.game.roster,first=roster[0].id,second=roster[1].id;
+  const roster=game.PetBreeding.rosterOf(state.game,order.speciesId),first=roster[0].id,second=roster[1].id;
   flow.toggleParent(first);flow.toggleParent(second);assert.equal(JSON.stringify(state.parents),JSON.stringify([first,second]));
   flow.doBreed();assert.equal(state.attempts,1);assert.ok(state.pup,'nasce um filhote');
   assert.equal(state.pup.speciesId,order.speciesId);
@@ -141,7 +145,7 @@ for(let index=0;index<d.orders.length;index++){
   flow.reserveForDelivery();atClient();const delivered=state.orderIndex;flow.interact();
   assert.equal(state.orderIndex,delivered+1,'entrega certa avança o pedido');
   const last=state.results[state.results.length-1];assert.ok(last.stars>=1&&last.stars<=3);assert.equal(state.pup,null);assert.equal(state.attempts,0);
-  if(state.phase==='intervalo'){flow.continueLevel();assert.equal(state.game.speciesId,d.orders[state.orderIndex].speciesId,'novo nível, nova espécie');}
+  if(state.phase==='intervalo'){flow.continueLevel();assert.equal(state.game.plans.length,3,'novo nível, novos planos');}
 }
 assert.equal(state.phase,'concluido');assert.equal(state.orderIndex,12);assert.equal(state.results.length,12);
 flow.resetPlay();awaitCustomer();atClient();flow.interact();assert.equal(state.orderReceived,true);
@@ -154,11 +158,25 @@ assert.deepEqual(Object.values(c.species).map(s=>s.name),['Gatinho','Cachorrinho
 {
   // Laboratório: a chance exibida vem da mesma lógica de cruzamento do catálogo e nunca passa da melhor do viveiro.
   flow.resetPlay();
-  const order=flow.currentOrder(),roster=state.game.roster,a=roster[0],b=roster[1];
+  const order=flow.currentOrder(),roster=game.PetBreeding.rosterOf(state.game,order.speciesId),a=roster[0],b=roster[1];
   state.parents=[null,null];assert.equal(flow.labChance(order),null,'sem pais, não há chance');
   state.parents=[a.id,b.id];
   close(flow.labChance(order),c.chanceFor(c.cross(order.speciesId,a.genotype,b.genotype),order.targets));
   assert.ok(flow.labChance(order)<=flow.currentPlan().chance+1e-10,'nenhum par passa da melhor chance do plano');
   state.parents=[null,null];
 }
-console.log('OK: genética por traços, pedidos sem porcentagem, pais do catálogo → filhote sorteado, caderno, entrega, estrelas e 12 pedidos em 3 níveis.');
+{ // os três bichos no laboratório: treino em outra espécie não conta tentativa; entregar a espécie errada é recusado
+  flow.resetPlay();
+  const order=flow.currentOrder(),other=Object.keys(c.species).find(id=>id!==order.speciesId);
+  const pool=game.PetBreeding.rosterOf(state.game,other);
+  state.panel=null;state.orderReceived=true;state.labSpecies=other;state.parents=[pool[0].id,pool[1].id];
+  const before=state.attempts;flow.doBreed();
+  assert.equal(state.attempts,before,'treino não conta tentativa');assert.equal(state.pup.speciesId,other);
+  const mixed=game.PetBreeding.rosterOf(state.game,order.speciesId)[0].id;
+  state.parents=[pool[0].id,mixed];flow.doBreed();assert.ok(/mesma espécie/.test(state.message),state.message);
+  flow.reserveForDelivery();state.player.x=750;state.player.y=620;
+  for(let t=0;t<1000&&(state.customer.phase!=='waiting'||state.customer.orderIndex!==state.orderIndex);t++)flow.update(.05);
+  const indexBefore=state.orderIndex;flow.tryDeliver();
+  assert.equal(state.orderIndex,indexBefore,'espécie errada não avança');assert.ok(/eu queria/.test(state.say),state.say);
+}
+console.log('OK: genética por traços, pedidos sem porcentagem, três bichos no viveiro, filhote sorteado, caderno, entrega, estrelas e 12 pedidos em 4 níveis.');

@@ -152,7 +152,8 @@
     game: null,
     parents: [null, null],
     parentSlot: null,
-    labTab: 'filhote',
+    labTab: 'analise',
+    labSpecies: 'gato',
     pup: null,
     attempts: 0,
     carry: false,
@@ -260,8 +261,8 @@
     else if (state.phase === 'intervalo') progress.textContent = 'Nível concluído';
     else if (state.phase === 'mundo') {
       var active = currentOrder();
-      var levelOrders = active ? PetOrders.levels.find(function (level) { return level.id === active.levelId; }).orders : [];
-      progress.textContent = active ? PetCatalog.species[active.speciesId].name + ' · Pedido ' + (active.indexInLevel + 1) + '/' + levelOrders.length + ' · ' + totalStars() + '★' : 'Nível concluído';
+      var activeLevel = active ? PetOrders.levels.find(function (level) { return level.id === active.levelId; }) : null;
+      progress.textContent = active ? 'Nível ' + (PetOrders.levels.indexOf(activeLevel) + 1) + ' · Pedido ' + (active.indexInLevel + 1) + '/' + activeLevel.orders.length + ' · ' + totalStars() + '★' : 'Nível concluído';
     }
     else progress.textContent = 'Nível solo';
     var order = currentOrder();
@@ -319,17 +320,31 @@
 
   function totalStars() { return state.results.reduce(function (sum, item) { return sum + item.stars; }, 0); }
 
-  // Só o que se vê: a aparência. Os genes ficam ocultos; a chance do pedido aparece no laboratório (chanceView).
+  var TRAITS = ['color', 'eyes', 'ears', 'spots', 'tail'];
+
+  function valueText(trait, value) {
+    if (trait === 'eyes') return 'olhos ' + value;
+    if (trait === 'tail') return 'rabo ' + value;
+    return PetCatalog.label(value);
+  }
+
+  function dot(trait, value, slot) {
+    if (trait === 'color' || trait === 'eyes') return el('span', { className: 'dot', 'data-tone': value });
+    return el('span', { className: 'dot', 'data-slot': String(slot || 0) });
+  }
+
+  // Só o que se vê: a aparência. Os genes ficam ocultos; a análise do par aparece na mesa de cruzamento.
   function traitChips(traits, order) {
     var wanted = order ? order.targets : {};
-    var list = [['color', PetCatalog.label(traits.color)], ['eyes', 'olhos ' + traits.eyes], ['ears', PetCatalog.label(traits.ears)], ['spots', PetCatalog.label(traits.spots)], ['tail', 'rabo ' + traits.tail]];
     var row = el('span', { className: 'pet-chips' });
-    list.forEach(function (entry) {
-      var isWanted = wanted[entry[0]] === traits[entry[0]];
-      row.append(el('span', { className: 'chip' + (entry[0] === 'color' ? ' chip-color' : '') + (isWanted ? ' is-wanted' : ''), text: entry[1] }));
+    TRAITS.forEach(function (trait) {
+      var isWanted = wanted[trait] === traits[trait];
+      row.append(el('span', { className: 'chip chip-' + trait + (isWanted ? ' is-wanted' : '') }, trait === 'color' || trait === 'eyes' ? dot(trait, traits[trait]) : null, valueText(trait, traits[trait])));
     });
     return row;
   }
+
+  function orderFor(speciesId, order) { return order && order.speciesId === speciesId ? order : null; }
 
   function parentSlot(id) { return state.parents.indexOf(id); }
 
@@ -351,26 +366,27 @@
       return;
     }
     state.parentSlot = null;
+    state.labTab = 'analise';
     state.message = '';
     state.liveNote = '';
     renderLab('card-' + id, true);
   }
 
-  function renderSlots() {
+  function renderSlots(order) {
     var wrap = el('div', { className: 'slots' });
     for (var slot = 0; slot < 2; slot += 1) {
       var id = state.parents[slot];
-      var box = el('div', { className: 'slot' + (state.parentSlot === slot ? ' is-target' : '') + (id ? '' : ' is-empty') });
+      var box = el('div', { className: 'slot' + (state.parentSlot === slot ? ' is-target' : '') + (id ? ' is-filled' : ' is-empty') });
       if (!id) {
         (function (position) {
           var choose = button('Escolher pai ' + (position + 1), 'slot-empty', function () { state.parentSlot = position; renderLab('slot-choose-' + position, true); }, 'slot-choose-' + position);
-          box.append(el('span', { className: 'slot-silhouette', 'aria-hidden': 'true', text: '?' }), choose, el('span', { className: 'slot-help', text: 'Toque em um bicho da lista' }));
+          box.append(el('span', { className: 'slot-label', text: 'Pai ' + (position + 1) }), el('span', { className: 'slot-silhouette', 'aria-hidden': 'true', text: '?' }), choose, el('span', { className: 'slot-help', text: 'Toque em um bicho da lista' }));
         })(slot);
       } else {
         var info = animalInfo(id);
-        box.append(makeThumb(info.speciesId, info.visualId, 'thumb'), el('div', { className: 'slot-copy' },
-          el('span', { className: 'slot-label', text: 'Pai ' + (slot + 1) }),
-          el('strong', { text: info.name })));
+        box.append(el('span', { className: 'slot-label', text: 'Pai ' + (slot + 1) }),
+          makeThumb(info.speciesId, info.visualId, 'thumb'),
+          el('strong', { className: 'slot-name', text: info.name }));
         (function (animalId, position) {
           box.append(el('div', { className: 'slot-controls' },
             button(state.parentSlot === position ? 'Escolha outro' : 'Trocar', 'text-button', function () { state.parentSlot = position; renderLab('slot-change-' + position, true); }, 'slot-change-' + position),
@@ -393,19 +409,49 @@
         picked !== -1 ? el('span', { className: 'pet-selected', text: 'Pai ' + (picked + 1) }) : null),
       el('span', { className: 'pet-card-copy' },
         el('span', { className: 'who', text: animal.name }),
-        traitChips(animal.traits, order)));
+        traitChips(animal.traits, orderFor(animal.speciesId, order))));
     card.addEventListener('click', function (event) { event.preventDefault(); toggleParent(animal.id); });
     return card;
   }
 
+  function selectSpecies(speciesId) {
+    if (state.labSpecies === speciesId) return;
+    state.labSpecies = speciesId;
+    state.parents = [null, null];
+    state.parentSlot = null;
+    state.labTab = 'analise';
+    state.message = '';
+    state.liveNote = PetCatalog.species[speciesId].name + ': escolha dois pais.';
+    renderLab('species-' + speciesId, true);
+  }
+
+  function renderSpeciesTabs(order) {
+    var tabs = el('div', { className: 'species-tabs', role: 'tablist', 'aria-label': 'Espécie dos pais' });
+    Object.keys(PetCatalog.species).forEach(function (speciesId) {
+      var species = PetCatalog.species[speciesId];
+      var control = labTabButton(species.name, 'species-' + speciesId, state.labSpecies === speciesId, function () { selectSpecies(speciesId); });
+      control.textContent = '';
+      if (order.speciesId === speciesId) control.classList.add('is-order');
+      control.append(makeThumb(speciesId, species.variants[0].id, 'thumb'),
+        el('span', { text: species.name }),
+        el('span', { className: 'species-count', text: order.speciesId === speciesId ? 'pedido atual' : 'treino' }));
+      tabs.append(control);
+    });
+    return tabs;
+  }
+
   function renderRoster(order) {
     var library = el('section', { className: 'lab-library' });
+    var roster = PetBreeding.rosterOf(state.game, state.labSpecies);
+    library.append(renderSpeciesTabs(order));
     library.append(el('div', { className: 'collection-heading' },
       el('h3', { text: 'Escolha os pais' }),
-      el('span', { text: state.game.roster.length + ' bichos' })));
-    library.append(el('p', { className: 'collection-notice', text: 'Você só vê a aparência. O que está escondido nos genes pode aparecer no filhote.' }));
+      el('span', { text: roster.length + ' bichos' })));
+    library.append(el('p', { className: 'collection-notice', text: state.labSpecies === order.speciesId
+      ? 'Você só vê a aparência. O que está escondido nos genes pode aparecer no filhote.'
+      : 'Treino: este bicho não é o do pedido, então o cruzamento não conta como tentativa.' }));
     var list = el('div', { className: 'parent-list', id: 'pet-collection' });
-    state.game.roster.forEach(function (animal) { list.append(parentCard(animal, order)); });
+    roster.forEach(function (animal) { list.append(parentCard(animal, order)); });
     library.append(list);
     return library;
   }
@@ -417,9 +463,22 @@
       box.append(el('p', { className: 'empty-note', text: 'Escolha dois pais e cruze. Nasce um filhote sorteado: ele pode ter características que os pais não mostram.' }));
       return box;
     }
+    var forOrder = orderFor(pup.speciesId, order);
     box.append(el('h3', { text: pup.name + ' nasceu!' }),
       el('p', { className: 'cross-parents', text: 'Filho de ' + pup.parentNames[0] + ' e ' + pup.parentNames[1] }),
-      el('div', { className: 'litter-pup is-single' }, makeThumb(pup.speciesId, pup.visualId, 'thumb'), traitChips(pup.traits, order)));
+      el('div', { className: 'litter-pup is-single' }, makeThumb(pup.speciesId, pup.visualId, 'thumb'), traitChips(pup.traits, forOrder)));
+    if (forOrder) {
+      var list = el('ul', { className: 'check-list', 'aria-label': 'Confere com o pedido?' });
+      TRAITS.filter(function (trait) { return forOrder.targets[trait]; }).forEach(function (trait) {
+        var ok = pup.traits[trait] === forOrder.targets[trait];
+        list.append(el('li', { className: ok ? 'is-ok' : 'is-miss' },
+          el('span', { className: 'check-mark', 'aria-hidden': 'true', text: ok ? '✓' : '✗' }),
+          el('span', { text: ok ? 'Confere: ' + valueText(trait, forOrder.targets[trait]) : 'Pedido: ' + valueText(trait, forOrder.targets[trait]) + ' · saiu: ' + valueText(trait, pup.traits[trait]) })));
+      });
+      box.append(list);
+    } else {
+      box.append(el('p', { className: 'empty-note', text: 'Treino: este filhote é de outra espécie e não vale para o pedido.' }));
+    }
     return box;
   }
 
@@ -436,24 +495,10 @@
     journal.slice().reverse().forEach(function (entry) {
       if (onlyPicked && !entry.parents.some(function (parent) { return state.parents.indexOf(parent.id) !== -1; })) return;
       box.append(el('div', { className: 'journal-entry' },
-        el('div', { className: 'journal-head' }, el('strong', { text: 'Cruzamento ' + entry.number }), el('span', { text: entry.parents[0].name + ' × ' + entry.parents[1].name })),
+        el('div', { className: 'journal-head' }, el('strong', { text: 'Cruzamento ' + entry.number + ' · ' + PetCatalog.species[entry.pup.speciesId].name }), el('span', { text: entry.parents[0].name + ' × ' + entry.parents[1].name })),
         el('div', { className: 'journal-parents' }, traitChips(entry.parents[0].traits), el('span', { className: 'journal-x', 'aria-hidden': 'true', text: '×' }), traitChips(entry.parents[1].traits)),
-        el('div', { className: 'journal-pups' }, el('span', { className: 'journal-name', text: 'Filhote ' + entry.pup.name }), traitChips(entry.pup.traits, order))));
+        el('div', { className: 'journal-pups' }, el('span', { className: 'journal-name', text: 'Filhote ' + entry.pup.name }), traitChips(entry.pup.traits, orderFor(entry.pup.speciesId, order)))));
     });
-    return box;
-  }
-
-  function orderView(order) {
-    var plan = currentPlan();
-    var box = el('section', { className: 'order-card' }, el('h3', { text: 'Pedido de ' + order.clientName }), el('p', { className: 'order-speech', text: order.speech }));
-    var want = el('span', { className: 'pet-chips' });
-    PetCatalog.species[order.speciesId].traits.forEach(function (trait) {
-      if (order.targets[trait.id]) want.append(el('span', { className: 'chip is-wanted', text: PetOrders.phrase(trait.id, order.targets[trait.id]) }));
-    });
-    box.append(want);
-    box.append(el('p', { className: 'day-line' }, el('strong', { text: 'Cruzamentos neste pedido: ' + state.attempts })));
-    box.append(el('p', { className: 'order-stars', text: '★★★ até ' + plan.par + ' cruzamentos · ★★ até ' + (plan.par + 2) + ' · ★ depois.' }));
-    box.append(el('p', { className: 'order-note', text: 'Cruze, confira o filhote e entregue ao cliente. Se não for o que ele pediu, é só cruzar de novo.' }));
     return box;
   }
 
@@ -473,20 +518,88 @@
     return control;
   }
 
-  function renderSidebar(order) {
-    var sidebar = el('aside', { className: 'lab-sidebar', 'aria-label': 'Cruzamento e filhote' },
-      el('div', { className: 'selection-heading' }, el('h3', { text: 'Seu cruzamento' }), el('span', { text: state.parents.filter(Boolean).length + '/2 pais' })), renderSlots());
-    var tabs = el('div', { className: 'analysis-tabs', role: 'tablist', 'aria-label': 'Filhote, caderno e pedido' });
-    [['filhote', 'Filhote'], ['caderno', 'Caderno'], ['pedido', 'Pedido']].forEach(function (entry) {
+  function analysisView(order) {
+    var box = el('section', { className: 'analysis' });
+    var first = state.parents[0] ? animalInfo(state.parents[0]) : null;
+    var second = state.parents[1] ? animalInfo(state.parents[1]) : null;
+    if (!first || !second) {
+      box.append(el('div', { className: 'analysis-empty' },
+        el('strong', { text: 'Análise de fenótipos' }),
+        el('p', { text: 'Escolha dois pais da mesma espécie. Aqui aparece o que cada característica pode ser no filhote e com que chance.' })));
+      return box;
+    }
+    var speciesId = first.speciesId;
+    var spec = PetCatalog.species[speciesId];
+    var result = PetCatalog.cross(speciesId, first.genotype, second.genotype);
+    var forOrder = orderFor(speciesId, order);
+    var targets = forOrder ? forOrder.targets : {};
+    if (forOrder) {
+      var chance = PetCatalog.chanceFor(result, targets);
+      var plan = currentPlan();
+      var fill = el('span', { className: 'meter-fill' });
+      fill.style.width = Math.round(chance * 100) + '%';
+      box.append(el('div', { className: 'chance-card' + (chance >= 0.5 ? ' is-high' : chance === 0 ? ' is-zero' : ''), role: 'status' },
+        el('div', { className: 'chance-main' }, el('span', { className: 'chance-label', text: 'Chance de sair o pedido' }), el('strong', { className: 'chance-number', text: formatPercent(chance) })),
+        el('span', { className: 'meter' }, fill),
+        el('span', { className: 'chance-best', text: chance === 0 ? 'Com esse par é impossível: troque um dos pais.' : plan && plan.chance > 0 ? 'Melhor par do viveiro: ' + formatPercent(plan.chance) : '' })));
+    } else {
+      box.append(el('p', { className: 'training-note', text: 'Treino: o cliente quer ' + PetOrders.nouns[order.speciesId] + '. Esta análise não conta para o pedido.' }));
+    }
+    var rows = el('div', { className: 'trait-rows' });
+    spec.traits.forEach(function (trait) {
+      var probs = result.traitProbabilities[trait.id];
+      var wantedValue = targets[trait.id];
+      var bar = el('div', { className: 'prob-bar' });
+      var legend = el('ul', { className: 'prob-legend' });
+      trait.values.forEach(function (value, index) {
+        var p = probs[value] || 0;
+        if (p <= 0) return;
+        var seg = el('span', { className: 'prob-seg' + (wantedValue === value ? ' is-wanted' : '') });
+        seg.setAttribute(trait.id === 'color' || trait.id === 'eyes' ? 'data-tone' : 'data-slot', trait.id === 'color' || trait.id === 'eyes' ? value : String(index));
+        seg.style.flexGrow = String(p);
+        bar.append(seg);
+        legend.append(el('li', { className: wantedValue === value ? 'is-wanted' : '' }, dot(trait.id, value, index), el('span', { text: valueText(trait.id, value) }), el('strong', { text: p >= 0.9995 ? 'sempre' : formatPercent(p) })));
+      });
+      rows.append(el('div', { className: 'trait-row' + (wantedValue ? ' is-asked' : '') },
+        el('div', { className: 'trait-head' }, el('strong', { text: trait.name }), wantedValue ? el('span', { className: 'trait-tag', text: 'pedido' }) : null,
+          el('span', { className: 'trait-parents' },
+            el('span', { className: 'mini' }, dot(trait.id, first.traits[trait.id], trait.values.indexOf(first.traits[trait.id])), valueText(trait.id, first.traits[trait.id])),
+            el('span', { className: 'mini-x', 'aria-hidden': 'true', text: '×' }),
+            el('span', { className: 'mini' }, dot(trait.id, second.traits[trait.id], trait.values.indexOf(second.traits[trait.id])), valueText(trait.id, second.traits[trait.id])))),
+        bar, legend));
+    });
+    box.append(rows);
+    return box;
+  }
+
+  function renderTable(order) {
+    var table = el('aside', { className: 'lab-table', 'aria-label': 'Mesa de cruzamento' },
+      el('div', { className: 'selection-heading' }, el('h3', { text: 'Mesa de cruzamento' }), el('span', { text: state.parents.filter(Boolean).length + '/2 pais' })), renderSlots(order));
+    var tabs = el('div', { className: 'analysis-tabs', role: 'tablist', 'aria-label': 'Análise, filhote e caderno' });
+    [['analise', 'Análise'], ['filhote', 'Filhote'], ['caderno', 'Caderno']].forEach(function (entry) {
       var control = labTabButton(entry[1], 'analysis-' + entry[0], state.labTab === entry[0], function () { state.labTab = entry[0]; renderLab('analysis-' + entry[0], true); });
       control.setAttribute('aria-controls', 'analysis-panel');
       tabs.append(control);
     });
     var panel = el('div', { className: 'analysis-panel', id: 'analysis-panel', role: 'tabpanel', 'aria-labelledby': 'analysis-' + state.labTab, tabindex: '0' });
     if (state.message) panel.append(el('p', { className: 'alert', text: state.message }));
-    panel.append(state.labTab === 'caderno' ? journalView(order) : state.labTab === 'pedido' ? orderView(order) : pupView(order));
-    sidebar.append(tabs, panel);
-    return sidebar;
+    panel.append(state.labTab === 'caderno' ? journalView(order) : state.labTab === 'filhote' ? pupView(order) : analysisView(order));
+    table.append(tabs, panel, renderBenchActions());
+    return table;
+  }
+
+  function orderRibbon(order) {
+    var plan = currentPlan();
+    var want = el('span', { className: 'pet-chips' });
+    PetCatalog.species[order.speciesId].traits.forEach(function (trait) {
+      var value = order.targets[trait.id];
+      if (value) want.append(el('span', { className: 'chip is-wanted chip-' + trait.id }, trait.id === 'color' || trait.id === 'eyes' ? dot(trait.id, value) : null, PetOrders.phrase(trait.id, value)));
+    });
+    return el('div', { className: 'lab-ribbon' },
+      el('div', { className: 'ribbon-copy' }, el('span', { className: 'order-client', text: 'Pedido de ' + order.clientName }), el('strong', { text: order.speech }), want),
+      el('div', { className: 'ribbon-meta' },
+        el('span', { className: 'ribbon-count', text: state.attempts === 0 ? 'Nenhum cruzamento ainda' : state.attempts + (state.attempts === 1 ? ' cruzamento' : ' cruzamentos') }),
+        plan ? el('span', { className: 'ribbon-stars', text: '★★★ até ' + plan.par + ' cruzamentos' }) : null));
   }
 
   // Chance de um filhote do par escolhido atender ao pedido, pela mesma lógica de cruzamento do catálogo.
@@ -494,21 +607,8 @@
     if (!state.parents[0] || !state.parents[1]) return null;
     var first = animalInfo(state.parents[0]);
     var second = animalInfo(state.parents[1]);
+    if (first.speciesId !== order.speciesId || second.speciesId !== order.speciesId) return null;
     return PetCatalog.chanceFor(PetCatalog.cross(order.speciesId, first.genotype, second.genotype), order.targets);
-  }
-
-  function chanceView(order) {
-    var plan = currentPlan();
-    var chance = labChance(order);
-    var box = el('div', { className: 'chance-box', role: 'status' });
-    if (chance === null) {
-      box.append(el('span', { text: 'Escolha dois pais para ver a chance de sair o que o cliente pediu.' }));
-    } else {
-      box.append(el('strong', { text: 'Chance de sair o que o cliente pediu: ' + formatPercent(chance) }));
-      if (chance === 0) box.append(el('span', { text: 'Com esse par é impossível: troque um dos pais.' }));
-    }
-    if (plan && plan.chance > 0) box.append(el('span', { className: 'chance-best', text: 'Melhor par do viveiro: ' + formatPercent(plan.chance) }));
-    return box;
   }
 
   function renderBenchActions() {
@@ -534,11 +634,7 @@
     modal.classList.add('is-bench');
     modal.classList.remove('is-help');
     modalBody.textContent = '';
-    modalBody.append(el('div', { className: 'lab-order' },
-      el('div', {}, el('span', { className: 'order-client', text: 'Pedido de ' + order.clientName }), el('strong', { text: order.speech })),
-      el('span', { className: 'lab-order-hint', text: state.attempts === 0 ? 'Nenhum cruzamento ainda' : state.attempts + (state.attempts === 1 ? ' cruzamento' : ' cruzamentos') })),
-      el('div', { className: 'lab-workspace' }, renderRoster(order), renderSidebar(order)));
-    modalBody.append(chanceView(order), renderBenchActions());
+    modalBody.append(orderRibbon(order), el('div', { className: 'lab-workspace' }, renderRoster(order), renderTable(order)));
     modal.dataset.panel = state.panel;
     modal.hidden = false;
     document.body.classList.add('modal-open');
@@ -567,6 +663,7 @@
       el('ul', {},
         el('li', { text: 'Atenda o cliente e leia o pedido: ele quer um filhote com todas as características pedidas.' }),
         el('li', { text: 'No laboratório, escolha dois pais e cruze. Você vê só a aparência deles; os genes ficam escondidos.' }),
+        el('li', { text: 'Há três bichos: gatinho, cachorrinho e coelhinho. Os pais têm de ser da mesma espécie. A aba do pedido conta tentativas; as outras são só treino.' }),
         el('li', { text: 'Nasce um filhote sorteado. Se ele tiver tudo o que o cliente pediu, escolha “Entregar este filhote” e leve até o balcão.' }),
         el('li', { text: 'Se não tiver, cruze de novo ou troque os pais. O caderno guarda os cruzamentos: compare pais e filhotes para descobrir o que cada um carrega.' }),
         el('li', { text: 'Quanto menos cruzamentos, mais estrelas.' })
@@ -705,6 +802,7 @@
   function clearParents() {
     state.parents = [null, null];
     state.parentSlot = null;
+    state.labTab = 'analise';
     state.message = '';
     state.liveNote = '';
     renderLab('btn-cruzar', true);
@@ -724,11 +822,12 @@
       renderLab('btn-cruzar', true);
       return;
     }
-    state.attempts += 1;
+    var forOrder = result.pup.speciesId === currentOrder().speciesId;
+    if (forOrder) state.attempts += 1;
     state.pup = result.pup;
     state.carry = false;
     state.labTab = 'filhote';
-    state.message = '';
+    state.message = forOrder ? '' : 'Treino: ' + result.pup.name + ' é de outra espécie e não conta para o pedido.';
     state.liveNote = result.pup.name + ' nasceu: ' + traitLine(result.pup.traits) + '.';
     renderHud();
     renderLab('btn-deliver', true);
@@ -757,6 +856,14 @@
       renderHud();
       return;
     }
+    if (pup.speciesId !== order.speciesId) {
+      state.carry = false;
+      state.pup = null;
+      state.say = 'Hmm, eu queria ' + PetOrders.nouns[order.speciesId] + ', não ' + PetOrders.nouns[pup.speciesId] + '. Pode tentar outro cruzamento?';
+      state.status = '';
+      openPanel('pedido', 'btn-ir-lab');
+      return;
+    }
     var wrong = PetBreeding.mismatches(order.targets, pup.traits);
     if (!wrong.length) {
       completeOrder(PetBreeding.stars(state.attempts, currentPlan()));
@@ -771,7 +878,7 @@
 
   function createGameFor(order) {
     var level = PetOrders.levels.find(function (item) { return item.id === order.levelId; });
-    return PetBreeding.create(level.id, level.orders);
+    return PetBreeding.create(level.orders);
   }
 
   function completeOrder(stars) {
@@ -820,7 +927,7 @@
       document.getElementById('screen-end').hidden = false;
       document.getElementById('end-title').textContent = 'Nível concluído';
       document.getElementById('done-count').textContent = levelStars + ' de ' + levelOrders.length * 3 + ' estrelas neste nível';
-      document.getElementById('end-copy').textContent = currentOrder().levelName + ' vem com outra família de bichos. Continue quando quiser.';
+      document.getElementById('end-copy').textContent = currentOrder().levelName + ' traz pedidos mais difíceis para os três bichos. Continue quando quiser.';
       document.getElementById('end-details').hidden = true;
       document.getElementById('btn-next-level').hidden = false;
       syncInert();
@@ -861,6 +968,11 @@
     }
     if (atLab) {
       state.status = '';
+      if (state.labSpecies !== currentOrder().speciesId) {
+        state.labSpecies = currentOrder().speciesId;
+        state.parents = [null, null];
+        state.parentSlot = null;
+      }
       openPanel('pais', 'btn-cruzar');
     }
   }
@@ -1015,7 +1127,7 @@
     state.orderReceived = false;
     state.parents = [null, null];
     state.parentSlot = null;
-    state.labTab = 'filhote';
+    state.labTab = 'analise';
     state.pup = null;
     state.attempts = 0;
     state.carry = false;

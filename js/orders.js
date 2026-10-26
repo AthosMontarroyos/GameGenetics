@@ -1,7 +1,6 @@
 (function(root){
   'use strict';
   // Pedidos em linguagem natural: o cliente descreve o bicho e o jogador entrega um que tenha tudo.
-  // Cada nível usa uma espécie; a dificuldade sobe (mais características, mais recessivas).
   var clients=[
     {id:'cliente-12683',name:'Estudante',open:'Oi! Quero'},
     {id:'cliente-12682',name:'Homem adulto',open:'Procuro'},
@@ -10,24 +9,27 @@
     {id:'cliente-12685',name:'Jovem',open:'Quero adotar'},
     {id:'cliente-12686',name:'Entregador',open:'Vim buscar'}
   ];
+  // Cada nível mistura os três bichos e a dificuldade sobe: mais características pedidas, mais recessivas.
   var levels=[
-    {id:'gato',orders:[
-      {color:'cinza'},
-      {color:'marrom',eyes:'verdes'},
-      {color:'claro',ears:'dobradas',tail:'curto'},
-      {color:'claro',eyes:'verdes',ears:'dobradas',spots:'liso',tail:'curto'}
+    {id:'nivel-1',title:'Primeiros pedidos',orders:[
+      {speciesId:'gato',targets:{color:'cinza'}},
+      {speciesId:'cachorro',targets:{color:'preto'}},
+      {speciesId:'coelho',targets:{ears:'caidas'}}
     ]},
-    {id:'cachorro',orders:[
-      {color:'preto'},
-      {eyes:'verdes',tail:'curto'},
-      {color:'claro',eyes:'verdes',spots:'liso'},
-      {color:'claro',eyes:'verdes',ears:'caidas',spots:'liso',tail:'longo'}
+    {id:'nivel-2',title:'Dois detalhes',orders:[
+      {speciesId:'gato',targets:{color:'marrom',eyes:'verdes'}},
+      {speciesId:'cachorro',targets:{eyes:'verdes',tail:'curto'}},
+      {speciesId:'coelho',targets:{color:'preto',spots:'manchado'}}
     ]},
-    {id:'coelho',orders:[
-      {ears:'caidas'},
-      {color:'preto',spots:'manchado'},
-      {color:'cinza',eyes:'verdes',tail:'curto'},
-      {color:'preto',eyes:'verdes',ears:'caidas',spots:'liso',tail:'curto'}
+    {id:'nivel-3',title:'Pedidos exigentes',orders:[
+      {speciesId:'gato',targets:{color:'claro',ears:'dobradas',tail:'curto'}},
+      {speciesId:'cachorro',targets:{color:'claro',eyes:'verdes',spots:'liso'}},
+      {speciesId:'coelho',targets:{color:'cinza',eyes:'verdes',tail:'curto'}}
+    ]},
+    {id:'nivel-4',title:'Mestre dos cruzamentos',orders:[
+      {speciesId:'gato',targets:{color:'claro',eyes:'verdes',ears:'dobradas',spots:'liso',tail:'curto'}},
+      {speciesId:'cachorro',targets:{color:'claro',eyes:'verdes',ears:'caidas',spots:'liso',tail:'longo'}},
+      {speciesId:'coelho',targets:{color:'preto',eyes:'verdes',ears:'caidas',spots:'liso',tail:'curto'}}
     ]}
   ];
   var nouns={gato:'um gatinho',cachorro:'um cachorrinho',coelho:'um coelhinho'};
@@ -52,12 +54,12 @@
   }
   var orders=[];
   levels.forEach(function(level,levelIndex){
-    level.name='Nível '+(levelIndex+1)+' — '+root.PetCatalog.species[level.id].name;
-    level.orders=level.orders.map(function(targets,index){
+    level.name='Nível '+(levelIndex+1)+' — '+level.title;
+    level.orders=level.orders.map(function(entry,index){
       var client=clients[(index+levelIndex*level.orders.length)%clients.length];
-      return {clientId:client.id,clientName:client.name,speciesId:level.id,targets:targets,phenotype:targets.color,speech:speechFor(client,level.id,targets),levelId:level.id,levelName:level.name,indexInLevel:index};
+      return {clientId:client.id,clientName:client.name,speciesId:entry.speciesId,targets:entry.targets,phenotype:entry.targets.color,speech:speechFor(client,entry.speciesId,entry.targets),levelId:level.id,levelName:level.name,indexInLevel:index};
     });
     level.orders.forEach(function(order){orders.push(order);});
   });
-  root.PetOrders={levels:levels,orders:orders,speechFor:speechFor,phrase:phrase};
+  root.PetOrders={levels:levels,orders:orders,nouns:nouns,speechFor:speechFor,phrase:phrase};
 })(typeof globalThis!=='undefined'?globalThis:this);

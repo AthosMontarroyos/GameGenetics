@@ -66,21 +66,23 @@
 
   function stars(attempts, plan) { return attempts <= plan.par ? 3 : attempts <= plan.par + 2 ? 2 : 1; }
 
-  function create(speciesId, orders, seed) {
+  // O viveiro tem os três bichos; cada pedido tem a sua espécie e só se cruzam bichos da mesma espécie.
+  function create(orders, seed) {
     var rand = seeded(seed == null ? Math.floor(Math.random() * 4294967296) : seed);
     return {
-      speciesId: speciesId,
       rand: rand,
-      roster: root.PetCatalog.individuals.filter(function (animal) { return animal.speciesId === speciesId; }),
+      roster: root.PetCatalog.individuals.slice(),
       journal: [],
       pupCount: 0,
-      plans: orders.map(function (order) { return planFor(speciesId, order); })
+      plans: orders.map(function (order) { return planFor(order.speciesId, order); })
     };
   }
 
+  function rosterOf(game, speciesId) { return game.roster.filter(function (animal) { return animal.speciesId === speciesId; }); }
+
   function find(game, id) { return game.roster.filter(function (animal) { return animal.id === id; })[0] || null; }
 
-  function snapshot(animal) { return { id: animal.id, name: animal.name, traits: animal.traits, visualId: animal.visualId }; }
+  function snapshot(animal) { return { id: animal.id, name: animal.name, speciesId: animal.speciesId, traits: animal.traits, visualId: animal.visualId }; }
 
   // Cruza dois pais e devolve o filhote (um sorteio por gene, como na meiose do modelo).
   function cross(game, firstId, secondId) {
@@ -88,23 +90,25 @@
     var b = find(game, secondId);
     if (!a || !b) return { ok: false, reason: 'Escolha dois pais.' };
     if (a.id === b.id) return { ok: false, reason: 'Escolha dois bichos diferentes.' };
-    var loci = root.PetCatalog.species[game.speciesId].loci;
+    if (a.speciesId !== b.speciesId) return { ok: false, reason: 'Só dá para cruzar bichos da mesma espécie.' };
+    var speciesId = a.speciesId;
+    var loci = root.PetCatalog.species[speciesId].loci;
     var genotype = {};
     loci.forEach(function (locus) {
       var one = a.genotype[locus].charAt(game.rand() < 0.5 ? 0 : 1);
       var two = b.genotype[locus].charAt(game.rand() < 0.5 ? 0 : 1);
       genotype[locus] = one === one.toUpperCase() ? one + two : (two === two.toUpperCase() ? two + one : one + two);
     });
-    var traits = root.PetCatalog.traitsFor(game.speciesId, genotype);
+    var traits = root.PetCatalog.traitsFor(speciesId, genotype);
     game.pupCount += 1;
     var turn = Math.ceil(game.pupCount / PUP_NAMES.length);
     var pup = {
-      id: game.speciesId + '-f' + game.pupCount,
+      id: speciesId + '-f' + game.pupCount,
       name: PUP_NAMES[(game.pupCount - 1) % PUP_NAMES.length] + (turn > 1 ? ' ' + turn : ''),
-      speciesId: game.speciesId,
+      speciesId: speciesId,
       genotype: genotype,
       traits: traits,
-      visualId: root.PetCatalog.visualFor(game.speciesId, traits),
+      visualId: root.PetCatalog.visualFor(speciesId, traits),
       parents: [a.id, b.id],
       parentNames: [a.name, b.name]
     };
@@ -113,5 +117,5 @@
     return { ok: true, pup: pup, entry: entry };
   }
 
-  root.PetBreeding = { create: create, find: find, cross: cross, meets: meets, mismatches: mismatches, planFor: planFor, stars: stars, pairChance: pairChance, seeded: seeded };
+  root.PetBreeding = { create: create, rosterOf: rosterOf, find: find, cross: cross, meets: meets, mismatches: mismatches, planFor: planFor, stars: stars, pairChance: pairChance, seeded: seeded };
 })(typeof globalThis !== 'undefined' ? globalThis : this);

@@ -1,0 +1,1781 @@
+{
+  "size": 64,
+  "source": "camadas-v1",
+  "palettes": {
+    "preto": [
+      "#1b1b24",
+      "#272732",
+      "#3d3d4a",
+      "#5a5a6e",
+      "#f1e6d2"
+    ],
+    "cinza": [
+      "#565a69",
+      "#7b7f8e",
+      "#9ca0ad",
+      "#bec2cd",
+      "#f4eadb"
+    ],
+    "marrom": [
+      "#4a2c17",
+      "#6b4024",
+      "#8c5a34",
+      "#ab774a",
+      "#f1e1c6"
+    ],
+    "claro": [
+      "#9c8454",
+      "#cbb386",
+      "#ead6ab",
+      "#f8ecce",
+      "#9a6a40"
+    ]
+  },
+  "layers": [
+    {
+      "species": "gato",
+      "file": "../camadas-v1/gato.json",
+      "sha256": "1b956d10e4f1d2f3f4a3a68e829ceba4d1d9f576dd7c886fea17c2f896a99bdd"
+    },
+    {
+      "species": "cachorro",
+      "file": "../camadas-v1/cachorro.json",
+      "sha256": "af7e9af7e15e77aa52998b851b8f8ef059857ad59515e5106dee37a63ecda71d"
+    },
+    {
+      "species": "coelho",
+      "file": "../camadas-v1/coelho.json",
+      "sha256": "aab585c27df3d5230622c9de79be047251529731344150786d2dcceefabcd0b1"
+    }
+  ],
+  "sprites": [
+    {
+      "file": "gato-preto-azuis-eretas-liso-longo.png",
+      "species": "gato",
+      "color": "preto",
+      "eyes": "azuis",
+      "ears": "eretas",
+      "spots": "liso",
+      "tail": "longo"
+    },
+    {
+      "file": "gato-preto-azuis-eretas-liso-curto.png",
+      "species": "gato",
+      "color": "preto",
+      "eyes": "azuis",
+      "ears": "eretas",
+      "spots": "liso",
+      "tail": "curto"
+    },
+    {
+      "file": "gato-preto-azuis-eretas-manchado-longo.png",
+      "species": "gato",
+      "color": "preto",
+      "eyes": "azuis",
+      "ears": "eretas",
+      "spots": "manchado",
+      "tail": "longo"
+    },
+    {
+      "file": "gato-preto-azuis-eretas-manchado-curto.png",
+      "species": "gato",
+      "color": "preto",
+      "eyes": "azuis",
+      "ears": "eretas",
+      "spots": "manchado",
+      "tail": "curto"
+    },
+    {
+      "file": "gato-preto-azuis-caidas-liso-longo.png",
+      "species": "gato",
+      "color": "preto",
+      "eyes": "azuis",
+      "ears": "caidas",
+      "spots": "liso",
+      "tail": "longo"
+    },
+    {
+      "file": "gato-preto-azuis-caidas-liso-curto.png",
+      "species": "gato",
+      "color": "preto",
+      "eyes": "azuis",
+      "ears": "caidas",
+      "spots": "liso",
+      "tail": "curto"
+    },
+    {
+      "file": "gato-preto-azuis-caidas-manchado-longo.png",
+      "species": "gato",
+      "color": "preto",
+      "eyes": "azuis",
+      "ears": "caidas",
+      "spots": "manchado",
+      "tail": "longo"
+    },
+    {
+      "file": "gato-preto-azuis-caidas-manchado-curto.png",
+      "species": "gato",
+      "color": "preto",
+      "eyes": "azuis",
+      "ears": "caidas",
+      "spots": "manchado",
+      "tail": "curto"
+    },
+    {
+      "file": "gato-preto-verdes-eretas-liso-longo.png",
+      "species": "gato",
+      "color": "preto",
+      "eyes": "verdes",
+      "ears": "eretas",
+      "spots": "liso",
+      "tail": "longo"
+    },
+    {
+      "file": "gato-preto-verdes-eretas-liso-curto.png",
+      "species": "gato",
+      "color": "preto",
+      "eyes": "verdes",
+      "ears": "eretas",
+      "spots": "liso",
+      "tail": "curto"
+    },
+    {
+      "file": "gato-preto-verdes-eretas-manchado-longo.png",
+      "species": "gato",
+      "color": "preto",
+      "eyes": "verdes",
+      "ears": "eretas",
+      "spots": "manchado",
+      "tail": "longo"
+    },
+    {
+      "file": "gato-preto-verdes-eretas-manchado-curto.png",
+      "species": "gato",
+      "color": "preto",
+      "eyes": "verdes",
+      "ears": "eretas",
+      "spots": "manchado",
+      "tail": "curto"
+    },
+    {
+      "file": "gato-preto-verdes-caidas-liso-longo.png",
+      "species": "gato",
+      "color": "preto",
+      "eyes": "verdes",
+      "ears": "caidas",
+      "spots": "liso",
+      "tail": "longo"
+    },
+    {
+      "file": "gato-preto-verdes-caidas-liso-curto.png",
+      "species": "gato",
+      "color": "preto",
+      "eyes": "verdes",
+      "ears": "caidas",
+      "spots": "liso",
+      "tail": "curto"
+    },
+    {
+      "file": "gato-preto-verdes-caidas-manchado-longo.png",
+      "species": "gato",
+      "color": "preto",
+      "eyes": "verdes",
+      "ears": "caidas",
+      "spots": "manchado",
+      "tail": "longo"
+    },
+    {
+      "file": "gato-preto-verdes-caidas-manchado-curto.png",
+      "species": "gato",
+      "color": "preto",
+      "eyes": "verdes",
+      "ears": "caidas",
+      "spots": "manchado",
+      "tail": "curto"
+    },
+    {
+      "file": "gato-cinza-azuis-eretas-liso-longo.png",
+      "species": "gato",
+      "color": "cinza",
+      "eyes": "azuis",
+      "ears": "eretas",
+      "spots": "liso",
+      "tail": "longo"
+    },
+    {
+      "file": "gato-cinza-azuis-eretas-liso-curto.png",
+      "species": "gato",
+      "color": "cinza",
+      "eyes": "azuis",
+      "ears": "eretas",
+      "spots": "liso",
+      "tail": "curto"
+    },
+    {
+      "file": "gato-cinza-azuis-eretas-manchado-longo.png",
+      "species": "gato",
+      "color": "cinza",
+      "eyes": "azuis",
+      "ears": "eretas",
+      "spots": "manchado",
+      "tail": "longo"
+    },
+    {
+      "file": "gato-cinza-azuis-eretas-manchado-curto.png",
+      "species": "gato",
+      "color": "cinza",
+      "eyes": "azuis",
+      "ears": "eretas",
+      "spots": "manchado",
+      "tail": "curto"
+    },
+    {
+      "file": "gato-cinza-azuis-caidas-liso-longo.png",
+      "species": "gato",
+      "color": "cinza",
+      "eyes": "azuis",
+      "ears": "caidas",
+      "spots": "liso",
+      "tail": "longo"
+    },
+    {
+      "file": "gato-cinza-azuis-caidas-liso-curto.png",
+      "species": "gato",
+      "color": "cinza",
+      "eyes": "azuis",
+      "ears": "caidas",
+      "spots": "liso",
+      "tail": "curto"
+    },
+    {
+      "file": "gato-cinza-azuis-caidas-manchado-longo.png",
+      "species": "gato",
+      "color": "cinza",
+      "eyes": "azuis",
+      "ears": "caidas",
+      "spots": "manchado",
+      "tail": "longo"
+    },
+    {
+      "file": "gato-cinza-azuis-caidas-manchado-curto.png",
+      "species": "gato",
+      "color": "cinza",
+      "eyes": "azuis",
+      "ears": "caidas",
+      "spots": "manchado",
+      "tail": "curto"
+    },
+    {
+      "file": "gato-cinza-verdes-eretas-liso-longo.png",
+      "species": "gato",
+      "color": "cinza",
+      "eyes": "verdes",
+      "ears": "eretas",
+      "spots": "liso",
+      "tail": "longo"
+    },
+    {
+      "file": "gato-cinza-verdes-eretas-liso-curto.png",
+      "species": "gato",
+      "color": "cinza",
+      "eyes": "verdes",
+      "ears": "eretas",
+      "spots": "liso",
+      "tail": "curto"
+    },
+    {
+      "file": "gato-cinza-verdes-eretas-manchado-longo.png",
+      "species": "gato",
+      "color": "cinza",
+      "eyes": "verdes",
+      "ears": "eretas",
+      "spots": "manchado",
+      "tail": "longo"
+    },
+    {
+      "file": "gato-cinza-verdes-eretas-manchado-curto.png",
+      "species": "gato",
+      "color": "cinza",
+      "eyes": "verdes",
+      "ears": "eretas",
+      "spots": "manchado",
+      "tail": "curto"
+    },
+    {
+      "file": "gato-cinza-verdes-caidas-liso-longo.png",
+      "species": "gato",
+      "color": "cinza",
+      "eyes": "verdes",
+      "ears": "caidas",
+      "spots": "liso",
+      "tail": "longo"
+    },
+    {
+      "file": "gato-cinza-verdes-caidas-liso-curto.png",
+      "species": "gato",
+      "color": "cinza",
+      "eyes": "verdes",
+      "ears": "caidas",
+      "spots": "liso",
+      "tail": "curto"
+    },
+    {
+      "file": "gato-cinza-verdes-caidas-manchado-longo.png",
+      "species": "gato",
+      "color": "cinza",
+      "eyes": "verdes",
+      "ears": "caidas",
+      "spots": "manchado",
+      "tail": "longo"
+    },
+    {
+      "file": "gato-cinza-verdes-caidas-manchado-curto.png",
+      "species": "gato",
+      "color": "cinza",
+      "eyes": "verdes",
+      "ears": "caidas",
+      "spots": "manchado",
+      "tail": "curto"
+    },
+    {
+      "file": "gato-marrom-azuis-eretas-liso-longo.png",
+      "species": "gato",
+      "color": "marrom",
+      "eyes": "azuis",
+      "ears": "eretas",
+      "spots": "liso",
+      "tail": "longo"
+    },
+    {
+      "file": "gato-marrom-azuis-eretas-liso-curto.png",
+      "species": "gato",
+      "color": "marrom",
+      "eyes": "azuis",
+      "ears": "eretas",
+      "spots": "liso",
+      "tail": "curto"
+    },
+    {
+      "file": "gato-marrom-azuis-eretas-manchado-longo.png",
+      "species": "gato",
+      "color": "marrom",
+      "eyes": "azuis",
+      "ears": "eretas",
+      "spots": "manchado",
+      "tail": "longo"
+    },
+    {
+      "file": "gato-marrom-azuis-eretas-manchado-curto.png",
+      "species": "gato",
+      "color": "marrom",
+      "eyes": "azuis",
+      "ears": "eretas",
+      "spots": "manchado",
+      "tail": "curto"
+    },
+    {
+      "file": "gato-marrom-azuis-caidas-liso-longo.png",
+      "species": "gato",
+      "color": "marrom",
+      "eyes": "azuis",
+      "ears": "caidas",
+      "spots": "liso",
+      "tail": "longo"
+    },
+    {
+      "file": "gato-marrom-azuis-caidas-liso-curto.png",
+      "species": "gato",
+      "color": "marrom",
+      "eyes": "azuis",
+      "ears": "caidas",
+      "spots": "liso",
+      "tail": "curto"
+    },
+    {
+      "file": "gato-marrom-azuis-caidas-manchado-longo.png",
+      "species": "gato",
+      "color": "marrom",
+      "eyes": "azuis",
+      "ears": "caidas",
+      "spots": "manchado",
+      "tail": "longo"
+    },
+    {
+      "file": "gato-marrom-azuis-caidas-manchado-curto.png",
+      "species": "gato",
+      "color": "marrom",
+      "eyes": "azuis",
+      "ears": "caidas",
+      "spots": "manchado",
+      "tail": "curto"
+    },
+    {
+      "file": "gato-marrom-verdes-eretas-liso-longo.png",
+      "species": "gato",
+      "color": "marrom",
+      "eyes": "verdes",
+      "ears": "eretas",
+      "spots": "liso",
+      "tail": "longo"
+    },
+    {
+      "file": "gato-marrom-verdes-eretas-liso-curto.png",
+      "species": "gato",
+      "color": "marrom",
+      "eyes": "verdes",
+      "ears": "eretas",
+      "spots": "liso",
+      "tail": "curto"
+    },
+    {
+      "file": "gato-marrom-verdes-eretas-manchado-longo.png",
+      "species": "gato",
+      "color": "marrom",
+      "eyes": "verdes",
+      "ears": "eretas",
+      "spots": "manchado",
+      "tail": "longo"
+    },
+    {
+      "file": "gato-marrom-verdes-eretas-manchado-curto.png",
+      "species": "gato",
+      "color": "marrom",
+      "eyes": "verdes",
+      "ears": "eretas",
+      "spots": "manchado",
+      "tail": "curto"
+    },
+    {
+      "file": "gato-marrom-verdes-caidas-liso-longo.png",
+      "species": "gato",
+      "color": "marrom",
+      "eyes": "verdes",
+      "ears": "caidas",
+      "spots": "liso",
+      "tail": "longo"
+    },
+    {
+      "file": "gato-marrom-verdes-caidas-liso-curto.png",
+      "species": "gato",
+      "color": "marrom",
+      "eyes": "verdes",
+      "ears": "caidas",
+      "spots": "liso",
+      "tail": "curto"
+    },
+    {
+      "file": "gato-marrom-verdes-caidas-manchado-longo.png",
+      "species": "gato",
+      "color": "marrom",
+      "eyes": "verdes",
+      "ears": "caidas",
+      "spots": "manchado",
+      "tail": "longo"
+    },
+    {
+      "file": "gato-marrom-verdes-caidas-manchado-curto.png",
+      "species": "gato",
+      "color": "marrom",
+      "eyes": "verdes",
+      "ears": "caidas",
+      "spots": "manchado",
+      "tail": "curto"
+    },
+    {
+      "file": "gato-claro-azuis-eretas-liso-longo.png",
+      "species": "gato",
+      "color": "claro",
+      "eyes": "azuis",
+      "ears": "eretas",
+      "spots": "liso",
+      "tail": "longo"
+    },
+    {
+      "file": "gato-claro-azuis-eretas-liso-curto.png",
+      "species": "gato",
+      "color": "claro",
+      "eyes": "azuis",
+      "ears": "eretas",
+      "spots": "liso",
+      "tail": "curto"
+    },
+    {
+      "file": "gato-claro-azuis-eretas-manchado-longo.png",
+      "species": "gato",
+      "color": "claro",
+      "eyes": "azuis",
+      "ears": "eretas",
+      "spots": "manchado",
+      "tail": "longo"
+    },
+    {
+      "file": "gato-claro-azuis-eretas-manchado-curto.png",
+      "species": "gato",
+      "color": "claro",
+      "eyes": "azuis",
+      "ears": "eretas",
+      "spots": "manchado",
+      "tail": "curto"
+    },
+    {
+      "file": "gato-claro-azuis-caidas-liso-longo.png",
+      "species": "gato",
+      "color": "claro",
+      "eyes": "azuis",
+      "ears": "caidas",
+      "spots": "liso",
+      "tail": "longo"
+    },
+    {
+      "file": "gato-claro-azuis-caidas-liso-curto.png",
+      "species": "gato",
+      "color": "claro",
+      "eyes": "azuis",
+      "ears": "caidas",
+      "spots": "liso",
+      "tail": "curto"
+    },
+    {
+      "file": "gato-claro-azuis-caidas-manchado-longo.png",
+      "species": "gato",
+      "color": "claro",
+      "eyes": "azuis",
+      "ears": "caidas",
+      "spots": "manchado",
+      "tail": "longo"
+    },
+    {
+      "file": "gato-claro-azuis-caidas-manchado-curto.png",
+      "species": "gato",
+      "color": "claro",
+      "eyes": "azuis",
+      "ears": "caidas",
+      "spots": "manchado",
+      "tail": "curto"
+    },
+    {
+      "file": "gato-claro-verdes-eretas-liso-longo.png",
+      "species": "gato",
+      "color": "claro",
+      "eyes": "verdes",
+      "ears": "eretas",
+      "spots": "liso",
+      "tail": "longo"
+    },
+    {
+      "file": "gato-claro-verdes-eretas-liso-curto.png",
+      "species": "gato",
+      "color": "claro",
+      "eyes": "verdes",
+      "ears": "eretas",
+      "spots": "liso",
+      "tail": "curto"
+    },
+    {
+      "file": "gato-claro-verdes-eretas-manchado-longo.png",
+      "species": "gato",
+      "color": "claro",
+      "eyes": "verdes",
+      "ears": "eretas",
+      "spots": "manchado",
+      "tail": "longo"
+    },
+    {
+      "file": "gato-claro-verdes-eretas-manchado-curto.png",
+      "species": "gato",
+      "color": "claro",
+      "eyes": "verdes",
+      "ears": "eretas",
+      "spots": "manchado",
+      "tail": "curto"
+    },
+    {
+      "file": "gato-claro-verdes-caidas-liso-longo.png",
+      "species": "gato",
+      "color": "claro",
+      "eyes": "verdes",
+      "ears": "caidas",
+      "spots": "liso",
+      "tail": "longo"
+    },
+    {
+      "file": "gato-claro-verdes-caidas-liso-curto.png",
+      "species": "gato",
+      "color": "claro",
+      "eyes": "verdes",
+      "ears": "caidas",
+      "spots": "liso",
+      "tail": "curto"
+    },
+    {
+      "file": "gato-claro-verdes-caidas-manchado-longo.png",
+      "species": "gato",
+      "color": "claro",
+      "eyes": "verdes",
+      "ears": "caidas",
+      "spots": "manchado",
+      "tail": "longo"
+    },
+    {
+      "file": "gato-claro-verdes-caidas-manchado-curto.png",
+      "species": "gato",
+      "color": "claro",
+      "eyes": "verdes",
+      "ears": "caidas",
+      "spots": "manchado",
+      "tail": "curto"
+    },
+    {
+      "file": "cachorro-preto-azuis-eretas-liso-longo.png",
+      "species": "cachorro",
+      "color": "preto",
+      "eyes": "azuis",
+      "ears": "eretas",
+      "spots": "liso",
+      "tail": "longo"
+    },
+    {
+      "file": "cachorro-preto-azuis-eretas-liso-curto.png",
+      "species": "cachorro",
+      "color": "preto",
+      "eyes": "azuis",
+      "ears": "eretas",
+      "spots": "liso",
+      "tail": "curto"
+    },
+    {
+      "file": "cachorro-preto-azuis-eretas-manchado-longo.png",
+      "species": "cachorro",
+      "color": "preto",
+      "eyes": "azuis",
+      "ears": "eretas",
+      "spots": "manchado",
+      "tail": "longo"
+    },
+    {
+      "file": "cachorro-preto-azuis-eretas-manchado-curto.png",
+      "species": "cachorro",
+      "color": "preto",
+      "eyes": "azuis",
+      "ears": "eretas",
+      "spots": "manchado",
+      "tail": "curto"
+    },
+    {
+      "file": "cachorro-preto-azuis-caidas-liso-longo.png",
+      "species": "cachorro",
+      "color": "preto",
+      "eyes": "azuis",
+      "ears": "caidas",
+      "spots": "liso",
+      "tail": "longo"
+    },
+    {
+      "file": "cachorro-preto-azuis-caidas-liso-curto.png",
+      "species": "cachorro",
+      "color": "preto",
+      "eyes": "azuis",
+      "ears": "caidas",
+      "spots": "liso",
+      "tail": "curto"
+    },
+    {
+      "file": "cachorro-preto-azuis-caidas-manchado-longo.png",
+      "species": "cachorro",
+      "color": "preto",
+      "eyes": "azuis",
+      "ears": "caidas",
+      "spots": "manchado",
+      "tail": "longo"
+    },
+    {
+      "file": "cachorro-preto-azuis-caidas-manchado-curto.png",
+      "species": "cachorro",
+      "color": "preto",
+      "eyes": "azuis",
+      "ears": "caidas",
+      "spots": "manchado",
+      "tail": "curto"
+    },
+    {
+      "file": "cachorro-preto-verdes-eretas-liso-longo.png",
+      "species": "cachorro",
+      "color": "preto",
+      "eyes": "verdes",
+      "ears": "eretas",
+      "spots": "liso",
+      "tail": "longo"
+    },
+    {
+      "file": "cachorro-preto-verdes-eretas-liso-curto.png",
+      "species": "cachorro",
+      "color": "preto",
+      "eyes": "verdes",
+      "ears": "eretas",
+      "spots": "liso",
+      "tail": "curto"
+    },
+    {
+      "file": "cachorro-preto-verdes-eretas-manchado-longo.png",
+      "species": "cachorro",
+      "color": "preto",
+      "eyes": "verdes",
+      "ears": "eretas",
+      "spots": "manchado",
+      "tail": "longo"
+    },
+    {
+      "file": "cachorro-preto-verdes-eretas-manchado-curto.png",
+      "species": "cachorro",
+      "color": "preto",
+      "eyes": "verdes",
+      "ears": "eretas",
+      "spots": "manchado",
+      "tail": "curto"
+    },
+    {
+      "file": "cachorro-preto-verdes-caidas-liso-longo.png",
+      "species": "cachorro",
+      "color": "preto",
+      "eyes": "verdes",
+      "ears": "caidas",
+      "spots": "liso",
+      "tail": "longo"
+    },
+    {
+      "file": "cachorro-preto-verdes-caidas-liso-curto.png",
+      "species": "cachorro",
+      "color": "preto",
+      "eyes": "verdes",
+      "ears": "caidas",
+      "spots": "liso",
+      "tail": "curto"
+    },
+    {
+      "file": "cachorro-preto-verdes-caidas-manchado-longo.png",
+      "species": "cachorro",
+      "color": "preto",
+      "eyes": "verdes",
+      "ears": "caidas",
+      "spots": "manchado",
+      "tail": "longo"
+    },
+    {
+      "file": "cachorro-preto-verdes-caidas-manchado-curto.png",
+      "species": "cachorro",
+      "color": "preto",
+      "eyes": "verdes",
+      "ears": "caidas",
+      "spots": "manchado",
+      "tail": "curto"
+    },
+    {
+      "file": "cachorro-cinza-azuis-eretas-liso-longo.png",
+      "species": "cachorro",
+      "color": "cinza",
+      "eyes": "azuis",
+      "ears": "eretas",
+      "spots": "liso",
+      "tail": "longo"
+    },
+    {
+      "file": "cachorro-cinza-azuis-eretas-liso-curto.png",
+      "species": "cachorro",
+      "color": "cinza",
+      "eyes": "azuis",
+      "ears": "eretas",
+      "spots": "liso",
+      "tail": "curto"
+    },
+    {
+      "file": "cachorro-cinza-azuis-eretas-manchado-longo.png",
+      "species": "cachorro",
+      "color": "cinza",
+      "eyes": "azuis",
+      "ears": "eretas",
+      "spots": "manchado",
+      "tail": "longo"
+    },
+    {
+      "file": "cachorro-cinza-azuis-eretas-manchado-curto.png",
+      "species": "cachorro",
+      "color": "cinza",
+      "eyes": "azuis",
+      "ears": "eretas",
+      "spots": "manchado",
+      "tail": "curto"
+    },
+    {
+      "file": "cachorro-cinza-azuis-caidas-liso-longo.png",
+      "species": "cachorro",
+      "color": "cinza",
+      "eyes": "azuis",
+      "ears": "caidas",
+      "spots": "liso",
+      "tail": "longo"
+    },
+    {
+      "file": "cachorro-cinza-azuis-caidas-liso-curto.png",
+      "species": "cachorro",
+      "color": "cinza",
+      "eyes": "azuis",
+      "ears": "caidas",
+      "spots": "liso",
+      "tail": "curto"
+    },
+    {
+      "file": "cachorro-cinza-azuis-caidas-manchado-longo.png",
+      "species": "cachorro",
+      "color": "cinza",
+      "eyes": "azuis",
+      "ears": "caidas",
+      "spots": "manchado",
+      "tail": "longo"
+    },
+    {
+      "file": "cachorro-cinza-azuis-caidas-manchado-curto.png",
+      "species": "cachorro",
+      "color": "cinza",
+      "eyes": "azuis",
+      "ears": "caidas",
+      "spots": "manchado",
+      "tail": "curto"
+    },
+    {
+      "file": "cachorro-cinza-verdes-eretas-liso-longo.png",
+      "species": "cachorro",
+      "color": "cinza",
+      "eyes": "verdes",
+      "ears": "eretas",
+      "spots": "liso",
+      "tail": "longo"
+    },
+    {
+      "file": "cachorro-cinza-verdes-eretas-liso-curto.png",
+      "species": "cachorro",
+      "color": "cinza",
+      "eyes": "verdes",
+      "ears": "eretas",
+      "spots": "liso",
+      "tail": "curto"
+    },
+    {
+      "file": "cachorro-cinza-verdes-eretas-manchado-longo.png",
+      "species": "cachorro",
+      "color": "cinza",
+      "eyes": "verdes",
+      "ears": "eretas",
+      "spots": "manchado",
+      "tail": "longo"
+    },
+    {
+      "file": "cachorro-cinza-verdes-eretas-manchado-curto.png",
+      "species": "cachorro",
+      "color": "cinza",
+      "eyes": "verdes",
+      "ears": "eretas",
+      "spots": "manchado",
+      "tail": "curto"
+    },
+    {
+      "file": "cachorro-cinza-verdes-caidas-liso-longo.png",
+      "species": "cachorro",
+      "color": "cinza",
+      "eyes": "verdes",
+      "ears": "caidas",
+      "spots": "liso",
+      "tail": "longo"
+    },
+    {
+      "file": "cachorro-cinza-verdes-caidas-liso-curto.png",
+      "species": "cachorro",
+      "color": "cinza",
+      "eyes": "verdes",
+      "ears": "caidas",
+      "spots": "liso",
+      "tail": "curto"
+    },
+    {
+      "file": "cachorro-cinza-verdes-caidas-manchado-longo.png",
+      "species": "cachorro",
+      "color": "cinza",
+      "eyes": "verdes",
+      "ears": "caidas",
+      "spots": "manchado",
+      "tail": "longo"
+    },
+    {
+      "file": "cachorro-cinza-verdes-caidas-manchado-curto.png",
+      "species": "cachorro",
+      "color": "cinza",
+      "eyes": "verdes",
+      "ears": "caidas",
+      "spots": "manchado",
+      "tail": "curto"
+    },
+    {
+      "file": "cachorro-marrom-azuis-eretas-liso-longo.png",
+      "species": "cachorro",
+      "color": "marrom",
+      "eyes": "azuis",
+      "ears": "eretas",
+      "spots": "liso",
+      "tail": "longo"
+    },
+    {
+      "file": "cachorro-marrom-azuis-eretas-liso-curto.png",
+      "species": "cachorro",
+      "color": "marrom",
+      "eyes": "azuis",
+      "ears": "eretas",
+      "spots": "liso",
+      "tail": "curto"
+    },
+    {
+      "file": "cachorro-marrom-azuis-eretas-manchado-longo.png",
+      "species": "cachorro",
+      "color": "marrom",
+      "eyes": "azuis",
+      "ears": "eretas",
+      "spots": "manchado",
+      "tail": "longo"
+    },
+    {
+      "file": "cachorro-marrom-azuis-eretas-manchado-curto.png",
+      "species": "cachorro",
+      "color": "marrom",
+      "eyes": "azuis",
+      "ears": "eretas",
+      "spots": "manchado",
+      "tail": "curto"
+    },
+    {
+      "file": "cachorro-marrom-azuis-caidas-liso-longo.png",
+      "species": "cachorro",
+      "color": "marrom",
+      "eyes": "azuis",
+      "ears": "caidas",
+      "spots": "liso",
+      "tail": "longo"
+    },
+    {
+      "file": "cachorro-marrom-azuis-caidas-liso-curto.png",
+      "species": "cachorro",
+      "color": "marrom",
+      "eyes": "azuis",
+      "ears": "caidas",
+      "spots": "liso",
+      "tail": "curto"
+    },
+    {
+      "file": "cachorro-marrom-azuis-caidas-manchado-longo.png",
+      "species": "cachorro",
+      "color": "marrom",
+      "eyes": "azuis",
+      "ears": "caidas",
+      "spots": "manchado",
+      "tail": "longo"
+    },
+    {
+      "file": "cachorro-marrom-azuis-caidas-manchado-curto.png",
+      "species": "cachorro",
+      "color": "marrom",
+      "eyes": "azuis",
+      "ears": "caidas",
+      "spots": "manchado",
+      "tail": "curto"
+    },
+    {
+      "file": "cachorro-marrom-verdes-eretas-liso-longo.png",
+      "species": "cachorro",
+      "color": "marrom",
+      "eyes": "verdes",
+      "ears": "eretas",
+      "spots": "liso",
+      "tail": "longo"
+    },
+    {
+      "file": "cachorro-marrom-verdes-eretas-liso-curto.png",
+      "species": "cachorro",
+      "color": "marrom",
+      "eyes": "verdes",
+      "ears": "eretas",
+      "spots": "liso",
+      "tail": "curto"
+    },
+    {
+      "file": "cachorro-marrom-verdes-eretas-manchado-longo.png",
+      "species": "cachorro",
+      "color": "marrom",
+      "eyes": "verdes",
+      "ears": "eretas",
+      "spots": "manchado",
+      "tail": "longo"
+    },
+    {
+      "file": "cachorro-marrom-verdes-eretas-manchado-curto.png",
+      "species": "cachorro",
+      "color": "marrom",
+      "eyes": "verdes",
+      "ears": "eretas",
+      "spots": "manchado",
+      "tail": "curto"
+    },
+    {
+      "file": "cachorro-marrom-verdes-caidas-liso-longo.png",
+      "species": "cachorro",
+      "color": "marrom",
+      "eyes": "verdes",
+      "ears": "caidas",
+      "spots": "liso",
+      "tail": "longo"
+    },
+    {
+      "file": "cachorro-marrom-verdes-caidas-liso-curto.png",
+      "species": "cachorro",
+      "color": "marrom",
+      "eyes": "verdes",
+      "ears": "caidas",
+      "spots": "liso",
+      "tail": "curto"
+    },
+    {
+      "file": "cachorro-marrom-verdes-caidas-manchado-longo.png",
+      "species": "cachorro",
+      "color": "marrom",
+      "eyes": "verdes",
+      "ears": "caidas",
+      "spots": "manchado",
+      "tail": "longo"
+    },
+    {
+      "file": "cachorro-marrom-verdes-caidas-manchado-curto.png",
+      "species": "cachorro",
+      "color": "marrom",
+      "eyes": "verdes",
+      "ears": "caidas",
+      "spots": "manchado",
+      "tail": "curto"
+    },
+    {
+      "file": "cachorro-claro-azuis-eretas-liso-longo.png",
+      "species": "cachorro",
+      "color": "claro",
+      "eyes": "azuis",
+      "ears": "eretas",
+      "spots": "liso",
+      "tail": "longo"
+    },
+    {
+      "file": "cachorro-claro-azuis-eretas-liso-curto.png",
+      "species": "cachorro",
+      "color": "claro",
+      "eyes": "azuis",
+      "ears": "eretas",
+      "spots": "liso",
+      "tail": "curto"
+    },
+    {
+      "file": "cachorro-claro-azuis-eretas-manchado-longo.png",
+      "species": "cachorro",
+      "color": "claro",
+      "eyes": "azuis",
+      "ears": "eretas",
+      "spots": "manchado",
+      "tail": "longo"
+    },
+    {
+      "file": "cachorro-claro-azuis-eretas-manchado-curto.png",
+      "species": "cachorro",
+      "color": "claro",
+      "eyes": "azuis",
+      "ears": "eretas",
+      "spots": "manchado",
+      "tail": "curto"
+    },
+    {
+      "file": "cachorro-claro-azuis-caidas-liso-longo.png",
+      "species": "cachorro",
+      "color": "claro",
+      "eyes": "azuis",
+      "ears": "caidas",
+      "spots": "liso",
+      "tail": "longo"
+    },
+    {
+      "file": "cachorro-claro-azuis-caidas-liso-curto.png",
+      "species": "cachorro",
+      "color": "claro",
+      "eyes": "azuis",
+      "ears": "caidas",
+      "spots": "liso",
+      "tail": "curto"
+    },
+    {
+      "file": "cachorro-claro-azuis-caidas-manchado-longo.png",
+      "species": "cachorro",
+      "color": "claro",
+      "eyes": "azuis",
+      "ears": "caidas",
+      "spots": "manchado",
+      "tail": "longo"
+    },
+    {
+      "file": "cachorro-claro-azuis-caidas-manchado-curto.png",
+      "species": "cachorro",
+      "color": "claro",
+      "eyes": "azuis",
+      "ears": "caidas",
+      "spots": "manchado",
+      "tail": "curto"
+    },
+    {
+      "file": "cachorro-claro-verdes-eretas-liso-longo.png",
+      "species": "cachorro",
+      "color": "claro",
+      "eyes": "verdes",
+      "ears": "eretas",
+      "spots": "liso",
+      "tail": "longo"
+    },
+    {
+      "file": "cachorro-claro-verdes-eretas-liso-curto.png",
+      "species": "cachorro",
+      "color": "claro",
+      "eyes": "verdes",
+      "ears": "eretas",
+      "spots": "liso",
+      "tail": "curto"
+    },
+    {
+      "file": "cachorro-claro-verdes-eretas-manchado-longo.png",
+      "species": "cachorro",
+      "color": "claro",
+      "eyes": "verdes",
+      "ears": "eretas",
+      "spots": "manchado",
+      "tail": "longo"
+    },
+    {
+      "file": "cachorro-claro-verdes-eretas-manchado-curto.png",
+      "species": "cachorro",
+      "color": "claro",
+      "eyes": "verdes",
+      "ears": "eretas",
+      "spots": "manchado",
+      "tail": "curto"
+    },
+    {
+      "file": "cachorro-claro-verdes-caidas-liso-longo.png",
+      "species": "cachorro",
+      "color": "claro",
+      "eyes": "verdes",
+      "ears": "caidas",
+      "spots": "liso",
+      "tail": "longo"
+    },
+    {
+      "file": "cachorro-claro-verdes-caidas-liso-curto.png",
+      "species": "cachorro",
+      "color": "claro",
+      "eyes": "verdes",
+      "ears": "caidas",
+      "spots": "liso",
+      "tail": "curto"
+    },
+    {
+      "file": "cachorro-claro-verdes-caidas-manchado-longo.png",
+      "species": "cachorro",
+      "color": "claro",
+      "eyes": "verdes",
+      "ears": "caidas",
+      "spots": "manchado",
+      "tail": "longo"
+    },
+    {
+      "file": "cachorro-claro-verdes-caidas-manchado-curto.png",
+      "species": "cachorro",
+      "color": "claro",
+      "eyes": "verdes",
+      "ears": "caidas",
+      "spots": "manchado",
+      "tail": "curto"
+    },
+    {
+      "file": "coelho-preto-azuis-eretas-liso-longo.png",
+      "species": "coelho",
+      "color": "preto",
+      "eyes": "azuis",
+      "ears": "eretas",
+      "spots": "liso",
+      "tail": "longo"
+    },
+    {
+      "file": "coelho-preto-azuis-eretas-liso-curto.png",
+      "species": "coelho",
+      "color": "preto",
+      "eyes": "azuis",
+      "ears": "eretas",
+      "spots": "liso",
+      "tail": "curto"
+    },
+    {
+      "file": "coelho-preto-azuis-eretas-manchado-longo.png",
+      "species": "coelho",
+      "color": "preto",
+      "eyes": "azuis",
+      "ears": "eretas",
+      "spots": "manchado",
+      "tail": "longo"
+    },
+    {
+      "file": "coelho-preto-azuis-eretas-manchado-curto.png",
+      "species": "coelho",
+      "color": "preto",
+      "eyes": "azuis",
+      "ears": "eretas",
+      "spots": "manchado",
+      "tail": "curto"
+    },
+    {
+      "file": "coelho-preto-azuis-caidas-liso-longo.png",
+      "species": "coelho",
+      "color": "preto",
+      "eyes": "azuis",
+      "ears": "caidas",
+      "spots": "liso",
+      "tail": "longo"
+    },
+    {
+      "file": "coelho-preto-azuis-caidas-liso-curto.png",
+      "species": "coelho",
+      "color": "preto",
+      "eyes": "azuis",
+      "ears": "caidas",
+      "spots": "liso",
+      "tail": "curto"
+    },
+    {
+      "file": "coelho-preto-azuis-caidas-manchado-longo.png",
+      "species": "coelho",
+      "color": "preto",
+      "eyes": "azuis",
+      "ears": "caidas",
+      "spots": "manchado",
+      "tail": "longo"
+    },
+    {
+      "file": "coelho-preto-azuis-caidas-manchado-curto.png",
+      "species": "coelho",
+      "color": "preto",
+      "eyes": "azuis",
+      "ears": "caidas",
+      "spots": "manchado",
+      "tail": "curto"
+    },
+    {
+      "file": "coelho-preto-verdes-eretas-liso-longo.png",
+      "species": "coelho",
+      "color": "preto",
+      "eyes": "verdes",
+      "ears": "eretas",
+      "spots": "liso",
+      "tail": "longo"
+    },
+    {
+      "file": "coelho-preto-verdes-eretas-liso-curto.png",
+      "species": "coelho",
+      "color": "preto",
+      "eyes": "verdes",
+      "ears": "eretas",
+      "spots": "liso",
+      "tail": "curto"
+    },
+    {
+      "file": "coelho-preto-verdes-eretas-manchado-longo.png",
+      "species": "coelho",
+      "color": "preto",
+      "eyes": "verdes",
+      "ears": "eretas",
+      "spots": "manchado",
+      "tail": "longo"
+    },
+    {
+      "file": "coelho-preto-verdes-eretas-manchado-curto.png",
+      "species": "coelho",
+      "color": "preto",
+      "eyes": "verdes",
+      "ears": "eretas",
+      "spots": "manchado",
+      "tail": "curto"
+    },
+    {
+      "file": "coelho-preto-verdes-caidas-liso-longo.png",
+      "species": "coelho",
+      "color": "preto",
+      "eyes": "verdes",
+      "ears": "caidas",
+      "spots": "liso",
+      "tail": "longo"
+    },
+    {
+      "file": "coelho-preto-verdes-caidas-liso-curto.png",
+      "species": "coelho",
+      "color": "preto",
+      "eyes": "verdes",
+      "ears": "caidas",
+      "spots": "liso",
+      "tail": "curto"
+    },
+    {
+      "file": "coelho-preto-verdes-caidas-manchado-longo.png",
+      "species": "coelho",
+      "color": "preto",
+      "eyes": "verdes",
+      "ears": "caidas",
+      "spots": "manchado",
+      "tail": "longo"
+    },
+    {
+      "file": "coelho-preto-verdes-caidas-manchado-curto.png",
+      "species": "coelho",
+      "color": "preto",
+      "eyes": "verdes",
+      "ears": "caidas",
+      "spots": "manchado",
+      "tail": "curto"
+    },
+    {
+      "file": "coelho-cinza-azuis-eretas-liso-longo.png",
+      "species": "coelho",
+      "color": "cinza",
+      "eyes": "azuis",
+      "ears": "eretas",
+      "spots": "liso",
+      "tail": "longo"
+    },
+    {
+      "file": "coelho-cinza-azuis-eretas-liso-curto.png",
+      "species": "coelho",
+      "color": "cinza",
+      "eyes": "azuis",
+      "ears": "eretas",
+      "spots": "liso",
+      "tail": "curto"
+    },
+    {
+      "file": "coelho-cinza-azuis-eretas-manchado-longo.png",
+      "species": "coelho",
+      "color": "cinza",
+      "eyes": "azuis",
+      "ears": "eretas",
+      "spots": "manchado",
+      "tail": "longo"
+    },
+    {
+      "file": "coelho-cinza-azuis-eretas-manchado-curto.png",
+      "species": "coelho",
+      "color": "cinza",
+      "eyes": "azuis",
+      "ears": "eretas",
+      "spots": "manchado",
+      "tail": "curto"
+    },
+    {
+      "file": "coelho-cinza-azuis-caidas-liso-longo.png",
+      "species": "coelho",
+      "color": "cinza",
+      "eyes": "azuis",
+      "ears": "caidas",
+      "spots": "liso",
+      "tail": "longo"
+    },
+    {
+      "file": "coelho-cinza-azuis-caidas-liso-curto.png",
+      "species": "coelho",
+      "color": "cinza",
+      "eyes": "azuis",
+      "ears": "caidas",
+      "spots": "liso",
+      "tail": "curto"
+    },
+    {
+      "file": "coelho-cinza-azuis-caidas-manchado-longo.png",
+      "species": "coelho",
+      "color": "cinza",
+      "eyes": "azuis",
+      "ears": "caidas",
+      "spots": "manchado",
+      "tail": "longo"
+    },
+    {
+      "file": "coelho-cinza-azuis-caidas-manchado-curto.png",
+      "species": "coelho",
+      "color": "cinza",
+      "eyes": "azuis",
+      "ears": "caidas",
+      "spots": "manchado",
+      "tail": "curto"
+    },
+    {
+      "file": "coelho-cinza-verdes-eretas-liso-longo.png",
+      "species": "coelho",
+      "color": "cinza",
+      "eyes": "verdes",
+      "ears": "eretas",
+      "spots": "liso",
+      "tail": "longo"
+    },
+    {
+      "file": "coelho-cinza-verdes-eretas-liso-curto.png",
+      "species": "coelho",
+      "color": "cinza",
+      "eyes": "verdes",
+      "ears": "eretas",
+      "spots": "liso",
+      "tail": "curto"
+    },
+    {
+      "file": "coelho-cinza-verdes-eretas-manchado-longo.png",
+      "species": "coelho",
+      "color": "cinza",
+      "eyes": "verdes",
+      "ears": "eretas",
+      "spots": "manchado",
+      "tail": "longo"
+    },
+    {
+      "file": "coelho-cinza-verdes-eretas-manchado-curto.png",
+      "species": "coelho",
+      "color": "cinza",
+      "eyes": "verdes",
+      "ears": "eretas",
+      "spots": "manchado",
+      "tail": "curto"
+    },
+    {
+      "file": "coelho-cinza-verdes-caidas-liso-longo.png",
+      "species": "coelho",
+      "color": "cinza",
+      "eyes": "verdes",
+      "ears": "caidas",
+      "spots": "liso",
+      "tail": "longo"
+    },
+    {
+      "file": "coelho-cinza-verdes-caidas-liso-curto.png",
+      "species": "coelho",
+      "color": "cinza",
+      "eyes": "verdes",
+      "ears": "caidas",
+      "spots": "liso",
+      "tail": "curto"
+    },
+    {
+      "file": "coelho-cinza-verdes-caidas-manchado-longo.png",
+      "species": "coelho",
+      "color": "cinza",
+      "eyes": "verdes",
+      "ears": "caidas",
+      "spots": "manchado",
+      "tail": "longo"
+    },
+    {
+      "file": "coelho-cinza-verdes-caidas-manchado-curto.png",
+      "species": "coelho",
+      "color": "cinza",
+      "eyes": "verdes",
+      "ears": "caidas",
+      "spots": "manchado",
+      "tail": "curto"
+    },
+    {
+      "file": "coelho-marrom-azuis-eretas-liso-longo.png",
+      "species": "coelho",
+      "color": "marrom",
+      "eyes": "azuis",
+      "ears": "eretas",
+      "spots": "liso",
+      "tail": "longo"
+    },
+    {
+      "file": "coelho-marrom-azuis-eretas-liso-curto.png",
+      "species": "coelho",
+      "color": "marrom",
+      "eyes": "azuis",
+      "ears": "eretas",
+      "spots": "liso",
+      "tail": "curto"
+    },
+    {
+      "file": "coelho-marrom-azuis-eretas-manchado-longo.png",
+      "species": "coelho",
+      "color": "marrom",
+      "eyes": "azuis",
+      "ears": "eretas",
+      "spots": "manchado",
+      "tail": "longo"
+    },
+    {
+      "file": "coelho-marrom-azuis-eretas-manchado-curto.png",
+      "species": "coelho",
+      "color": "marrom",
+      "eyes": "azuis",
+      "ears": "eretas",
+      "spots": "manchado",
+      "tail": "curto"
+    },
+    {
+      "file": "coelho-marrom-azuis-caidas-liso-longo.png",
+      "species": "coelho",
+      "color": "marrom",
+      "eyes": "azuis",
+      "ears": "caidas",
+      "spots": "liso",
+      "tail": "longo"
+    },
+    {
+      "file": "coelho-marrom-azuis-caidas-liso-curto.png",
+      "species": "coelho",
+      "color": "marrom",
+      "eyes": "azuis",
+      "ears": "caidas",
+      "spots": "liso",
+      "tail": "curto"
+    },
+    {
+      "file": "coelho-marrom-azuis-caidas-manchado-longo.png",
+      "species": "coelho",
+      "color": "marrom",
+      "eyes": "azuis",
+      "ears": "caidas",
+      "spots": "manchado",
+      "tail": "longo"
+    },
+    {
+      "file": "coelho-marrom-azuis-caidas-manchado-curto.png",
+      "species": "coelho",
+      "color": "marrom",
+      "eyes": "azuis",
+      "ears": "caidas",
+      "spots": "manchado",
+      "tail": "curto"
+    },
+    {
+      "file": "coelho-marrom-verdes-eretas-liso-longo.png",
+      "species": "coelho",
+      "color": "marrom",
+      "eyes": "verdes",
+      "ears": "eretas",
+      "spots": "liso",
+      "tail": "longo"
+    },
+    {
+      "file": "coelho-marrom-verdes-eretas-liso-curto.png",
+      "species": "coelho",
+      "color": "marrom",
+      "eyes": "verdes",
+      "ears": "eretas",
+      "spots": "liso",
+      "tail": "curto"
+    },
+    {
+      "file": "coelho-marrom-verdes-eretas-manchado-longo.png",
+      "species": "coelho",
+      "color": "marrom",
+      "eyes": "verdes",
+      "ears": "eretas",
+      "spots": "manchado",
+      "tail": "longo"
+    },
+    {
+      "file": "coelho-marrom-verdes-eretas-manchado-curto.png",
+      "species": "coelho",
+      "color": "marrom",
+      "eyes": "verdes",
+      "ears": "eretas",
+      "spots": "manchado",
+      "tail": "curto"
+    },
+    {
+      "file": "coelho-marrom-verdes-caidas-liso-longo.png",
+      "species": "coelho",
+      "color": "marrom",
+      "eyes": "verdes",
+      "ears": "caidas",
+      "spots": "liso",
+      "tail": "longo"
+    },
+    {
+      "file": "coelho-marrom-verdes-caidas-liso-curto.png",
+      "species": "coelho",
+      "color": "marrom",
+      "eyes": "verdes",
+      "ears": "caidas",
+      "spots": "liso",
+      "tail": "curto"
+    },
+    {
+      "file": "coelho-marrom-verdes-caidas-manchado-longo.png",
+      "species": "coelho",
+      "color": "marrom",
+      "eyes": "verdes",
+      "ears": "caidas",
+      "spots": "manchado",
+      "tail": "longo"
+    },
+    {
+      "file": "coelho-marrom-verdes-caidas-manchado-curto.png",
+      "species": "coelho",
+      "color": "marrom",
+      "eyes": "verdes",
+      "ears": "caidas",
+      "spots": "manchado",
+      "tail": "curto"
+    },
+    {
+      "file": "coelho-claro-azuis-eretas-liso-longo.png",
+      "species": "coelho",
+      "color": "claro",
+      "eyes": "azuis",
+      "ears": "eretas",
+      "spots": "liso",
+      "tail": "longo"
+    },
+    {
+      "file": "coelho-claro-azuis-eretas-liso-curto.png",
+      "species": "coelho",
+      "color": "claro",
+      "eyes": "azuis",
+      "ears": "eretas",
+      "spots": "liso",
+      "tail": "curto"
+    },
+    {
+      "file": "coelho-claro-azuis-eretas-manchado-longo.png",
+      "species": "coelho",
+      "color": "claro",
+      "eyes": "azuis",
+      "ears": "eretas",
+      "spots": "manchado",
+      "tail": "longo"
+    },
+    {
+      "file": "coelho-claro-azuis-eretas-manchado-curto.png",
+      "species": "coelho",
+      "color": "claro",
+      "eyes": "azuis",
+      "ears": "eretas",
+      "spots": "manchado",
+      "tail": "curto"
+    },
+    {
+      "file": "coelho-claro-azuis-caidas-liso-longo.png",
+      "species": "coelho",
+      "color": "claro",
+      "eyes": "azuis",
+      "ears": "caidas",
+      "spots": "liso",
+      "tail": "longo"
+    },
+    {
+      "file": "coelho-claro-azuis-caidas-liso-curto.png",
+      "species": "coelho",
+      "color": "claro",
+      "eyes": "azuis",
+      "ears": "caidas",
+      "spots": "liso",
+      "tail": "curto"
+    },
+    {
+      "file": "coelho-claro-azuis-caidas-manchado-longo.png",
+      "species": "coelho",
+      "color": "claro",
+      "eyes": "azuis",
+      "ears": "caidas",
+      "spots": "manchado",
+      "tail": "longo"
+    },
+    {
+      "file": "coelho-claro-azuis-caidas-manchado-curto.png",
+      "species": "coelho",
+      "color": "claro",
+      "eyes": "azuis",
+      "ears": "caidas",
+      "spots": "manchado",
+      "tail": "curto"
+    },
+    {
+      "file": "coelho-claro-verdes-eretas-liso-longo.png",
+      "species": "coelho",
+      "color": "claro",
+      "eyes": "verdes",
+      "ears": "eretas",
+      "spots": "liso",
+      "tail": "longo"
+    },
+    {
+      "file": "coelho-claro-verdes-eretas-liso-curto.png",
+      "species": "coelho",
+      "color": "claro",
+      "eyes": "verdes",
+      "ears": "eretas",
+      "spots": "liso",
+      "tail": "curto"
+    },
+    {
+      "file": "coelho-claro-verdes-eretas-manchado-longo.png",
+      "species": "coelho",
+      "color": "claro",
+      "eyes": "verdes",
+      "ears": "eretas",
+      "spots": "manchado",
+      "tail": "longo"
+    },
+    {
+      "file": "coelho-claro-verdes-eretas-manchado-curto.png",
+      "species": "coelho",
+      "color": "claro",
+      "eyes": "verdes",
+      "ears": "eretas",
+      "spots": "manchado",
+      "tail": "curto"
+    },
+    {
+      "file": "coelho-claro-verdes-caidas-liso-longo.png",
+      "species": "coelho",
+      "color": "claro",
+      "eyes": "verdes",
+      "ears": "caidas",
+      "spots": "liso",
+      "tail": "longo"
+    },
+    {
+      "file": "coelho-claro-verdes-caidas-liso-curto.png",
+      "species": "coelho",
+      "color": "claro",
+      "eyes": "verdes",
+      "ears": "caidas",
+      "spots": "liso",
+      "tail": "curto"
+    },
+    {
+      "file": "coelho-claro-verdes-caidas-manchado-longo.png",
+      "species": "coelho",
+      "color": "claro",
+      "eyes": "verdes",
+      "ears": "caidas",
+      "spots": "manchado",
+      "tail": "longo"
+    },
+    {
+      "file": "coelho-claro-verdes-caidas-manchado-curto.png",
+      "species": "coelho",
+      "color": "claro",
+      "eyes": "verdes",
+      "ears": "caidas",
+      "spots": "manchado",
+      "tail": "curto"
+    }
+  ]
+}

@@ -401,7 +401,7 @@ body.is-playing #btn-help { display: block; }
   flex: 0 0 auto;
   background: var(--paper-2);
   border-radius: 10px;
-  image-rendering: pixelated;
+  image-rendering: auto;
 }
 
 .parent-card .thumb { width: 44px; height: 44px; }
